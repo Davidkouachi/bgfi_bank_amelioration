@@ -16,7 +16,6 @@
     <link href="assets/css/theme0226.css" rel="stylesheet">
     <script src="{{asset('chart.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
-    <script src="{{ asset('js/app.js') }}" ></script>
     
     <!--<script>
         import Echo from 'laravel-echo'
@@ -164,7 +163,7 @@
                                 @yield('option_btn')
                                 @if (Auth::check())
                                 <li class="dropdown user-dropdown">
-                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown">
                                         <div class="user-toggle">
                                             <div class="user-avatar">
                                                 <em class="icon ni ni-user-alt"></em>

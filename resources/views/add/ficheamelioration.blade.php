@@ -2,6 +2,17 @@
 
 @section('titre', 'Nouveau Processus')
 
+@section('option_btn')
+
+    <li class="dropdown chats-dropdown">
+        <a href="{{ route('index_accueil') }}" class="dropdown-toggle nk-quick-nav-icon">
+            <div class="icon-status icon-status-na">
+                <em class="icon ni ni-home"></em>
+            </div>
+        </a>
+    </li>
+
+@endsection
 
 @section('content')
 
@@ -11,18 +22,11 @@
                 <div class="nk-content-body">
                     <div class="nk-block-head nk-block-head-sm" >
                                 <div class="nk-block-between">
-                                    <div class="nk-block-head-content">
+                                    <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            Fiche de réclamation
+                                            <span>Fiche de réclamation</span>
+                                            <em class="icon ni ni-trend-up"></em>
                                         </h3>
-                                    </div>
-                                    <div class="nk-block-head-content">
-                                        <div class="toggle-wrap nk-block-tools-toggle">
-                                            <a class="btn btn-white btn-dim btn-outline-primary" href="{{ route('index_accueil') }}">
-                                                <em class="icon ni ni-home"></em>
-                                                <span>Accueil</span>
-                                            </a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -77,17 +81,17 @@
                                                             Date
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input required name="date_fiche" type="date" class="form-control">
+                                                            <input readonly value="{{ date('Y-m-d') }}" name="date_fiche" type="date" class="form-control text-center">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <div class="form-group">
                                                         <label class="form-label">
-                                                            Date limite traitement
+                                                            Date limite de traitement 
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input required name="date_limite" type="date" class="form-control">
+                                                            <input readonly value="{{ date('Y-m-d', strtotime('+5 days')) }}" name="date_limite" type="date" class="form-control text-center">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -290,8 +294,15 @@
                                                                         </label>
                                                                         <input  name="nature[]" value="0" type="text" >
                                                                         <div class="form-control-wrap">
-                                                                            <select id="responsable_idc" required name="processus_id[]" class="form-select" >
-                                                                                    <option selected value="1">1</option>
+                                                                            <select id="responsable_idc" required name="processus_id[]" class="form-select js-select2" >
+                                                                                    <option value="" >
+                                                                                        Choisir un processus
+                                                                                    </option>
+                                                                                    @foreach($processuss as $processus)
+                                                                                    <option value="{{$processus->id}}" >
+                                                                                        {{$processus->nom}}
+                                                                                    </option>
+                                                                                    @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -378,399 +389,6 @@
             </div>
         </div>
     </div>
-
-    @foreach($risques as $risque)
-    <div class="modal fade" id="modalVurisque{{$risque->id}}" tabindex="-1" aria-labelledby="modalVuLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                        <h5 class="modal-title">Détails</h5>
-                        <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em
-                                class="icon ni ni-cross"></em></a>
-                    </div>
-                    <div class="modal-body modal-body-lg">
-                        <form class="nk-block" >
-                            <div class="row g-gs">
-                                <div class="col-md-12 col-xxl-4" id="groupesContainer">
-                                    <div class="card card-bordered">
-                                        <div class="card-inner">
-                                                <div class="row g-4">
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="Cause">
-                                                                Processus
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ $risque->nom_processus }}" readonly type="text" class="form-control" id="Cause">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="controle">
-                                                                Risque
-                                                                @if ($risque->statut === 'soumis')
-                                                                    <span class="text-danger"> ( Non validé )</span>
-                                                                @endif
-                                                                @if ($risque->statut === 'valider')
-                                                                    <span class="text-success"> ( Validé )</span>
-                                                                @endif
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ $risque->nom }}" readonly type="text" class="form-control" id="controle">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 row g-2" style="margin-left:1px;">
-                                    <div class="col-md-12">
-                                        @if ($risque->evaluation >= 1 && $risque->evaluation <= 2 )
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#5eccbf;" >
-                                        @endif
-                                        @if ($risque->evaluation >= 3 && $risque->evaluation <= 9)
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#f7f880;">
-                                        @endif
-                                        @if ($risque->evaluation >= 10 && $risque->evaluation <= 16)
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#f2b171;">
-                                        @endif
-                                        @if ($risque->evaluation > 16)
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#ea6072;">
-                                        @endif
-                                            <div class="card-inner">
-                                                <div class="card-head">
-                                                    <h5 class="card-title">Evaluation risque sans dispositif de contrôle interne ou dispositif antérieur</h5>
-                                                </div>
-                                                <form action="#">
-                                                    <div class="row g-4">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="Cause">
-                                                                    Vraisemblence
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $risque->vraisemblence }}" readonly type="text" class="form-control" id="Cause">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    gravite
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $risque->gravite }}" readonly type="text" class="form-control" id="controle">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-2">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Evaluation
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $risque->evaluation }}" readonly type="text" class="form-control" id="controle">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Coût
-                                                                </label>
-                                                                @php
-                                                                    $cout = $risque->cout;
-                                                                    $formatcommande = number_format($cout, 0, '.', '.');
-                                                                @endphp
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $formatcommande }} Fcfa" readonly type="text" class="form-control" id="controle">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @foreach ($causesData[$caus2->risque_id] as $causesDatas)
-                                <div class="col-md-12 col-xxl-4" id="groupesContainer">
-                                    <div class="card card-bordered">
-                                        <div class="card-inner">
-                                                <div class="row g-4">
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="Cause">
-                                                                Cause
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ $causesDatas['cause'] }}" readonly type="text" class="form-control" id="Cause">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="controle">
-                                                                Dispositif de Contrôle
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ $causesDatas['dispositif'] }}" readonly type="text" class="form-control" id="controle">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                                <div class="col-md-12 row g-2" style="margin-left:1px;">
-                                    <div class="col-md-12">
-                                        @if ($risque->evaluation_residuel >= 1 && $risque->evaluation_residuel <= 2 )
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#5eccbf;" >
-                                        @endif
-                                        @if ($risque->evaluation_residuel >= 3 && $risque->evaluation_residuel <= 9)
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#f7f880;">
-                                        @endif
-                                        @if ($risque->evaluation_residuel >= 10 && $risque->evaluation_residuel <= 16)
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#f2b171;">
-                                        @endif
-                                        @if ($risque->evaluation_residuel > 16)
-                                            <div class="card card-bordered h-100 border-white" style="background-color:#ea6072;">
-                                        @endif
-                                            <div class="card-inner">
-                                                <div class="card-head">
-                                                    <h5 class="card-title">Evaluation risque avec dispositif de contrôle interne actuel</h5>
-                                                </div>
-                                                <form action="#">
-                                                    <div class="row g-4">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="Cause">
-                                                                    Vraisemblence
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $risque->vraisemblence_residuel }}" readonly type="text" class="form-control" id="Cause">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    gravite
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $risque->gravite_residuel }}" readonly type="text" class="form-control" id="controle">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-2">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Evaluation
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $risque->evaluation_residuel }}" readonly type="text" class="form-control" id="controle">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Coût
-                                                                </label>
-                                                                @php
-                                                                    $cout2 = $risque->cout_residuel;
-                                                                    $formatcommande2 = number_format($cout2, 0, '.', '.');
-                                                                @endphp
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $formatcommande2 }} Fcfa" readonly type="text" class="form-control" id="controle">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Traitement
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $risque->traitement }}" readonly type="text" class="form-control" id="controle">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @foreach ($actionsData[$Suivi_action2->risque_id] as $actionsDatas)
-
-                                @if ($actionsDatas['type'] === 'preventive')
-                                <div class="col-md-12 col-xxl-4" id="groupesAction">
-                                    <div class="card card-bordered">
-                                        <div class="card-inner">
-                                                <div class="row g-4">
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="preventif">
-                                                                Action préventive
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ $actionsDatas['action'] }}" readonly type="text" class="form-control" id="preventif">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="email-address-1">
-                                                                Délai
-                                                            </label>
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $actionsDatas['delai'] }}" readonly type="date" class="form-control">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="email-address-1">
-                                                                Responsabilité
-                                                            </label>
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $actionsDatas['responsable'] }}" readonly type="text" class="form-control">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="email-address-1">
-                                                                Statut
-                                                            </label>
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $actionsDatas['statut'] }}" readonly type="text" class="form-control text-white text-center 
-                                                                    @php
-                                                                        if ($actionsDatas['statut'] ==='non-realiser') {
-                                                                            echo 'bg-danger';
-                                                                        } elseif ($actionsDatas['statut'] ==='realiser') {
-                                                                            echo 'bg-success';
-                                                                        }
-                                                                    @endphp
-                                                                    ">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    @if ($actionsDatas['statut'] ==='realiser')
-
-                                                            <div class="col-lg-4">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="email-address-1">
-                                                                        Réaliser le 
-                                                                    </label>
-                                                                    <div class="form-group">
-                                                                        <div class="form-control-wrap">
-                                                                            <input value="{{ $actionsDatas['date_action'] }}" readonly type="date" class="form-control">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-4">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="email-address-1">
-                                                                        Suivi éffectué le 
-                                                                    </label>
-                                                                    <div class="form-group">
-                                                                        <div class="form-control-wrap">
-                                                                            <input value="{{ $actionsDatas['date_suivi'] }}" readonly type="datetime" class="form-control">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-4">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="email-address-1">
-                                                                        Efficacité 
-                                                                    </label>
-                                                                    <div class="form-group">
-                                                                        <div class="form-control-wrap">
-                                                                            <input value="{{ $actionsDatas['efficacite'] }}" readonly type="text" class="form-control">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                    @endif
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endif
-
-                                @if ($actionsDatas['type'] === 'corrective')
-                                <div class="col-md-12 col-xxl-4" id="groupesAction">
-                                    <div class="card card-bordered">
-                                        <div class="card-inner">
-                                                <div class="row g-4">
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="corectif">
-                                                                Action corrective
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ $actionsDatas['action'] }}" readonly type="text" class="form-control" id="corectif">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="email-address-1">
-                                                                Responsabilité
-                                                            </label>
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $actionsDatas['responsable'] }}" readonly type="text" class="form-control">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endif
-
-                                @endforeach
-                                <div class="col-md-12 col-xxl-4">
-                                    <div class="card card-bordered card-preview">
-                                        <div class="card-inner row g-gs">
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label class="form-label" for="email-address-1">
-                                                        Validateur
-                                                    </label>
-                                                    <div class="form-group">
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{$risque->validateur}}" readonly type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-            </div>
-        </div>
-    </div>
-    @endforeach
 
     @foreach($causes_selects as $causes_select)
     <div class="modal fade" id="modalVucause{{$causes_select->id}}" tabindex="-1" aria-labelledby="modalVuLabel" aria-hidden="true">
@@ -1168,22 +786,6 @@
     <script>
         $(document).ready(function() {
             // Écoutez l'événement de changement de l'élément select
-            $('#risqueSelect').on('change', function() {
-                // Récupérez la valeur sélectionnée
-                var selectedValue = $(this).val();
-
-                // Fermez tous les modals existants
-                $('.modal').modal('hide');
-
-                // Ouvrez le modal correspondant à la valeur sélectionnée
-                $(`#modalVurisque${selectedValue}`).modal('show');
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            // Écoutez l'événement de changement de l'élément select
             $('#causeSelect').on('change', function() {
                 // Récupérez la valeur sélectionnée
                 var selectedValu = $(this).val();
@@ -1214,13 +816,6 @@
 
         function addGroup(type_new) {
 
-            var dynamicFields = document.getElementById("dynamic-fields");
-
-            // Supprimer le contenu existant
-            while (dynamicFields.firstChild) {
-                dynamicFields.removeChild(dynamicFields.firstChild);
-            }
-
             var groupe = document.createElement("div");
             groupe.className = "card card-bordered";
             groupe.innerHTML = `
@@ -1241,11 +836,15 @@
                                                                             Processus
                                                                         </label>
                                                                         <input required style="display:none;" name="nature[]" value="new" type="text" >
-                                                                        <select required id="responsable_idc" required name="processus_id[]" class="form-select">
-                                                                            <option selected value="">
-                                                                                Choisir un responsable
+                                                                        <select id="processus_id" required name="processus_id[]" class="form-select js-select2" placeholder="Choisir un processus" >
+                                                                            <option selected value="" >
+                                                                                
                                                                             </option>
-                                                                            ${processuss.map(processus => `<option value="${processus.id}">${processus.nom}</option>`).join('')}
+                                                                            @foreach($processuss as $processus)
+                                                                            <option value="{{$processus->id}}" >
+                                                                                {{$processus->nom}}
+                                                                            </option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1284,11 +883,15 @@
                                                                                 <label class="form-label" for="Coût">
                                                                                     Responsable
                                                                                 </label>
-                                                                                <select required id="responsable_idc" required name="poste_id[]" class="form-select">
-                                                                                    <option selected value="">
-                                                                                        Choisir un responsable
+                                                                                <select required id="responsable_idc" required name="poste_id[]" class="form-select js-select2">
+                                                                                    <option value="" >
+                                                                                        Choisir le responsable
                                                                                     </option>
-                                                                                    ${postes.map(poste => `<option value="${poste.id}">${poste.nom}</option>`).join('')}
+                                                                                    @foreach($postes as $poste)
+                                                                                    <option value="{{$poste->id}}" >
+                                                                                        {{$poste->nom}}
+                                                                                    </option>
+                                                                                    @endforeach
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group">
