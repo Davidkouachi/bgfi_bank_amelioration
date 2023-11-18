@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRejetsTable extends Migration
+class CreateReclamationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateRejetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rejets', function (Blueprint $table) {
+        Schema::create('reclamations', function (Blueprint $table) {
             $table->id();
-            $table->text('motif');
-            $table->unsignedBigInteger('risque_id');
-            $table->foreign('risque_id')->references('id')->on('risques');
+            $table->string('nom');
+            $table->unsignedBigInteger('processus_id');
+            $table->foreign('processus_id')->references('id')->on('processuses');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateRejetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rejets');
+        Schema::dropIfExists('reclamations');
     }
 }

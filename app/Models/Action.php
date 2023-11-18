@@ -14,12 +14,12 @@ class Action extends Model
 
     protected $fillable = [
         'id',
-        'action',
+        'nom',
         'delai',
-        'type',
         'statut',
         'poste_id',
-        'risque_id',
+        'reclamation_id',
+        'actions',
     ];
 
     public function poste()
@@ -27,8 +27,8 @@ class Action extends Model
         return $this->belongsTo(Poste::class, 'poste_id');
     }
 
-    public function risque()
+    public function reclamation()
     {
-        return $this->belongsTo(Risque::class, 'risque_id');
+        return $this->belongsTo(Reclamation::class, 'reclamation_id');
     }
 }

@@ -450,6 +450,7 @@
             </div>
         </div>
     @endforeach
+    
     @foreach ($risques as $risque)
         <div class="modal fade" tabindex="-1" id="modalConfirme{{ $risque->id }}" aria-modal="true" role="dialog">
             <div class="modal-dialog" role="document">

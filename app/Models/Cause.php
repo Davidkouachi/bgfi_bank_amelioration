@@ -15,13 +15,12 @@ class Cause extends Model
     protected $fillable = [
         'id',
         'nom',
-        'dispositif',
-        'risque_id',
+        'reclamation_id',
     ];
 
-    public function risque()
+    public function reclamation()
     {
-        return $this->belongsTo(Risque::class, 'risque_id');
+        return $this->belongsTo(Reclamation::class, 'reclamation_id');
     }
 
 }

@@ -11,31 +11,37 @@ class Amelioration extends Model
 
     protected $fillable = [
         'id',
-        'type',
         'date_fiche',
         'lieu',
         'detecteur',
-        'non_conformite',
         'consequence',
         'cause',
-        'choix_select',
+        'reclamation',
         'nature',
-        'processus_id',
-        'risque',
-        'resume',
-        'action',
-        'poste_id',
-        'date_action',
         'commentaire',
+        'action_id',
+        'processus_id',
+        'cause_id',
+        'reclamation_id',
     ];
 
-    public function poste() 
+    public function action() 
     {
-        return $this->belongsTo(Poste::class, 'poste_id');
+        return $this->belongsTo(Action::class, 'action_id');
     }
 
     public function processus()
     {
         return $this->belongsTo(Processus::class, 'processus_id');
+    }
+
+    public function cause()
+    {
+        return $this->belongsTo(Cause::class, 'cause_id');
+    }
+
+    public function reclamation()
+    {
+        return $this->belongsTo(Reclamation::class, 'reclamation_id');
     }
 }

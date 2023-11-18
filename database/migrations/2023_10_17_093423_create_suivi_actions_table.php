@@ -21,10 +21,6 @@ class CreateSuiviActionsTable extends Migration
             $table->dateTime('date_suivi')->nullable();
             $table->unsignedBigInteger('action_id');
             $table->foreign('action_id')->references('id')->on('actions');
-            $table->unsignedBigInteger('processus_id');
-            $table->foreign('processus_id')->references('id')->on('processuses');
-            $table->unsignedBigInteger('risque_id');
-            $table->foreign('risque_id')->references('id')->on('risques');
             $table->timestamps();
         });
     }

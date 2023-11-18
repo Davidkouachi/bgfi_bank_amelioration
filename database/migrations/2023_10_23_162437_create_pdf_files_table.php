@@ -17,8 +17,8 @@ class CreatePdfFilesTable extends Migration
             $table->id();
             $table->string('pdf_nom');
             $table->string('pdf_chemin');
-            $table->unsignedBigInteger('risque_id');
-            $table->foreign('risque_id')->references('id')->on('risques');
+            $table->unsignedBigInteger('processus_id');
+            $table->foreign('processus_id')->references('id')->on('processuses');
             $table->timestamps();
         });
     }

@@ -288,6 +288,19 @@ class ProcessusController extends Controller
         $processus->finalite = $finalite;
         $processus->save();
 
+        if ($request->hasFile('pdfFile') && $request->file('pdfFile')->isValid()) {
+
+            $originalFileName = $request->file('pdfFile')->getClientOriginalName();
+            $pdfPathname = $request->file('pdfFile')->storeAs('public/pdf', $originalFileName);
+
+            // Enregistrez le fichier PDF dans la base de données
+            $pdfFile = new Pdf_file();
+            $pdfFile->pdf_nom = $originalFileName;
+            $pdfFile->pdf_chemin = $pdfPathname;
+            $pdfFile->processus_id = $processus->id;
+            $pdfFile->save();
+        }
+
         foreach ($objectifs as $objectif) {
             $nouvelObjectif = new Objectif();
             $nouvelObjectif->processus_id = $processus->id;

@@ -255,8 +255,8 @@
                 <div class="container-fluid">
                     <div class="nk-footer-wrap">
                         <div class="nk-footer-copyright">
-                            © 2023 Cohérence.
-                            <img height="30" width="30" src="/images/logo.png" alt="">
+                            © 2023 BGFIBank.
+                            <img height="30" width="100" src="{{asset('BGFI_logo.jpg')}}" alt="">
                         </div>
                     </div>
                 </div>

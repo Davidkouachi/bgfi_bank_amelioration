@@ -15,20 +15,8 @@ class Suivi_action extends Model
         'commentaire',
         'date_action',
         'date_suivi',
-        'processus_id',
-        'risque_id',
         'action_id',
     ];
-
-    public function processus()
-    {
-        return $this->belongsTo(Processus::class, 'processus_id');
-    }
-    
-    public function risque()
-    {
-        return $this->belongsTo(Risque::class, 'risque_id');
-    }
     
     public function action()
     {

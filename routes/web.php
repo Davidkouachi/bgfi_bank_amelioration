@@ -10,6 +10,7 @@ use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\AmeliorationController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\StatistiqueController;
+use App\Http\Controllers\ListeprocessusController;
 
 
 Route::get('/Login', [AuthController::class, 'view_login'])->name('login');
@@ -38,6 +39,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cause_valider/{id}', [ProcessusController::class, 'cause_valider'])->name('cause_valider');
     Route::get('/rejet/{id}', [ProcessusController::class, 'cause_rejet'])->name('cause_rejet');
 
+    Route::get('/Liste processus', [ListeprocessusController::class, 'index_listeprocessus'])->name('index_listeprocessus');
+    Route::get('/suppr_processus/{id}', [ListeprocessusController::class, 'suppr_processus'])->name('suppr_processus');
 
 
     Route::post('/traitement_resva', [ResvaController::class, 'add_resva'])->name('add_resva');

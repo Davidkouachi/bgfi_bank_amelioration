@@ -13,11 +13,11 @@ class Pdf_file extends Model
         'id',
         'pdf_nom',
         'pdf_chemin',
-        'risque_id',
+        'processus_id',
     ];
 
-    public function risque()
+    public function processus()
     {
-        return $this->belongsTo(Risque::class, 'risque_id');
+        return $this->belongsTo(Processus::class, 'processus_id');
     }
 }

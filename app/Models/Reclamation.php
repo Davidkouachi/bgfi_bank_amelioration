@@ -5,19 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rejet extends Model
+class Reclamation extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'id',
-        'motif',
-        'risque_id',
+        'nom',
+        'processus_id',
     ];
-
-    public function risque()
-    {
-        return $this->belongsTo(Risque::class, 'risque_id');
-    }
-
 }

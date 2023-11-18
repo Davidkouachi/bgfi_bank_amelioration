@@ -2,6 +2,18 @@
 
 @section('titre', 'Nouveau Processus')
 
+@section('option_btn')
+
+    <li class="dropdown chats-dropdown">
+        <a href="{{ route('index_accueil') }}" class="dropdown-toggle nk-quick-nav-icon">
+            <div class="icon-status icon-status-na">
+                <em class="icon ni ni-home"></em>
+            </div>
+        </a>
+    </li>
+
+@endsection
+
 @section('content')
 
     <div class="nk-content ">
@@ -10,20 +22,13 @@
                 <div class="nk-content-body">
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
-                            <div class="nk-block-head-content">
-                                <h3 class="text-center">
-                                    Historique
-                                </h3>
-                            </div>
-                            <div class="nk-block-head-content">
-                                <div class="toggle-wrap nk-block-tools-toggle">
-                                    <a class="btn btn-white btn-dim btn-outline-primary" href="{{ route('index_accueil') }}">
-                                        <em class="icon ni ni-home"></em>
-                                        <span>Accueil</span>
-                                    </a>
+                                    <div class="nk-block-head-content" style="margin:0px auto;">
+                                        <h3 class="text-center">
+                                            <span>Historique</span>
+                                            <em class="icon ni ni-property"></em>
+                                        </h3>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="nk-block">
                         <div class="row g-gs">
