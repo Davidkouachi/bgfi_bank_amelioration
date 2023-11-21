@@ -34,7 +34,7 @@
                     </div>
                     <div class="nk-block">
                         <div class="row g-gs">
-                            <div class="col-md-12 col-xxl-4">
+                            <div class="col-lg-12 col-xxl-12">
                                 <div class="card card-bordered card-preview">
                                     <div class="card-inner">
                                         <table class="datatable-init table">
@@ -97,7 +97,7 @@
                     <div class="modal-body">
                         <form class="nk-block" >
                             <div class="row g-gs">
-                                <div class="col-md-12 col-xxl-4" id="groupesContainer">
+                                <div class="col-md-12 col-xxl-12" id="groupesContainer">
                                     <div class="card card-bordered">
                                         <div class="card-inner">
                                                 <div class="row g-4">

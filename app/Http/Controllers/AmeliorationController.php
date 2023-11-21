@@ -14,6 +14,8 @@ use App\Models\Poste;
 use App\Models\User;
 use App\Models\Amelioration;
 use App\Models\Reclamation;
+use App\Models\Risquetrouver;
+use App\Models\Causetrouver;
 
 use App\Events\NotificationEvent;
 
@@ -43,15 +45,9 @@ class AmeliorationController extends Controller
 
             foreach($actions as $action)
             {
-               $Suivi_action = Suivi_action::where('action_id', $action->id)->first();
                $actionsData[$recla->id][] = [
                     'action' => $action->nom,
-                    'delai' => $action->delai,
                     'responsable' => $action->responsable,
-                    'statut' => $action->statut,
-                    'date_action' => $Suivi_action->date_action,
-                    'date_suivi' => $Suivi_action->date_suivi,
-                    'efficacite' => $Suivi_action->efficacite,
                 ];
             }
 
@@ -132,47 +128,74 @@ class AmeliorationController extends Controller
 
     public function index_add(Request $request) 
     {
-        $type = $request->input('type');
         $date_fiche = $request->input('date_fiche');
+        $nbre_jour = $request->input('nbre_jour');
+        $date_limite = $request->input('date_limite');
+
         $lieu = $request->input('lieu');
         $detecteur = $request->input('detecteur');
-        $non_conformite = $request->input('non_conformite');
-        $consequence = $request->input('consequence');
-        $cause = $request->input('cause');
+
+        $reclamations = $request->input('reclamations');
+        $causes = $request->input('causes');
+        $consequences = $request->input('consequences');
+
+        $choix_recla = $request->input('choix_recla');
+
         $choix_select = $request->input('choix_select');
 
         $nature = $request->input('nature');
         $processus_id = $request->input('processus_id');
-        $risque = $request->input('risque');
-        $resume = $request->input('resume');
-        $action = $request->input('action');
         $poste_id = $request->input('poste_id');
-        $date_action = $request->input('date_action');
-        $commentaire = $request->input('commentaire');
+        $reclamation = $request->input('reclamation');
+        $cause = $request->input('cause');
+        $actions = $request->input('actions');
+        $commentaires = $request->input('commentaires');
+        $action = $request->input('action');
 
         foreach ($nature as $index => $valeur) {
 
-            if ($nature[$index] !== '0') {
-                $hasNonZeroNature = true;
+            if ($nature[$index] === 'new') {
+
+                $recla = new Reclamation();
+                $recla->nom = $reclamation[$index];
+                $recla->processus_id = $processus_id[$index];
+                $recla->save();
+
+                $caus = new Cause();
+                $caus->nom = $cause[$index];
+                $caus->reclamation_id = $recla->id;
+                $caus->save();
+
+                $actio = new Action();
+                $actio->nom = $action[$index];
+                $actio->actions = $actions[$index];
+                $actio->poste_id = $poste_id[$index];
+                $actio->reclamation_id = $recla->id;
+                $actio->save();
 
                 $am = new Amelioration();
-                $am->type = $type;
                 $am->date_fiche = $date_fiche;
                 $am->lieu =$lieu;
                 $am->detecteur = $detecteur;
-                $am->non_conformite = $non_conformite;
-                $am->consequence = $consequence;
-                $am->cause = $cause;
-                $am->choix_select = $choix_select;
+                $am->reclamations = $reclamations;
+                $am->consequences = $consequences;
+                $am->causes = $causes;
                 $am->nature = $nature[$index];
-                $am->risque = $risque[$index];
-                $am->resume = $resume[$index];
-                $am->action = $action[$index];
-                $am->date_action = $date_action[$index];
-                $am->commentaire = $commentaire[$index];
+                $am->choix_select = 'neant';
+                $am->commentaires = $commentaires[$index];
+                $am->action_id = $actio->id;
+                $am->reclamation_id = $recla->id;
                 $am->processus_id = $processus_id[$index];
-                $am->poste_id = $poste_id[$index];
                 $am->save();
+
+                $suivi = new Suivi_action();
+                $suivi->action_id = $actio->id;
+                $suivi->amelioration_id = $am->id;
+                $suivi->processus_id = $processus_id[$index];
+                $suivi->delai = $date_limite;
+                $suivi->statut = 'non-realiser';
+                $suivi->save();
+
             }
             
         }

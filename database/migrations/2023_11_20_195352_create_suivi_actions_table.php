@@ -16,11 +16,17 @@ class CreateSuiviActionsTable extends Migration
         Schema::create('suivi_actions', function (Blueprint $table) {
             $table->id();
             $table->string('efficacite')->nullable();
-            $table->text('commentaire')->nullable();
+            $table->text('commentaires')->nullable();
             $table->date('date_action')->nullable();
+            $table->date('delai');
+            $table->string('statut');
             $table->dateTime('date_suivi')->nullable();
             $table->unsignedBigInteger('action_id');
             $table->foreign('action_id')->references('id')->on('actions');
+            $table->unsignedBigInteger('processus_id');
+            $table->foreign('processus_id')->references('id')->on('processuses');
+            $table->unsignedBigInteger('amelioration_id');
+            $table->foreign('amelioration_id')->references('id')->on('ameliorations');
             $table->timestamps();
         });
     }

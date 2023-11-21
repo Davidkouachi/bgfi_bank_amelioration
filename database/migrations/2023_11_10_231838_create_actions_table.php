@@ -16,8 +16,6 @@ class CreateActionsTable extends Migration
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
             $table->string('nom')->nullable();
-            $table->date('delai')->nullable();
-            $table->string('statut')->nullable();
             $table->string('actions')->nullable();
             $table->unsignedBigInteger('poste_id')->nullable();
             $table->foreign('poste_id')->references('id')->on('postes');

@@ -14,34 +14,30 @@ class Amelioration extends Model
         'date_fiche',
         'lieu',
         'detecteur',
-        'consequence',
-        'cause',
-        'reclamation',
+        'consequences',
+        'causes',
+        'reclamations',
         'nature',
-        'commentaire',
+        'choix_select',
+        'commentaires',
         'action_id',
         'processus_id',
-        'cause_id',
         'reclamation_id',
     ];
 
-    public function action() 
+    public function action()
     {
         return $this->belongsTo(Action::class, 'action_id');
     }
 
     public function processus()
     {
-        return $this->belongsTo(Processus::class, 'processus_id');
-    }
-
-    public function cause()
-    {
-        return $this->belongsTo(Cause::class, 'cause_id');
+        return $this->belongsTo(Processuse::class, 'processus_id');
     }
 
     public function reclamation()
     {
         return $this->belongsTo(Reclamation::class, 'reclamation_id');
     }
+
 }

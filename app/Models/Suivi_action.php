@@ -12,14 +12,28 @@ class Suivi_action extends Model
     protected $fillable = [
         'id',
         'efficacite',
-        'commentaire',
+        'commentaires',
+        'delai',
+        'statut',
         'date_action',
         'date_suivi',
         'action_id',
+        'amelioration_id',
+        'processus_id',
     ];
     
     public function action()
     {
         return $this->belongsTo(Action::class, 'action_id');
+    }
+
+    public function amelioration()
+    {
+        return $this->belongsTo(Amelioration::class, 'amelioration_id');
+    }
+    
+    public function processus()
+    {
+        return $this->belongsTo(Processuse::class, 'processus_id');
     }
 }
