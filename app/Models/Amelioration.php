@@ -23,6 +23,7 @@ class Amelioration extends Model
         'action_id',
         'processus_id',
         'reclamation_id',
+        'cause_id',
     ];
 
     public function action()
@@ -38,6 +39,11 @@ class Amelioration extends Model
     public function reclamation()
     {
         return $this->belongsTo(Reclamation::class, 'reclamation_id');
+    }
+
+    public function cause()
+    {
+        return $this->belongsTo(Cause::class, 'cause_id');
     }
 
 }

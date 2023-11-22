@@ -16,7 +16,7 @@ class Action extends Model
         'id',
         'nom',
         'poste_id',
-        'reclamation_id',
+        'cause_id',
         'actions',
     ];
 
@@ -25,8 +25,8 @@ class Action extends Model
         return $this->belongsTo(Poste::class, 'poste_id');
     }
 
-    public function reclamation()
+    public function cause()
     {
-        return $this->belongsTo(Reclamation::class, 'reclamation_id');
+        return $this->belongsTo(Cause::class, 'cause_id');
     }
 }

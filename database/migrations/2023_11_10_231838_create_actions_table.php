@@ -19,8 +19,8 @@ class CreateActionsTable extends Migration
             $table->string('actions')->nullable();
             $table->unsignedBigInteger('poste_id')->nullable();
             $table->foreign('poste_id')->references('id')->on('postes');
-            $table->unsignedBigInteger('reclamation_id')->nullable();
-            $table->foreign('reclamation_id')->references('id')->on('reclamations');
+            $table->unsignedBigInteger('cause_id')->nullable();
+            $table->foreign('cause_id')->references('id')->on('causes');
             $table->timestamps();
         });
     }

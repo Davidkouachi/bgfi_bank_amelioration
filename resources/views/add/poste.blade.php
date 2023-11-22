@@ -44,7 +44,7 @@
                                                                     Poste(s)
                                                                 </label>
                                                                 <div class="form-control-wrap">
-                                                                    <input placeholder="Saisie obligatoire" autocomplete="off" required type="text" class="form-control text-center poste" name="nom[]" oninput="this.value = this.value.toUpperCase()">
+                                                                    <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" name="nom[]" oninput="this.value = this.value.toUpperCase()">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -88,7 +88,7 @@
             <div class="row g-g2" >
                 <div class=" col-md-12 form-group">
                     <div class="form-control-wrap">
-                        <input placeholder="Saisie obligatoire" autocomplete="off" required type="text" class="form-control text-center objectif me-2" name="nom[]" oninput="this.value = this.value.toUpperCase()">
+                        <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center objectif me-2" name="nom[]" oninput="this.value = this.value.toUpperCase()">
                     </div>
                 </div>
                 <div class=" col-md-12 form-group text-center">

@@ -36,9 +36,9 @@ class AmeliorationController extends Controller
         foreach($reclas as $recla)
         {
 
-            $actions = Action::join('reclamations', 'actions.reclamation_id', '=', 'reclamations.id')
+            $actions = Action::join('causes', 'actions.cause_id', '=', 'causes.id')
                 ->join('postes', 'actions.poste_id', '=', 'postes.id')
-                ->select('actions.*','reclamations.nom as reclamation','postes.nom as responsable')
+                ->select('actions.*','causes.nom as cause','postes.nom as responsable')
                 ->get();
 
             $actionsData[$recla->id] = [];
@@ -72,57 +72,66 @@ class AmeliorationController extends Controller
             'postes' => $postes, 'processuss' => $processuss]);
     }
 
-    public function get_cause_info($id)
+    public function get_cause($id)
     {
-        $cause = Cause::find($id);
-        $risque = Risque::find($cause->risque_id);
-        $actions = Action::join('postes', 'actions.poste_id', '=', 'postes.id')
-                      ->where('actions.risque_id', $risque->id)
-                      ->where('actions.type', 'corrective')
-                      ->select('actions.*', 'postes.nom as responsable')
-                      ->get();
+        $causes = Cause::where('reclamation_id', $id)->get();
+        $nbre_cause = $causes->count();
 
-        foreach ($actions as $action) {
-
-            $action->risque = $risque->nom;
-
-            $processus = Processuse::find($risque->processus_id);
-            $action->processus = $processus->nom;
-            $action->processus_id = $processus->id;
-
-            $action->nature="cause";
-
-
+        if($causes->isEmpty()) {
+            return response()->json(['error' => true]);
         }
 
         return response()->json([
-            'actions' => $actions,
+            'causes' => $causes,
+            'nbre_cause' => $nbre_cause,
         ]);
     }
 
-    public function get_risque_info($id)
+    public function get_cause_new($id)
     {
-        $risque = Risque::find($id);
+        $reclamations = Reclamation::find($id);
+        $processus = Processuse::where('id',$reclamations->processus_id);
+
+        if($reclamations || $processus) {
+            return response()->json([
+                'reclamations' => $reclamations,
+                'processus' => $processus,
+            ]);
+        } else {
+            return response()->json(['error' => true]);
+        }
+
+    }
+
+    public function get_action($id)
+    {
+
         $actions = Action::join('postes', 'actions.poste_id', '=', 'postes.id')
-                      ->where('actions.risque_id', $risque->id)
-                      ->where('actions.type', 'corrective')
-                      ->select('actions.*', 'postes.nom as responsable')
-                      ->get();
+                    ->join('causes', 'actions.cause_id', '=', 'causes.id')
+                    ->where('actions.cause_id', '=', $id)
+                    ->select('actions.*', 'postes.nom as responsable','postes.id as responsable_id','causes.nom as cause','causes.reclamation_id as reclamation_id','causes.id as cause_id')
+                    ->get();
+
+        $nbre_action = $actions->count();
 
         foreach ($actions as $action) {
 
-            $action->risque = $risque->nom;
+            $recla = Reclamation::where('id', $action->reclamation_id)->first();
+            $action->reclamation = $recla->nom;
 
-            $processus = Processuse::find($risque->processus_id);
+            $processus = Processuse::where('id', $recla->processus_id)->first();
             $action->processus = $processus->nom;
             $action->processus_id = $processus->id;
 
-            $action->nature="risque";
+        }
 
+        if($nbre_action === 0 ) {
+            return response()->json(['error' => true]);
         }
 
         return response()->json([
             'actions' => $actions,
+            'nbre_action' => $nbre_action,
         ]);
     }
 
@@ -170,7 +179,7 @@ class AmeliorationController extends Controller
                 $actio->nom = $action[$index];
                 $actio->actions = $actions[$index];
                 $actio->poste_id = $poste_id[$index];
-                $actio->reclamation_id = $recla->id;
+                $actio->cause_id = $caus->id;
                 $actio->save();
 
                 $am = new Amelioration();
@@ -186,10 +195,13 @@ class AmeliorationController extends Controller
                 $am->action_id = $actio->id;
                 $am->reclamation_id = $recla->id;
                 $am->processus_id = $processus_id[$index];
+                $am->cause_id = $caus->id;
                 $am->save();
 
                 $suivi = new Suivi_action();
                 $suivi->action_id = $actio->id;
+                $suivi->reclamation_id = $recla->id;
+                $suivi->cause_id = $caus->id;
                 $suivi->amelioration_id = $am->id;
                 $suivi->processus_id = $processus_id[$index];
                 $suivi->delai = $date_limite;

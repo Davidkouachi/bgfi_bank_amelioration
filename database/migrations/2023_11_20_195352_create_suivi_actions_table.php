@@ -27,6 +27,10 @@ class CreateSuiviActionsTable extends Migration
             $table->foreign('processus_id')->references('id')->on('processuses');
             $table->unsignedBigInteger('amelioration_id');
             $table->foreign('amelioration_id')->references('id')->on('ameliorations');
+            $table->unsignedBigInteger('cause_id');
+            $table->foreign('cause_id')->references('id')->on('causes');
+            $table->unsignedBigInteger('reclamation_id');
+            $table->foreign('reclamation_id')->references('id')->on('reclamations');
             $table->timestamps();
         });
     }
