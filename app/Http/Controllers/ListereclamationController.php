@@ -106,4 +106,25 @@ class ListereclamationController extends Controller
 
         return view('liste.cause', ['causes' => $causes, 'actionsData' => $actionsData ]);
     }
+
+    public function index_modif_cause(Request $request)
+    {
+        $rech = Cause::where('id', $request->cause_id)->first();
+        
+        if ($rech) {
+
+            $rech->nom = $request->cause;
+            $rech->update();
+
+            $his = new Historique_action();
+            $his->nom_formulaire = 'Liste des Causes';
+            $his->nom_action = 'Mise à jour';
+            $his->user_id = Auth::user()->id;
+            $his->save();
+
+            return redirect()
+                ->back()
+                ->with('valider', 'Mise à jour éffectuée.');
+        }
+    }
 }

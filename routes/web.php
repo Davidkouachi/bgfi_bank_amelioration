@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/liste_reclamation', [ListereclamationController::class, 'index'])->name('index_listereclamation');
     Route::get('/liste_cause', [ListereclamationController::class, 'index_cause'])->name('index_listecause');
+    Route::post('/Modification Cause', [ListereclamationController::class, 'index_modif_cause'])->name('index_modif_cause');
 
     Route::get('/Profil', [ProfilController::class, 'index_profil'])->name('index_profil');
 

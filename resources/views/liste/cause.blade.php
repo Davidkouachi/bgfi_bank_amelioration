@@ -185,7 +185,32 @@
                         <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
                     </div>
                     <div class="modal-body">
-                        
+                        <form method="post" action="{{ route('index_modif_cause') }}">
+                            @csrf
+                            <div class="row g-4 mb-4" id="poste-container">
+                                <div class="col-lg-12">
+                                    <div class="form-group text-center">
+                                        <label class="form-label" for="poste">
+                                            Cause
+                                        </label>
+                                        <div class="form-control-wrap">
+                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" value="{{ $cause->nom }}" name="cause" oninput="this.value = this.value.toUpperCase()">
+                                            <input type="text" name="cause_id" value="{{ $cause->id }}" style="display: none;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-gs">
+                                <div class="col-lg-12">
+                                    <div class="form-group text-center">
+                                        <button type="submit" class="btn btn-lg btn-primary btn-dim">
+                                            <em class="ni ni-edit me-2"></em>
+                                            <em>Mise à jour</em>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
