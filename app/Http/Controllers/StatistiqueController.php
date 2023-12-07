@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\Historique_action;
 use App\Models\Poste;
 use App\Models\Amelioration;
+use App\Models\Reclamation;
 
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -26,26 +27,26 @@ class StatistiqueController extends Controller
 {
     public function index_stat()
     {
-        $types = ['non_conformite_interne', 'reclamation', 'contentieux'];
+        if (Auth::check() === false ) {
+            return redirect()->route('login');
+        }
+
+        $types = ['processus', 'reclamation', 'cause'];
 
         $statistics = [];
 
         foreach ($types as $type) {
             $statistics[$type] = [];
 
-            $statistics[$type]['total'] = Amelioration::where('type', $type)->count();
-            $statistics[$type]['causes'] = Amelioration::where('type', $type)
-                ->where('choix_select', 'cause')->count();
-            $statistics[$type]['risques'] = Amelioration::where('type', $type)
-                ->where('choix_select', 'risque')->count();
-            $statistics[$type]['causes_risques_nt'] = Amelioration::where('type', $type)
-                ->where('choix_select', 'cause_risque_nt')->count();
+            $statistics[$type]['processus'] = Processuse::all()->count();
+            $statistics[$type]['reclamation'] = Reclamation::all()->count();
+            $statistics[$type]['cause'] = Cause::all()->count();
         }
-
 
         $processus = Processuse::all();
 
         return view('statistique.index', ['statistics' => $statistics, 'processus' => $processus]);
+
     }
 
     public function get_processus($id)

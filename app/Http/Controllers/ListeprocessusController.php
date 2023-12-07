@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 use App\Models\Processuse;
 use App\Models\Objectif;
@@ -25,6 +27,10 @@ class ListeprocessusController extends Controller
 {
     public function index_listeprocessus()
     {
+        if (Auth::check() === false ) {
+            return redirect()->route('login');
+        }
+
         $processus = Processuse::all();
 
         $objectifData = [];
@@ -52,15 +58,6 @@ class ListeprocessusController extends Controller
         }
 
         return view('liste.processus', ['processus' => $processus, 'objectifData' => $objectifData]);
-    }
-
-    public function suppr_processus($id)
-    {
-        return redirect()
-            ->back()
-            ->with('valider', 'Aucun code.');
-
-        
     }
 
 

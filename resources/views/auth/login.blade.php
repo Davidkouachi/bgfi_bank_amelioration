@@ -65,6 +65,17 @@
         {{ session()->forget('error_login') }}
     @endif
 
+    <script>
+        window.onload = function() {
+            if (window.history && window.history.pushState) {
+                history.pushState(null, null, window.location.href);
+                window.onpopstate = function() {
+                    history.pushState(null, null, window.location.href);
+                };
+            }
+        };
+    </script>
+
 
 </body>
 

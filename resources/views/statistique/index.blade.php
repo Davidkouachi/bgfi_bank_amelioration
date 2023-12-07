@@ -32,23 +32,14 @@
                 </div>
                 <div class="nk-block">
                     <div class="row g-gs">
-                        @foreach ($statistics as $type => $stat)
+                        @foreach ($statistics as $key => $stat)
                             <div class="col-md-4">
                                 <div class="card card-bordered card-full">
                                     <div class="card-inner">
                                         <div class="card-amount">
-                                            <span class="amount">
-                                                @if ($type === 'non_conformite_interne')
-                                                    Non Conformité Interne
-                                                @endif
-                                                @if ($type === 'reclamation')
-                                                    Réclamation
-                                                @endif
-                                                @if ($type === 'contentieux')
-                                                     Contentieux
-                                                @endif
+                                            <span class="amount">Statistique
                                                 <span class="currency currency-usd">
-                                                    ({{ $stat['total'] }})
+                                                    (0)
                                                 </span>
                                             </span>
                                         </div>
@@ -56,64 +47,32 @@
                                             <div class="invest-data-amount g-2">
                                                 <div class="invest-data-history">
                                                     <div class="title text-center">
+                                                        Processus(s)
+                                                    </div>
+                                                    <div class="amount text-center">
+                                                        {{ $stat['processus'] }}
+                                                    </div>
+                                                </div>
+                                                <div class="invest-data-history">
+                                                    <div class="title text-center">
+                                                        Réclamation(s)
+                                                    </div>
+                                                    <div class="amount text-center">
+                                                        {{ $stat['reclamation'] }}
+                                                    </div>
+                                                </div>
+                                                <div class="invest-data-history">
+                                                    <div class="title text-center">
                                                         Cause(s)
                                                     </div>
                                                     <div class="amount text-center">
-                                                        {{ $stat['causes'] }}
-                                                    </div>
-                                                </div>
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Risque(s)
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        {{ $stat['risques'] }}
-                                                    </div>
-                                                </div>
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Néant
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        {{ $stat['causes_risques_nt'] }}
+                                                        {{ $stat['cause'] }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div>
-                                            <canvas id="myChart{{$type}}"></canvas>
-                                        </div>
-
-                                        <script>
-                                            var ctx{{ $type }} = document.getElementById('myChart{{ $type }}').getContext('2d');
-                                            var myChart{{ $type }} = new Chart(ctx{{ $type }}, {
-                                                type: 'bar', // Ou 'line', 'pie', etc., selon le type de diagramme que vous souhaitez
-                                                data: {
-                                                    labels: ['Causes', 'Risques', 'Néant'],
-                                                    datasets: [{
-                                                       label: 'Histogramme',
-                                                        data: [{{ $stat['causes'] }}, {{ $stat['risques'] }}, {{ $stat['causes_risques_nt'] }}],
-                                                        backgroundColor: [
-                                                            'blue',
-                                                            'red',
-                                                            'orange'], // Couleur de remplissage du graphique
-                                                        borderColor: 'white', // Couleur de la bordure du graphique
-                                                        borderWidth: 1
-                                                    }]
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        y: {
-                                                            beginAtZero: true,
-                                                            ticks: {
-                                                                stepSize: 10 // L'intervalle entre chaque étiquette sur l'axe Y
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        </script>
+                                        
 
                                         <!--<div class="card-amount">
                                             <div >

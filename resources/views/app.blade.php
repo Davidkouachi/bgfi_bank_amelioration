@@ -16,35 +16,8 @@
     <link href="assets/css/theme0226.css" rel="stylesheet">
     <script src="{{asset('chart.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
-    
-    <!--<script>
-        import Echo from 'laravel-echo'
-
-        window.Echo = new Echo({
-          broadcaster: 'pusher',
-          key: '9f9514edd43b1637ff61',
-          cluster: 'eu',
-          forceTLS: true
-        });
-
-        var channel = Echo.channel('my-channel');
-        channel.listen('.my-event', function(data) {
-                    Swal.fire({
-                        title: "Information!",
-                        text: "Nouvelle(s) action(s) corrective à valider",
-                        icon: "info",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        confirmButtonText: "OK",
-                        allowOutsideClick: false,
-                        showCloseButton: true
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Insérer ici le code pour effectuer une action après confirmation
-                        }
-                    });
-        });
-    </script>-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{ asset('pusher.min.js') }}"></script>
     </link>
     </link>
     </link>
@@ -60,11 +33,11 @@
             <div class="nk-header is-light nk-header-fixed">
                 <div class="container-fluid">
                     <div class="nk-header-wrap">
-                        <!--<div class="nk-menu-trigger me-sm-2 d-lg-none">
+                        <div class="nk-menu-trigger me-sm-2 d-lg-none">
                             <a class="nk-nav-toggle nk-quick-nav-icon" data-target="headerNav" href="#">
                                 <em class="icon ni ni-menu"></em>
                             </a>
-                        </div>-->
+                        </div>
                         <div class="nk-header-brand">
                             <a class="logo-link" href="{{ route('index_accueil') }}">
                                 <img alt="logo-dark" class="logo-dark logo-img" src="{{asset('BGFI_logo.png')}}">
@@ -72,13 +45,11 @@
                             </a>
                         </div>
                         <div class="nk-header-menu ms-auto" data-content="headerNav">
-                            <!--<div class="nk-header-mobile">
+                            <div class="nk-header-mobile">
                                 <div class="nk-header-brand">
                                     <a class="logo-link" href="index-2.html">
-                                        <img alt="logo-dark" class="logo-dark logo-img" src="images/logo.png"
-                                            srcset="/images/logo.png 2x">
+                                        <img alt="logo-dark" class="logo-dark logo-img" src="{{asset('BGFI_logo.png')}}">
                                         </img>
-                                        <span><B>COHÉRENCE</B></span>
                                     </a>
                                 </div>
                                 <div class="nk-menu-trigger me-n2">
@@ -86,77 +57,196 @@
                                         <em class="icon ni ni-arrow-left"></em>
                                     </a>
                                 </div>
-                            </div>-->
+                            </div>
+                            @if (Auth::check())
                             <ul class="nk-menu nk-menu-main ui-s2">
-                                <!--<li >
-                                    <a class="nk-menu-link" href="{{ route('index_accueil') }}">
-                                        <span class="nk-menu-text">
-                                            Accueil
-                                        </span>
-                                    </a>
-                                </li>
+                                @if (session('user_auto')->new_user === 'oui' || session('user_auto')->new_poste === 'oui' || session('user_auto')->historiq === 'oui' || session('user_auto')->stat === 'oui')
                                 <li class="nk-menu-item has-sub">
-                                    <a class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-text">
-                                            Nouvelle Enregistrement
+                                    <a class="nk-menu-toggle btn " >
+                                        <em class="ni ni-building me-2"></em>
+                                        <span class="nk-menu-text text-dark">
+                                            Administration
                                         </span>
                                     </a>
                                     <ul class="nk-menu-sub">
+                                        @if (session('user_auto')->new_user === 'oui')
+                                        <li >
+                                            <a class="nk-menu-link" href="{{ route('index_add_resva') }}">
+                                                <em class="icon ni ni-user-add me-1"></em>
+                                                <span class="nk-menu-text ">
+                                                    Nouveau utilisateur
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li >
+                                            <a class="nk-menu-link" href="{{ route('index_liste_resva') }}">
+                                                <em class="icon ni ni-list me-1"></em>
+                                                <span class="nk-menu-text ">
+                                                    Liste des utilisateurs
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                        @if (session('user_auto')->new_poste === 'oui')
+                                        <li >
+                                            <a data-bs-toggle="modal" data-bs-target="#modalPoste" class="nk-menu-link">
+                                                <em class="ni ni-reports-alt me-1"></em>
+                                                <span class="nk-menu-text ">
+                                                    Nouveau poste
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li >
+                                            <a href="{{ route('index_liste_poste') }}" class="nk-menu-link">
+                                                <em class="ni ni-list me-1"></em>
+                                                <span class="nk-menu-text ">
+                                                    Liste des postes
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                        @if (session('user_auto')->historiq === 'oui')
+                                        <li>
+                                            <a class="nk-menu-link" href="{{ route('index_historique') }}">
+                                                <em class="icon ni ni-property me-1"></em>
+                                                <span class="nk-menu-text " >
+                                                    historique
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                        @if (session('user_auto')->stat === 'oui')
+                                        <li>
+                                            <a class="nk-menu-link" href="{{ route('index_stat') }}" >
+                                                <em class="ni ni-bar-chart-alt me-1"></em>
+                                                <span class="nk-menu-text ">
+                                                    statistique
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                    </ul>
+                                </li>
+                                @endif
+                                @if (session('user_auto')->new_proces === 'oui' || session('user_auto')->list_proces === 'oui')
+                                <li class="nk-menu-item has-sub">
+                                    <a class="nk-menu-toggle btn " >
+                                        <em class="ni ni-share-alt me-2"></em>
+                                        <span class="nk-menu-text text-dark">
+                                            Processus
+                                        </span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @if (session('user_auto')->new_proces === 'oui')
                                         <li >
                                             <a class="nk-menu-link" href="{{ route('index_add_processus') }}">
-                                                <span class="nk-menu-text">
-                                                    Fiche Processus
+                                                <em class="icon ni ni-property-add me-1"></em>
+                                                <span class="nk-menu-text ">
+                                                    Nouveau processus
                                                 </span>
                                             </a>
                                         </li>
+                                        @endif
+                                        @if (session('user_auto')->list_proces === 'oui')
                                         <li >
-                                            <a class="nk-menu-link" href="{{ route('index_add_processuseva') }}">
-                                                <span class="nk-menu-text">
-                                                    Fiche Risque
+                                            <a class="nk-menu-link" href="{{ route('index_listeprocessus') }}">
+                                                <em class="ni ni-list-index me-1"></em>
+                                                <span class="nk-menu-text ">
+                                                    Liste des processus
                                                 </span>
                                             </a>
                                         </li>
-                                        <li >
-                                            <a class="nk-menu-link" href="{{ route('index_amelioration') }}">
-                                                <span class="nk-menu-text">
-                                                    Fiche d'amélioration
-                                                </span>
-                                            </a>
-                                        </li>
+                                        @endif
                                     </ul>
                                 </li>
+                                @endif
+                                @if (session('user_auto')->new_recla === 'oui' || session('user_auto')->list_recla === 'oui')
                                 <li class="nk-menu-item has-sub">
-                                    <a class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-text">
-                                            Tableau
+                                    <a class=" nk-menu-toggle btn " >
+                                        <em class="icon ni ni-reports me-2"></em>
+                                        <span class="nk-menu-text text-dark">
+                                            Réclamation
                                         </span>
                                     </a>
                                     <ul class="nk-menu-sub">
-                                        <li >
-                                            <a class="nk-menu-link" href="{{ route('index_validation_processus') }}">
+                                        @if (session('user_auto')->new_recla === 'oui')
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_amelioration') }}">
+                                                <em class="icon ni ni-view-list-sq me-1"></em>
                                                 <span class="nk-menu-text">
-                                                    Validation
+                                                    Nouvelle Réclamation
                                                 </span>
                                             </a>
                                         </li>
-                                        <li >
-                                            <a class="nk-menu-link" href="{{ route('index_suiviaction') }}">
+                                        @endif
+                                        @if (session('user_auto')->list_recla === 'oui')
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_listereclamation') }}">
+                                                <em class="ni ni-list-index me-1"></em>
                                                 <span class="nk-menu-text">
-                                                    Suivi des actions
+                                                    Liste des réclamations
                                                 </span>
                                             </a>
                                         </li>
-                                        <li >
-                                            <a class="nk-menu-link" href="{{ route('index_evaluation') }}">
+                                        @endif
+                                        @if (session('user_auto')->list_cause === 'oui')
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_listecause') }}">
+                                                <em class="ni ni-list-index me-1"></em>
                                                 <span class="nk-menu-text">
-                                                    Evaluation Processus
+                                                    Liste des causes
                                                 </span>
                                             </a>
                                         </li>
+                                        @endif
                                     </ul>
-                                </li>-->
+                                </li>
+                                @endif
+                                @if (session('user_auto')->suivi_act === 'oui' || session('user_auto')->act_eff === 'oui' || session('user_auto')->list_act === 'oui')
+                                <li class="nk-menu-item has-sub">
+                                    <a class="nk-menu-toggle btn " >
+                                        <em class="ni ni-box-view-fill me-2"></em>
+                                        <span class="nk-menu-text text-dark">
+                                            Actions
+                                        </span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @if (session('user_auto')->suivi_act === 'oui')
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_suiviaction') }}">
+                                                <em class="icon ni ni-view-list-sq me-1"></em>
+                                                <span class="nk-menu-text">
+                                                    Tableau de suivi
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                        @if (session('user_auto')->act_eff === 'oui')
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_listeactioneffectuer') }}">
+                                                <em class="icon ni ni-view-list-sq me-1"></em>
+                                                <span class="nk-menu-text">
+                                                    Actions éffectuées
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                        @if (session('user_auto')->list_act === 'oui')
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_listeaction') }}">
+                                                <em class="ni ni-list-index me-1"></em>
+                                                <span class="nk-menu-text">
+                                                    Liste des actions
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                    </ul>
+                                </li>
+                                @endif
                                 @yield('menu')
                             </ul>
+                            @endif
                         </div>
                         <div class="nk-header-tools">
                             <ul class="nk-quick-nav">
@@ -171,7 +261,7 @@
                                             <div class="user-info">
                                                 <div class="user-status text-primary"> </div>
                                                 <div class="user-name dropdown-indicator">
-                                                    {{ Auth::user()->name }}
+                                                    {{ session('user_poste')->nom }}
                                                 </div>
                                             </div>
                                         </div>
@@ -193,23 +283,10 @@
                                                         {{ Auth::user()->email }}
                                                     </span>
                                                 </div>
-                                                <div class="user-action">
-                                                    <a class="btn btn-icon me-n2" href="user-profile-setting.html">
-                                                        <em class="icon ni ni-setting"></em>
-                                                    </a>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="dropdown-inner">
                                             <ul class="link-list">
-                                                <li>
-                                                    <a href="{{ route('index_accueil') }}">
-                                                        <em class="icon ni ni-home"></em>
-                                                        <span>
-                                                            Accueil
-                                                        </span>
-                                                    </a>
-                                                </li>
                                                 <li>
                                                     <a href="{{ route('index_profil') }}">
                                                         <em class="icon ni ni-user-alt"></em>
@@ -256,7 +333,7 @@
                     <div class="nk-footer-wrap">
                         <div class="nk-footer-copyright">
                             © 2023 BGFIBank.
-                            <img height="30" width="100" src="{{asset('BGFI_logo.jpg')}}" alt="">
+                            <img height="30" width="130" src="{{asset('BGFI_logo.jpg')}}" alt="">
                         </div>
                     </div>
                 </div>
@@ -306,6 +383,85 @@
 
     <link href="{{asset('notification/toastr.min.css')}}" rel="stylesheet">
     <script src="{{asset('notification/toastr.min.js')}}"></script>
+
+    <div class="modal fade zoom" tabindex="-1" id="modalPoste">
+        <div class="modal-dialog modal-md" role="document" style="width: 100%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau Poste</h5>
+                    <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
+                </div>
+                <div class="modal-body">
+                    <form id="processus-form" method="post" action="{{ route('index_add_poste_traitement') }}">
+                        @csrf
+                        <div class="row g-4 mb-4" id="poste-container">
+                            <div class="col-lg-12">
+                                <div class="form-group text-center">
+                                    <label class="form-label" for="poste">
+                                        Poste(s)
+                                    </label>
+                                    <div class="form-control-wrap">
+                                        <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" name="nom[]" oninput="this.value = this.value.toUpperCase()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-gs">
+                            <div class="col-lg-6">
+                                <div class="form-group text-center">
+                                    <button type="button" class="btn btn-lg btn-primary btn-dim" id="ajouter-poste">
+                                        <em class="ni ni-plus me-2"></em>
+                                        <em>Ajouter</em>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-lg btn-success btn-dim">
+                                        <em class="ni ni-check me-2"></em>
+                                        <em>Enregistrer</em>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('ajouter-poste').addEventListener('click', function(event) {
+            event.preventDefault();
+            const container = document.getElementById('poste-container');
+            const div = document.createElement('div');
+            div.classList.add('col-lg-12');
+            div.innerHTML = `
+            <div class="row g-g2" >
+                <div class=" col-md-12 form-group">
+                    <div class="form-control-wrap">
+                        <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center objectif me-2" name="nom[]" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+                </div>
+                <div class=" col-md-12 form-group text-center">
+                    <div class="form-control-wrap">
+                        <button type="button" class="btn btn-danger btn-dim text-center btn-remove-poste">
+                            <em class="ni ni-trash me-2"></em>
+                            <em>Supprimer</em>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            `;
+            container.appendChild(div);
+
+            // Ajouter un écouteur d'événement pour supprimer l'objectif
+            div.querySelector('.btn-remove-poste').addEventListener('click', function() {
+                container.removeChild(div);
+            });
+        });
+    </script>
+
 
     <!--<script>
         // Check if the browser supports the Notification API
@@ -437,6 +593,15 @@
             showEasing:"swing",showMethod:"fadeIn",hideMethod:"fadeOut"})
         </script>
         {{ session()->forget('am_choisir') }}
+    @endif
+    @if (session('echec'))
+        <script>
+            toastr.warning("{{ session('echec') }}"," ",
+            {positionClass:"toast-top-left",timeOut:5e3,debug:!1,newestOnTop:!0,
+            preventDuplicates:!0,showDuration:"300",hideDuration:"1000",extendedTimeOut:"1000",
+            showEasing:"swing",showMethod:"fadeIn",hideMethod:"fadeOut"})
+        </script>
+        {{ session()->forget('echec') }}
     @endif
 
 </body>

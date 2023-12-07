@@ -11,6 +11,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Poste;
+use App\Models\Historique_action;
+use App\Models\Processuse;
+use App\Models\Objectif;
+use App\Models\Resva;
+use App\Models\Risque;
+use App\Models\Cause;
+use App\Models\Rejet;
+use App\Models\Action;
+use App\Models\Suivi_action;
+use App\Models\Amelioration;
+use App\Models\Autorisation;
+use App\Models\Pdf_file;
+use App\Events\NotificationEvent;
 
 class Controller extends BaseController
 {
@@ -21,9 +34,11 @@ class Controller extends BaseController
         return view('menu');
     }
 
-    public function index_add_poste()
+    public function index_liste_poste()
     {
-        return view('add.poste');
+        $postes = Poste::all();
+
+        return view('add.poste',['postes' => $postes]);
     }
 
     public function index_add_poste_traitement(Request $request)
@@ -36,9 +51,38 @@ class Controller extends BaseController
             $poste->save();
         }
         
+        if ($poste) {
 
-        return redirect()
-            ->route('index_add_poste')
-            ->with('ajouter', 'Enregistrement éffectuée.');
+            $his = new Historique_action();
+            $his->nom_formulaire = 'Nouveau Poste';
+            $his->nom_action = 'Ajouter';
+            $his->user_id = Auth::user()->id;
+            $his->save();
+
+            return redirect()
+                ->route('index_add_poste')
+                ->with('ajouter', 'Enregistrement éffectuée.');
+        }
+    }
+
+    public function index_modif_poste_traitement(Request $request)
+    {
+        $rech = Poste::where('id', $request->poste_id)->first();
+        
+        if ($rech) {
+
+            $rech->nom = $request->nom;
+            $rech->update();
+
+            $his = new Historique_action();
+            $his->nom_formulaire = 'Liste des Postes';
+            $his->nom_action = 'Mise à jour';
+            $his->user_id = Auth::user()->id;
+            $his->save();
+
+            return redirect()
+                ->back()
+                ->with('valider', 'Mise à jour éffectuée.');
+        }
     }
 }

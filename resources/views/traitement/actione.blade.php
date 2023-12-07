@@ -24,7 +24,7 @@
                         <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            <span>Tableau de Suivi</span>
+                                            <span>Tableau des Actions éffectuées</span>
                                             <em class="icon ni ni-list-index"></em>
                                         </h3>
                                     </div>
@@ -39,10 +39,11 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th></th>
-                                                    <th>Processus</th>
-                                                    <th>Risque</th>
                                                     <th>Action</th>
+                                                    <th>Cause</th>
                                                     <th>Délai</th>
+                                                    <th>Date de traitement</th>
+                                                    <th></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -50,10 +51,16 @@
                                                 @foreach ($actions as $key => $action)
                                                     <tr class="text-center">
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $action->reclamation }}</td>
-                                                        <td>{{ $action->cause }}</td>
                                                         <td>{{ $action->action }}</td>
+                                                        <td>{{ $action->cause }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($action->delai)->format('d/m/Y') }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($action->date_action)->format('d/m/Y') }}</td>
+                                                        @if ( $action->delai >= $action->date_action )
+                                                            <td class="text-center text-success" >Réaliser dans le délai</td>
+                                                        @endif
+                                                        @if ( $action->delai < $action->date_action )
+                                                            <td class="text-center text-danger" >Réaliser hors délai</td>
+                                                        @endif
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail{{ $action->id }}"
@@ -132,7 +139,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <label class="form-label" for="corectif">
                                                                 Délai
@@ -142,7 +149,40 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="corectif">
+                                                                Date de traitement
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input value="{{ \Carbon\Carbon::parse($action->date_action)->format('d/m/Y') }}" type="text" class="form-control" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="corectif">
+                                                                Date de Suivi
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input value="{{ \Carbon\Carbon::parse($action->date_suivi)->format('d/m/Y') }}" type="text" class="form-control" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                @if ( $action->delai >= $action->date_action )
+                                                                    <input value="Réaliser dans le délai" type="text" class="form-control bg-success text-white text-center" disabled>
+                                                                @endif
+                                                                @if ( $action->delai < $action->date_action )
+                                                                    <input value="Réaliser hors délai" type="text" class="form-control bg-danger text-white text-center" disabled>
+                                                                @endif
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12">
                                                         <div class="form-group">
                                                             <label class="form-label" for="Coût">
                                                                 Responsable
@@ -150,50 +190,6 @@
                                                             <div class="form-control-wrap">
                                                                 <input value="{{ $action->poste }}" type="text" class="form-control" disabled>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="email-address-1">
-                                                                Efficacitée
-                                                            </label>
-                                                            <select required name="efficacite" class="form-select ">
-                                                                <option value="">
-                                                                    Choisir
-                                                                </option>
-                                                                <option value="efficace">
-                                                                    efficace
-                                                                </option>
-                                                                <option value="non_efficace">
-                                                                    non-efficace
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="Coût">
-                                                                Date d'action éffectuée
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input name="date_action" type="date" class="form-control" >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <div class="form-group text-center">
-                                                            <label class="form-label" for="description">
-                                                                Commentaire
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <textarea name="commentaire" class="form-control no-resize" id="default-textarea"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-group text-center">
-                                                            <button type="submit" class="btn btn-lg btn-success btn-dim">
-                                                                <em class="ni ni-check me-2 "></em>
-                                                                <em >Enregistrer</em>
-                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -208,6 +204,7 @@
         </div>
     @endforeach
 
+
     <script>
         Pusher.logToConsole = true;
 
@@ -215,11 +212,11 @@
           cluster: 'eu'
         });
 
-        var channel = pusher.subscribe('my-channel-action');
-        channel.bind('my-event-actionr', function(data) {
+        var channel = pusher.subscribe('my-channel-action-e');
+        channel.bind('my-event-action-e', function(data) {
             Swal.fire({
                         title: "Alert!",
-                        text: "Nouvelle(s) Action(s)",
+                        text: "Nouvelle(s) Action(s) éffectée(s)",
                         icon: "info",
                         confirmButtonColor: "#00d819",
                         confirmButtonText: "OK",

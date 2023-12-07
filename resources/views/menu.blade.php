@@ -10,6 +10,20 @@
                 <div class="nk-content-body">
                     <div class="nk-block justify-items-center">
                         <form class="row g-gs" >
+                            <div class="col-lg-12 col-xxl-12" style="margin-bottom: -15px;" >
+                                <div class="card card-bordered card-preview" style="margin-top: -15px; background-color: red;">
+                                    <div class="" style="height: 30px; display: flex; " >
+                                        <label class="form-label" style="font-size: 20px; color: white;margin-left:5px;">
+                                            Alert: 
+                                        </label>
+                                        <marquee>
+                                            <label style="font-size: 20px; color: white;">
+                                                Nouveau
+                                            </label>
+                                        </marquee>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-12 col-xxl-12" >
                                 <div class="card card-bordered card-preview">
                                     <div class="card-inner row g-gs">
@@ -93,53 +107,5 @@
             </div>
         </div>
     </div>
-
-    <script src="{{ asset('pusher.min.js') }}"></script>
-    <script>
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('9f9514edd43b1637ff61', {
-          cluster: 'eu'
-        });
-
-        var channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', function(data) {
-            Swal.fire({
-                        title: "Alert!",
-                        text: "Nouvelle(s) action(s) corrective à valider",
-                        icon: "info",
-                        confirmButtonColor: "#00d819",
-                        confirmButtonText: "OK",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    });
-        });
-    </script>
-    <script>
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('9f9514edd43b1637ff61', {
-          cluster: 'eu'
-        });
-
-        var channel = pusher.subscribe('my-channel-action');
-        channel.bind('my-event-action', function(data) {
-            Swal.fire({
-                        title: "Alert!",
-                        text: "Action(s) corrective à valider",
-                        icon: "info",
-                        confirmButtonColor: "#00d819",
-                        confirmButtonText: "OK",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    });
-        });
-    </script>
 
 @endsection

@@ -65,6 +65,37 @@
                     <form class="nk-block" method="post" action="{{ route('index_add') }}">
                         @csrf
                         <div class="row g-gs">
+                            <div class="col-lg-12 col-xxl-12">
+                                <div class="card card-bordered card-preview">
+                                    <div class="card-inner">
+                                        <div class="card-head">
+                                            <h5 class="card-title">
+                                                Notification
+                                            </h5>
+                                        </div>
+                                        <div class="row g-gs">
+                                            <div class="col-lg-4 text-left">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input readonly name="choix_alert_alert" value="alert" required type="checkbox" checked class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">Alert à l'écran</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 text-left">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input name="choix_alert_email" value="email" type="checkbox" class="custom-control-input" id="customCheck2">
+                                                    <label class="custom-control-label" for="customCheck2">Par Email</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 text-left">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input name="choix_alert_sms" value="sms" disabled type="checkbox" class="custom-control-input" id="customCheck3">
+                                                    <label class="custom-control-label" for="customCheck3">Par Sms</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-12 col-xxl-12" id="groupesContainer">
                                 <div class="card card-bordered">
                                     <div class="card-inner">
@@ -75,7 +106,7 @@
                                                             Date 
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input readonly id="date" name="date_fiche" type="text" class="form-control text-center">
+                                                            <input id="date" name="date_fiche" type="date" class="form-control text-center" value="{{ \Carbon\Carbon::now()->toDateString() }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -279,8 +310,8 @@
                                                 <div class="card">
                                                     <div class="card-inner">
                                                         <div class="card-head">
-                                                            <span class="badge badge-dot bg-primary">
-                                                                Nouveau
+                                                            <span class="badge badge-dot bg-success">
+                                                                Nouvelle Réclamation
                                                             </span>
                                                         </div>
                                                             <div class="row g-4">
@@ -327,6 +358,7 @@
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                             <input required placeholder="Saisie obligatoire" name="reclamation[]" type="text" class="form-control" >
+                                                                            <input style="display:none;" name="reclamation_id[]" type="text" value="0" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -337,6 +369,7 @@
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                             <input required placeholder="Saisie obligatoire" name="cause[]" type="text" class="form-control" >
+                                                                            <input style="display:none;" name="cause_id[]" type="text" value="0" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -367,6 +400,7 @@
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                             <input required placeholder="Saisie obligatoire" name="action[]" type="text" class="form-control" >
+                                                                            <input style="display:none;" name="action_id[]" type="text" value="0" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -388,10 +422,6 @@
             groupe.querySelector("#suppr_nouvelle_action").addEventListener("click", function(event) {
                 event.preventDefault();
                 groupe.remove();
-
-                if (!groupe.hasChildNodes()) {
-                    document.getElementById("btn_enrg").style.display = "none";
-                }
             });
 
             document.getElementById("dynamic-fields").appendChild(groupe);
@@ -437,8 +467,8 @@
                                                 <div class="card">
                                                     <div class="card-inner">
                                                         <div class="card-head">
-                                                            <span class="badge badge-dot bg-primary">
-                                                                Nouveau
+                                                            <span class="badge badge-dot bg-success">
+                                                                Nouvelle Cause
                                                             </span>
                                                         </div>
                                                             <div class="row g-4">
@@ -447,7 +477,7 @@
                                                                         <label class="form-label" for="Cause">
                                                                             Processus
                                                                         </label>
-                                                                        <input required style="display:none;" name="nature[]" value="new" type="text" >
+                                                                        <input required style="display:none;" name="nature[]" value="new_cause" type="text" >
                                                                         <select readonly id="processus_id" required name="processus_id[]" class="form-select js-select2" placeholder="Choisir un processus" >
                                                                             ${processuss.map(proces => `<option value="${proces.id}" ${data.processus.id == proces.id ? 'selected' : ''}>${proces.nom}</option>`).join('')}
                                                                         </select>
@@ -474,7 +504,7 @@
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                         <input style="display:none;" placeholder="Saisie obligatoire" name="reclamation_id[]" value="${data.reclamations.id}" type="text" class="form-control" >
-                                                                        <input readonly value="${data.reclamations.nom}" type="text" class="form-control" >
+                                                                        <input readonly name="reclamation[]" value="${data.reclamations.nom}" type="text" class="form-control" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -485,6 +515,7 @@
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                             <input required placeholder="Saisie obligatoire" name="cause[]" type="text" class="form-control" >
+                                                                            <input style="display:none;" name="cause_id[]" type="text" value="0" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -515,6 +546,7 @@
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                             <input required placeholder="Saisie obligatoire" name="action[]" type="text" class="form-control" >
+                                                                            <input style="display:none;" name="action_id[]" type="text" value="0" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -538,7 +570,6 @@
                 groupe.remove();
 
                 if (!groupe.hasChildNodes()) {
-                    document.getElementById("btn_enrg").style.display = "none";
                 }
             });
 
@@ -601,12 +632,6 @@
             $(document).ready(function() {
                 // Écoutez l'événement de changement de l'élément select
                 $('#selectCause').on('change', function() {
-
-                    var dynamicFields = document.getElementById("dynamic-fields");
-                    // Supprimer le contenu existant
-                    while (dynamicFields.firstChild) {
-                        dynamicFields.removeChild(dynamicFields.firstChild);
-                    }
 
                     // Récupérez la valeur sélectionnée
                     var causeValue = $(this).val();
@@ -671,13 +696,6 @@
         });
 
                                     function addGroups_action(response) {
-                                        // Récupérer l'élément qui contient les groupes
-                                        var dynamicFields = document.getElementById("dynamic-fields");
-
-                                        // Supprimer le contenu existant
-                                        while (dynamicFields.firstChild) {
-                                            dynamicFields.removeChild(dynamicFields.firstChild);
-                                        }
 
                                         document.getElementById("btn_enrg").style.display = "block";
 
@@ -696,16 +714,13 @@
                                                                         </span>
                                                                     </div>
                                                                     <div class="row g-4">
-                                                                        <input style="display:none;" name="nature[]" value="cause_trouver" type="text" >
+                                                                        <input style="display:none;" name="nature[]" value="trouve" type="text" >
                                                                         <div class="col-lg-6">
                                                                             <div class="form-group">
                                                                                 <label class="form-label" for="Cause">
                                                                                     Processus
                                                                                 </label>
                                                                                 <select id="processus_id" required name="processus_id[]" class="form-select js-select2" placeholder="Choisir un processus" >
-                                                                                    <option selected value="" >
-                                                                                        Choisir un processus
-                                                                                    </option>
                                                                                     ${processuss.map(processus => `<option value="${processus.id}" ${action.processus_id == processus.id ? 'selected' : ''}>${processus.nom}</option>`).join('')}
                                                                                 </select>
                                                                             </div>
@@ -716,9 +731,6 @@
                                                                                     Responsable
                                                                                 </label>
                                                                                 <select required id="responsable_idc" required name="poste_id[]" class="form-select" >
-                                                                                    <option selected value="">
-                                                                                        Choisir un responsable
-                                                                                    </option>
                                                                                     ${postes.map(poste => `<option value="${poste.id}" ${action.responsable_id == poste.id ? 'selected' : ''}>${poste.nom}</option>`).join('')}
                                                                                 </select>
                                                                             </div>
@@ -794,7 +806,6 @@
                                             groupe.querySelector("#suppr_action").addEventListener("click", function(event) {
                                                 event.preventDefault();
                                                 groupe.remove();
-                                                document.getElementById("btn_enrg").style.display = "none";
                                             });
 
                                             document.getElementById("dynamic-fields").appendChild(groupe);
@@ -805,54 +816,38 @@
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const selectedDays = parseInt(
-                document.getElementById("nbre_jour").value,
-            );
-            const dateLimiteInput = document.getElementById("date_limite");
-            const dateInput = document.getElementById("date");
+        document.addEventListener("DOMContentLoaded", function() {
+            // Écoute des changements sur le champ de date et le champ du nombre de jours
+            document.getElementById('date').addEventListener('change', updateDateLimite);
+            document.getElementById('nbre_jour').addEventListener('change', updateDateLimite);
 
-            // Obtention de la date du jour en JavaScript
-            function formatDate(dateString) {
-                // Formatage de la date "aaaa-mm-jj" en "jj/mm/aaaa"
-                const [year, month, day] = dateString.split("-");
-                return `${year}-${month}-${day}`;
+            function updateDateLimite() {
+                var dateDebut = document.getElementById('date').value;
+                var nbreJours = parseInt(document.getElementById('nbre_jour').value);
+
+                // Vérification si la date de début est sélectionnée et le nombre de jours est valide
+                if (dateDebut && !isNaN(nbreJours)) {
+                    var dateLimite = new Date(dateDebut);
+                    dateLimite.setDate(dateLimite.getDate() + nbreJours);
+
+                    // Extraction des éléments de date individuels
+                    var jour = ('0' + dateLimite.getDate()).slice(-2); // Jour
+                    var mois = ('0' + (dateLimite.getMonth() + 1)).slice(-2); // Mois (ajouter +1 car les mois commencent à 0)
+                    var annee = dateLimite.getFullYear(); // Année
+
+                    // Formatage de la date au format dd/mm/aaaa
+                    var formattedDate = jour + '/' + mois + '/' + annee;
+
+                    // Mettre à jour la valeur du champ "Date limite de traitement"
+                    document.getElementById('date_limite').value = formattedDate;
+                }
             }
 
-            const currentDate = new Date();
-            const formattedDate = formatDate(
-                currentDate.toISOString().slice(0, 10),
-            );
-            dateInput.value = formattedDate;
-
-            // Calcul de la date en fonction des jours sélectionnés
-            const futureDate = new Date(currentDate);
-            futureDate.setDate(currentDate.getDate() + selectedDays);
-            const formattedFutureDate = formatDate(
-                futureDate.toISOString().slice(0, 10),
-            );
-
-            // Mise à jour de la date limite de traitement initiale
-            dateLimiteInput.value = formattedFutureDate;
-
-            // Écoute des changements dans la sélection du nombre de jours
-            document
-                .getElementById("nbre_jour")
-                .addEventListener("change", function () {
-                    const selectedDays = parseInt(this.value);
-
-                    // Calcul de la date en fonction des jours sélectionnés
-                    const futureDate = new Date(currentDate);
-                    futureDate.setDate(currentDate.getDate() + selectedDays);
-                    const formattedFutureDate = formatDate(
-                        futureDate.toISOString().slice(0, 10),
-                    );
-
-                    // Mise à jour des valeurs des champs de date en utilisant JavaScript
-                    dateLimiteInput.value = formattedFutureDate;
-                });
+            // Appel initial pour mettre à jour la date limite lors du chargement de la page
+            updateDateLimite();
         });
     </script>
+
 
 
 

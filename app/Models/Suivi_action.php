@@ -13,6 +13,8 @@ class Suivi_action extends Model
         'id',
         'efficacite',
         'commentaires',
+        'nature',
+        'commentaire_am',
         'delai',
         'statut',
         'date_action',

@@ -20,6 +20,8 @@ class CreateSuiviActionsTable extends Migration
             $table->date('date_action')->nullable();
             $table->date('delai');
             $table->string('statut');
+            $table->string('nature');
+            $table->string('commentaire_am');
             $table->dateTime('date_suivi')->nullable();
             $table->unsignedBigInteger('action_id');
             $table->foreign('action_id')->references('id')->on('actions');
