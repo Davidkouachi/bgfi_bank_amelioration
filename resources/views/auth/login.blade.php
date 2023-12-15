@@ -1,59 +1,91 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-    <title>Login</title>
     <meta charset="utf-8">
+    <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets_login/css/style.css">
+    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <link href="{{asset('BGFI_logo.png')}}" rel="shortcut icon">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{asset('assets/css/dashlite0226.css')}}">
+    <link id="skin-default" rel="stylesheet" href="{{asset('assets/css/theme0226.css')}}">
 </head>
 
-<body>
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-5">
-                    <div class="login-wrap p-4 p-md-5">
-                        <div class="icon d-flex align-items-center justify-content-center ">
-                            <span class="fa fa-user-o"></span>
+<body class="nk-body bg-white npc-general pg-auth">
+    <div class="nk-app-root">
+        <div class="nk-main ">
+            <div class="nk-wrap nk-wrap-nosidebar">
+                <div class="nk-content bg-primary">
+                    <div class="nk-block nk-block-middle nk-auth-body  wide-xs card-bordered bg-white">
+                        <div class="brand-logo pb-0 text-center">
+                            <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-user bg-primary"></em>
                         </div>
-                        <h3 class="text-center mb-4">Utilisateur</h3>
-                        <form action="/auth_user" method="post" class="login-form">
-                            @csrf
-                            <div class="form-group">
-                                <input autocomplete="off" type="text" class="form-control rounded-left" placeholder="Email" required name="email">
-                            </div>
-                            <div class="form-group d-flex">
-                                <input autocomplete="off" type="password" class="form-control rounded-left" placeholder="Mot de passe" required name="password">
-                            </div>
-                            <!--<div class="form-group d-md-flex">
-                                <div class="w-50">
-                                    <label class="checkbox-wrap checkbox-primary">Se souvenir de moi
-                                        <input type="checkbox" name="remember">
-                                        <span class="checkmark"></span>
-                                    </label>
+                        <div class="card">
+                            <div class="card-inner card-inner-lg pt-2">
+                                <div class="nk-block-head text-center">
+                                    <div class="nk-block-head-content">
+                                        <h4 class="nk-block-title">Utilisateur</h4>
+                                    </div>
                                 </div>
-                            </div>-->
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary rounded submit p-3 px-5">
-                                    Se connecter
-                                </button>
+                                <form action="/auth_user" method="post">
+                                    @csrf
+                                    <div class="form-group">
+                                        <div class="form-label-group">
+                                            <label class="form-label" for="default-01">Email</label>
+                                        </div>
+                                        <div class="form-control-wrap"><input type="text" class="form-control form-control-lg" id="email" name="email" value="{{ old('email') }}" placeholder="Entrer votre email"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-label-group">
+                                            <label class="form-label" for="password">Mot de passe</label>
+                                            <a class="link link-primary link-sm" href="auth-reset-v2.html">Mot de passe oublié?</a>
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <a href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">
+                                                <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                            </a>
+                                            <input type="password" name="password" class="form-control form-control-lg" id="password" placeholder="Entrer votre Mot de passe">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-dim btn-lg btn-success btn-block">Connexion</button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <script src="assets_login/js/jquery.min.js"></script>
-    <script src="assets_login/js/popper.js"></script>
-    <script src="assets_login/js/bootstrap.min.js"></script>
-    <script src="assets_login/js/main.js"></script>
+    </div>
+
+    <script src="{{asset('assets/js/bundle0226.js')}}"></script>
+    <script src="{{asset('assets/js/scripts0226.js')}}"></script>
+    <script src="{{asset('assets/js/demo-settings0226.js')}}"></script>
 
     <link href="{{asset('notification/toastr.min.css')}}" rel="stylesheet">
     <script src="{{asset('notification/toastr.min.js')}}"></script>
+
+    <script>
+        let idleTimer;
+        const idleTime = 600000;
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(showLogoutModal, idleTime);
+        }
+
+        function showLogoutModal() {
+            location.reload();
+        }
+
+        document.addEventListener('mousemove', resetIdleTimer);
+        document.addEventListener('keypress', resetIdleTimer);
+
+    </script>
 
     @if (session('error_login'))
         <script>
@@ -64,19 +96,5 @@
         </script>
         {{ session()->forget('error_login') }}
     @endif
-
-    <script>
-        window.onload = function() {
-            if (window.history && window.history.pushState) {
-                history.pushState(null, null, window.location.href);
-                window.onpopstate = function() {
-                    history.pushState(null, null, window.location.href);
-                };
-            }
-        };
-    </script>
-
-
-</body>
 
 </html>

@@ -27,21 +27,25 @@ class DatabaseSeeder extends Seeder
             'matricule' => 'C123456',
             'tel' => '0585782723',
             'poste_id' => $poste1->id,
+            'suivi_active' => 'non',
+            'fa' => 'non',
         ]);
 
         $auto = Autorisation::create([
             'new_user' => 'oui',
+            'list_user' => 'oui',
             'new_poste' => 'oui',
+            'list_poste' => 'oui',
             'historiq' => 'oui',
             'stat' => 'oui',
-            'new_proces' => 'non',
-            'list_proces' => 'non',
-            'new_recla' => 'non',
-            'list_recla' => 'non',
-            'list_cause' => 'non',
-            'suivi_act' => 'non',
-            'act_eff' => 'non',
-            'list_act' => 'non',
+            'new_proces' => 'oui',
+            'list_proces' => 'oui',
+            'new_recla' => 'oui',
+            'list_recla' => 'oui',
+            'list_cause' => 'oui',
+            'suivi_act' => 'oui',
+            'act_eff' => 'oui',
+            'list_act' => 'oui',
             'user_id' => $user->id,
         ]);
 

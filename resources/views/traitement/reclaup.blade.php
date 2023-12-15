@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('titre', 'Liste des réclamations')
+@section('titre', 'Liste des reclamations non acceptées')
 
 @section('option_btn')
 
@@ -25,7 +25,7 @@
                                 <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            <span>Liste des rèclamations</span>
+                                            <span>Liste des reclamations non acceptées</span>
                                             <em class="icon ni ni-list-index"></em>
                                         </h3>
                                     </div>
@@ -278,30 +278,6 @@
             </div>
         </div>
     @endforeach
-
-    <script>
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('9f9514edd43b1637ff61', {
-          cluster: 'eu'
-        });
-
-        var channel = pusher.subscribe('my-channel-action-r');
-        channel.bind('my-event-action-r', function(data) {
-            Swal.fire({
-                        title: "Alert!",
-                        text: "Nouvelle(s) Réclamation(s)",
-                        icon: "info",
-                        confirmButtonColor: "#00d819",
-                        confirmButtonText: "OK",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    });
-        });
-    </script>
 
 
 @endsection

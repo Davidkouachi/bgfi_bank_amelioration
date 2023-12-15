@@ -78,6 +78,8 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        @endif
+                                        @if (session('user_auto')->list_user === 'oui')
                                         <li >
                                             <a class="nk-menu-link" href="{{ route('index_liste_resva') }}">
                                                 <em class="icon ni ni-list me-1"></em>
@@ -96,6 +98,8 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        @endif
+                                        @if (session('user_auto')->list_poste === 'oui')
                                         <li >
                                             <a href="{{ route('index_liste_poste') }}" class="nk-menu-link">
                                                 <em class="ni ni-list me-1"></em>
@@ -189,6 +193,34 @@
                                             </a>
                                         </li>
                                         @endif
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_validation_recla') }}">
+                                                <em class="ni ni-file-docs me-1"></em>
+                                                <span class="nk-menu-text">
+                                                    Verification des Réclamations
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_non_accepte') }}">
+                                                <em class="ni ni-row-view me-1"></em>
+                                                <span class="nk-menu-text">
+                                                    Réclamations non accéptées
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @endif
+                                @if (session('user_auto')->list_cause === 'oui')
+                                <li class="nk-menu-item has-sub">
+                                    <a class="nk-menu-toggle btn " >
+                                        <em class="ni ni-focus me-2"></em>
+                                        <span class="nk-menu-text text-dark">
+                                            Causes
+                                        </span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
                                         @if (session('user_auto')->list_cause === 'oui')
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_listecause') }}">
@@ -216,7 +248,7 @@
                                             <a class="nk-menu-link" href="{{ route('index_suiviaction') }}">
                                                 <em class="icon ni ni-view-list-sq me-1"></em>
                                                 <span class="nk-menu-text">
-                                                    Tableau de suivi
+                                                    Contrôle des actions
                                                 </span>
                                             </a>
                                         </li>

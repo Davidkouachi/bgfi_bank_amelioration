@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('titre', 'Nouveau Processus')
+@section('titre', 'Liste des causes')
 
 @section('option_btn')
 

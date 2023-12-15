@@ -16,7 +16,9 @@ class CreateAutorisationsTable extends Migration
         Schema::create('autorisations', function (Blueprint $table) {
             $table->id();
             $table->string('new_user');
+            $table->string('list_user');
             $table->string('new_poste');
+            $table->string('list_poste');
             $table->string('historiq');
             $table->string('stat');
             $table->string('new_proces');

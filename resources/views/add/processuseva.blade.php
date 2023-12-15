@@ -426,7 +426,18 @@
                                                 </label>
                                                 <div class="form-group">
                                                     <div class="form-control-wrap">
-                                                        <input id="delai" autocomplete="off" name="delai[]" type="date" class="form-control">
+                                                        <input id="delai" name="delai[]" type="date" class="form-control" onchange="checkDate()">
+                                                        <script>
+                                                            function checkDate() {
+                                                                var inputDate = new Date(document.getElementById('delai').value);
+                                                                var currentDate = new Date();
+
+                                                                if (inputDate < currentDate) {
+                                                                    toastr.info("Vérifier la date saisie.");
+                                                                    document.getElementById('delai').value = ''; // Vide l'input si la date est future
+                                                                }
+                                                            }
+                                                        </script>
                                                     </div>
                                                 </div>
                                             </div>

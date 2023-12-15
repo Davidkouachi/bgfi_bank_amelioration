@@ -70,13 +70,17 @@ class AuthController extends Controller
                 'matricule' => $request->matricule,
                 'tel' => $request->tel,
                 'poste_id' => $request->poste_id,
+                'suivi_active' => 'non',
+                'fa' => 'non',
             ]);
 
             if ($user) {
 
                 $auto = new Autorisation();
                 $auto->new_user = $request->nouveau_user;
+                $auto->list_user = $request->liste_user;
                 $auto->new_poste = $request->nouveau_poste;
+                $auto->list_poste = $request->liste_poste;
                 $auto->historiq = $request->historique;
                 $auto->stat = $request->statistique;
                 $auto->new_proces = $request->nouveau_proces;
@@ -146,7 +150,9 @@ class AuthController extends Controller
             return redirect()->intended(route('index_accueil'));
         }
 
-        return back()->with('error_login', 'Coordonnées incorrecte.');
+        return redirect()->back()->withInput($request->only('email'))->with([
+            'error_login' => 'Email ou Mot de passe Incorrect. Veuillez réessayer.',
+        ]);
     }
 
     public function verifi_session(Request $request)

@@ -22,6 +22,8 @@ class CreateAmeliorationsTable extends Migration
             $table->text('causes');
             $table->text('reclamations');
             $table->string('choix_select');
+            $table->string('statut');
+            $table->datetime('date_validation')->nullable();
             $table->timestamps();
         });
     }

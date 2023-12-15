@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('titre', 'Nouveau Processus')
+@section('titre', 'Liste de contrôle des actions')
 
 @section('option_btn')
 
@@ -24,7 +24,7 @@
                         <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            <span>Tableau de Suivi</span>
+                                            <span>Liste de contrôle des actions</span>
                                             <em class="icon ni ni-list-index"></em>
                                         </h3>
                                     </div>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="nk-block">
                         <div class="row g-gs">
-                            <div class="col-md-12 col-xxl-4">
+                            <div class="col-md-12 col-xxl-12">
                                 <div class="card card-bordered card-preview">
                                     <div class="card-inner">
                                         <table class="datatable-init table">
@@ -174,7 +174,7 @@
                                                                 Date d'action éffectuée
                                                             </label>
                                                             <div class="form-control-wrap">
-                                                                <input name="date_action" type="date" class="form-control" >
+                                                                <input name="date_action" type="date" class="form-control" max="{{ \Carbon\Carbon::now()->toDateString() }}">
                                                             </div>
                                                         </div>
                                                     </div>

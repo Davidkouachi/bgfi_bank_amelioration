@@ -59,8 +59,7 @@ class Controller extends BaseController
             $his->user_id = Auth::user()->id;
             $his->save();
 
-            return redirect()
-                ->route('index_add_poste')
+            return back()
                 ->with('ajouter', 'Enregistrement éffectuée.');
         }
     }

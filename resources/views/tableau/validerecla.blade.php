@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('titre', 'Liste des réclamations')
+@section('titre', 'Vérification des réclamations')
 
 @section('option_btn')
 
@@ -25,7 +25,7 @@
                                 <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            <span>Liste des rèclamations</span>
+                                            <span>Vérifications des réclamations </span>
                                             <em class="icon ni ni-list-index"></em>
                                         </h3>
                                     </div>
@@ -64,6 +64,18 @@
                                                                 href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
                                                                 <em class="icon ni ni-eye"></em>
                                                             </a>
+                                                            @if ($am->statut !== 'non-valider')
+                                                                <a data-bs-toggle="modal"
+                                                                    data-bs-target="#modalConfirme{{ $am->id }}"
+                                                                    href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-success border border-1 border-white rounded">
+                                                                    <em class="icon ni ni-check"></em>
+                                                                </a>
+                                                                <a data-bs-toggle="modal"
+                                                                    data-bs-target="#modalRejet{{ $am->id }}"
+                                                                    href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-danger border border-1 border-white rounded">
+                                                                    <em class="icon ni ni-cross"></em>
+                                                                </a>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -279,29 +291,65 @@
         </div>
     @endforeach
 
-    <script>
-        Pusher.logToConsole = true;
+    @foreach ($ams as $am)
+        <div class="modal fade" id="modalRejet{{ $am->id }}" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Rejet</h5><a href="#" class="close" data-bs-dismiss="modal"
+                            aria-label="Close"><em class="icon ni ni-cross"></em></a>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post" >
+                            @csrf
+                            <div class="form-group">
+                                <label class="form-label" for="pay-amount">Motif</label>
+                                <div class="form-control-wrap">
+                                    <textarea required name="motif" class="form-control no-resize" id="default-textarea"></textarea>
+                                    <input type="text" value="{{ $am->id }}" name="amelioration_id" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-lg btn-success">
+                                    Sauvgarder
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
-        var pusher = new Pusher('9f9514edd43b1637ff61', {
-          cluster: 'eu'
-        });
-
-        var channel = pusher.subscribe('my-channel-action-r');
-        channel.bind('my-event-action-r', function(data) {
-            Swal.fire({
-                        title: "Alert!",
-                        text: "Nouvelle(s) Réclamation(s)",
-                        icon: "info",
-                        confirmButtonColor: "#00d819",
-                        confirmButtonText: "OK",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    });
-        });
-    </script>
+    @foreach ($ams as $am)
+        <div class="modal fade" id="modalRejet{{ $am->id }}" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Rejet</h5><a href="#" class="close" data-bs-dismiss="modal"
+                            aria-label="Close"><em class="icon ni ni-cross"></em></a>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post" >
+                            @csrf
+                            <div class="form-group">
+                                <label class="form-label" for="pay-amount">Motif</label>
+                                <div class="form-control-wrap">
+                                    <textarea required name="motif" class="form-control no-resize" id="default-textarea"></textarea>
+                                    <input type="text" value="{{ $am->id }}" name="amelioration_id" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-lg btn-success">
+                                    Sauvgarder
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
 
 @endsection

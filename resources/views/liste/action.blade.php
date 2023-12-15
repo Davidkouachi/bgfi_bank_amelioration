@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('titre', 'Nouveau Processus')
+@section('titre', 'Liste des actions')
 
 @section('option_btn')
 
@@ -43,7 +43,7 @@
                                                     <th></th>
                                                     <th>Action</th>
                                                     <th>Cause</th>
-                                                    <th>Responsable</th>
+                                                    <th>Reclamation</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -53,7 +53,7 @@
                                                         <td>{{ $key+1 }}</td>
                                                         <td>{{ $action->nom }}</td>
                                                         <td>{{ $action->cause }}</td>
-                                                        <td>{{ $action->poste }}</td>
+                                                        <td>{{ $action->reclamation }}</td>
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail"
@@ -128,16 +128,6 @@
                                                             </label>
                                                             <div class="form-control-wrap">
                                                                 <input value="{{ $action->nom }}" disabled type="text" class="form-control" id="Cause">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="Cause">
-                                                                Responsable
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ $action->poste }}" disabled type="text" class="form-control" id="Cause">
                                                             </div>
                                                         </div>
                                                     </div>

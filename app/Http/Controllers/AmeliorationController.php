@@ -193,6 +193,7 @@ class AmeliorationController extends Controller
         $am->consequences = $consequences;
         $am->causes = $causes;
         $am->choix_select = 'neant';
+        $am->statut = 'soumis';
         $am->save();
 
         if ($am) {

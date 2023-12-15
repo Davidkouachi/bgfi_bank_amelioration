@@ -18,6 +18,8 @@ class Amelioration extends Model
         'causes',
         'reclamations',
         'choix_select',
+        'statut',
+        'date_validation',
     ];
 
 }

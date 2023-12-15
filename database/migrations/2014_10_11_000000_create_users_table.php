@@ -22,6 +22,9 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('poste_id');
             $table->foreign('poste_id')->references('id')->on('postes');
             $table->string('tel');
+            $table->string('suivi_active');
+            $table->datetime('mdp_date')->nullable();
+            $table->string('fa');
             $table->string('matricule')->unique();
             $table->rememberToken();
             $table->timestamps();

@@ -56,7 +56,7 @@
                                 <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            <span>Fiche de réclamation</span>
+                                            <span>Nouvelle réclamation</span>
                                             <em class="icon ni ni-reports"></em>
                                         </h3>
                                     </div>
@@ -106,7 +106,7 @@
                                                             Date 
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input id="date" name="date_fiche" type="date" class="form-control text-center" value="{{ \Carbon\Carbon::now()->toDateString() }}">
+                                                            <input id="date" name="date_fiche" type="date" class="form-control text-center" value="{{ \Carbon\Carbon::now()->toDateString() }}" onchange="checkDate()" max="{{ \Carbon\Carbon::now()->toDateString() }}">
                                                         </div>
                                                     </div>
                                                 </div>

@@ -43,9 +43,6 @@ class ListeactionController extends Controller
 
     public function index_effectuer()
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
         
         $actions = Suivi_action::join('actions', 'suivi_actions.action_id', '=', 'actions.id')
                     ->join('postes', 'actions.poste_id', '=', 'postes.id')

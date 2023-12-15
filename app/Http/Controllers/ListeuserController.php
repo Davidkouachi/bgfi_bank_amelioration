@@ -34,7 +34,7 @@ class ListeuserController extends Controller
 
         $users = User::join('postes', 'users.poste_id', 'postes.id')
                     ->join('autorisations', 'autorisations.user_id', 'users.id')
-                    ->select('users.*','autorisations.new_user as new_user','autorisations.new_poste as new_poste', 'postes.nom as poste','autorisations.historiq as historiq','autorisations.stat as stat','autorisations.new_proces as new_proces','autorisations.list_proces as list_proces','autorisations.new_recla as new_recla','autorisations.list_recla as list_recla', 'autorisations.list_cause as list_cause','autorisations.suivi_act as suivi_act','autorisations.act_eff as act_eff','autorisations.list_act as list_act')
+                    ->select('users.*','autorisations.new_user as new_user', 'autorisations.list_user as list_user' ,'autorisations.new_poste as new_poste', 'autorisations.list_poste as list_poste' , 'postes.nom as poste','autorisations.historiq as historiq','autorisations.stat as stat','autorisations.new_proces as new_proces','autorisations.list_proces as list_proces','autorisations.new_recla as new_recla','autorisations.list_recla as list_recla', 'autorisations.list_cause as list_cause','autorisations.suivi_act as suivi_act','autorisations.act_eff as act_eff','autorisations.list_act as list_act')
                     ->get();
 
         return view('liste.user',['users' => $users]);
@@ -44,7 +44,9 @@ class ListeuserController extends Controller
     {
         $auto = Autorisation::where('user_id', $request->user_id)->first();
         $auto->new_user = $request->nouveau_user;
+        $auto->list_user = $request->liste_user;
         $auto->new_poste = $request->nouveau_poste;
+        $auto->list_poste = $request->liste_poste;
         $auto->historiq = $request->historique;
         $auto->stat = $request->statistique;
         $auto->new_proces = $request->nouveau_proces;

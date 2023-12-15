@@ -32,7 +32,7 @@
                     </div>
                     <div class="nk-block">
                         <div class="row g-gs">
-                            <div class="col-md-12 col-xxl-4">
+                            <div class="col-md-12 col-xxl-12">
                                 <div class="card card-bordered card-preview">
                                     <div class="card-inner">
                                         <table class="datatable-init table" data-export-title="Export">

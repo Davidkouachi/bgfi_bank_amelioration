@@ -21,16 +21,15 @@ class SuiviactionController extends Controller
 {
     public function index_suiviaction()
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
 
         $actions = Suivi_action::join('actions', 'suivi_actions.action_id', '=', 'actions.id')
                     ->join('postes', 'actions.poste_id', '=', 'postes.id')
+                    ->join('ameliorations', 'suivi_actions.amelioration_id', '=', 'ameliorations.id')
                     ->join('causes', 'actions.cause_id', '=', 'causes.id')
                     ->join('reclamations', 'suivi_actions.reclamation_id', '=', 'reclamations.id')
                     ->join('processuses', 'suivi_actions.processus_id', '=', 'processuses.id')
                     ->where('suivi_actions.statut', 'non-realiser')
+                    ->where('ameliorations.statut', 'valider')
                     ->select('suivi_actions.*','postes.nom as responsable','reclamations.nom as reclamation','processuses.nom as processus', 'actions.nom as action', 'causes.nom as cause', 'postes.nom as poste')
                     ->get();
 

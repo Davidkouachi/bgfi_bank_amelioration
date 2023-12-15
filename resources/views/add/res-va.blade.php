@@ -174,6 +174,29 @@
                                                         </div>
                                                         <div class="col-lg-5">
                                                             <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Liste des Utilisateurs</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio1l" name="liste_user" class="custom-control-input" value="oui" >
+                                                                                <label class="custom-control-label" for="customRadio1l">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio2l" name="liste_user" checked class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio2l">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-5">
+                                                            <div class="form-group align-items-center justify-content-center">
                                                                 <span class="preview-title overline-title">Nouveau Poste</span>
                                                                 <div class="row gy-4">
                                                                     <div class="col-md-3 col-sm-6">
@@ -189,6 +212,29 @@
                                                                             <div class="custom-control custom-radio">
                                                                                 <input type="radio" id="customRadio4" name="nouveau_poste" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio4">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-5">
+                                                            <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Liste des Postes</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio3l" name="liste_poste" class="custom-control-input" value="oui" >
+                                                                                <label class="custom-control-label" for="customRadio3l">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio4l" name="liste_poste" checked class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio4l">Non</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>

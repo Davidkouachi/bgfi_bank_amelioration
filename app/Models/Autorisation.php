@@ -12,7 +12,9 @@ class Autorisation extends Model
     protected $fillable = [
         'id',
         'new_user',
+        'list_user',
         'new_poste',
+        'list_poste',
         'historiq',
         'stat',
         'new_proces',
