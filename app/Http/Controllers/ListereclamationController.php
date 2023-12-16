@@ -30,9 +30,6 @@ class ListereclamationController extends Controller
 {
     public function index()
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
 
         $ams = Amelioration::all();
 
@@ -215,6 +212,58 @@ class ListereclamationController extends Controller
         }
 
         return view('traitement.reclaup', ['ams' => $ams, 'actionsData' => $actionsData ]);
+    }
+
+    public function index_non_accepte2(Request $request)
+    {
+
+        $reclas = Reclamation::join('processuses', 'reclamations.processus_id', '=', 'processuses.id')
+                ->select('reclamations.*','processuses.nom as processus')
+                ->get();
+
+        $causesData = [];
+        $actionsData = [];
+
+        foreach($reclas as $recla)
+        {
+
+            $actions = Action::join('causes', 'actions.cause_id', '=', 'causes.id')
+                ->join('postes', 'actions.poste_id', '=', 'postes.id')
+                ->select('actions.*','causes.nom as cause','postes.nom as responsable')
+                ->get();
+
+            $actionsData[$recla->id] = [];
+
+            foreach($actions as $action)
+            {
+               $actionsData[$recla->id][] = [
+                    'action' => $action->nom,
+                    'responsable' => $action->responsable,
+                ];
+            }
+
+            $causes = Cause::where('causes.reclamation_id', $recla->id)->get();
+            $recla->nbre_cause = count($causes);
+            
+            $causesData[$recla->id] = [];
+            
+            foreach($causes as $cause)
+            {
+                $causesData[$recla->id][] = [
+                    'cause' => $cause->nom,
+                ];
+            }
+        }
+
+        $postes = Poste::join('users', 'users.poste_id', 'postes.id')
+                        ->select('postes.*') // Sélectionne les colonnes de la table 'postes'
+                        ->distinct() // Rend les résultats uniques
+                        ->get();
+        $processuss = Processuse::all();
+
+        return view('traitement.reclaup2',
+            ['reclas' => $reclas, 'causesData' => $causesData, 'actionsData' => $actionsData,
+            'postes' => $postes, 'processuss' => $processuss]);
     }
 
 }

@@ -45,7 +45,7 @@
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
                                                     <th>Date</th>
-                                                    <th>Nombre d'actions</th>
+                                                    <th></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -57,14 +57,22 @@
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}</td>
-                                                        <td>{{ $am->nbre_action }}</td>
+                                                        @if ($am->statut === 'update')
+                                                            <td class="text-success" >Modification détecter</td>
+                                                        @endif
+                                                        @if ($am->statut === 'non-valider')
+                                                            <td class="text-info" >En attente de modification</td>
+                                                        @endif
+                                                        @if ($am->statut === 'soumis')
+                                                            <td class="text-warning" >En attente de validation</td>
+                                                        @endif
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail{{ $am->id }}"
                                                                 href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
                                                                 <em class="icon ni ni-eye"></em>
                                                             </a>
-                                                            @if ($am->statut !== 'non-valider')
+                                                            @if ($am->statut === 'soumis' || $am->statut === 'update')
                                                                 <a data-bs-toggle="modal"
                                                                     data-bs-target="#modalConfirme{{ $am->id }}"
                                                                     href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-success border border-1 border-white rounded">
@@ -172,11 +180,11 @@
                                 </div>
                                 @foreach($actionsData[$am->id] as $key => $actions)
                                 <div class="col-md-12 col-xxl-122" id="groupesContainer">
-                                    <div class="card card-bordered">
+                                    <div class="card">
                                         <div class="card-inner">
                                             <div class="card-head">
                                                 <h5 class="card-title">
-                                                    Action Corrective {{ $key+1 }}
+                                                    Action {{ $key+1 }}
                                                 </h5>
                                             </div>
                                             <div class="row g-4">
@@ -220,41 +228,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @if ($actions['statut'] === 'realiser')
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-12">
                                                     <div class="form-group text-center">
                                                         <label class="form-label" for="Cause">
                                                             Délai
                                                         </label>
                                                         <div class="form-control-wrap">
                                                             <input value="{{ \Carbon\Carbon::parse($actions['delai'])->format('d/m/Y') }}" readonly type="text" class="form-control text-center" id="Cause">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Date de realisation
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($actions['date_action'])->format('d/m/Y') }}" readonly type="text" class="form-control text-center" id="Cause">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Date du Suivi
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($actions['date_suivi'])->format('d/m/Y H:i:s') }}" readonly type="text" class="form-control text-center" id="Cause">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-group text-center">
-                                                        <div class="form-control-wrap">
-                                                            <input value="Action Réaliser" readonly type="text" class="form-control text-center bg-success" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -268,16 +248,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @endif
-                                                @if ($actions['statut'] === 'non-realiser')
-                                                <div class="col-lg-12">
-                                                    <div class="form-group text-center">
-                                                        <div class="form-control-wrap">
-                                                            <input value="Action Non Réaliser" readonly type="text" class="form-control text-center bg-danger" id="Cause">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -292,29 +262,28 @@
     @endforeach
 
     @foreach ($ams as $am)
-        <div class="modal fade" id="modalRejet{{ $am->id }}" aria-modal="true" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Rejet</h5><a href="#" class="close" data-bs-dismiss="modal"
-                            aria-label="Close"><em class="icon ni ni-cross"></em></a>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post" >
-                            @csrf
-                            <div class="form-group">
-                                <label class="form-label" for="pay-amount">Motif</label>
-                                <div class="form-control-wrap">
-                                    <textarea required name="motif" class="form-control no-resize" id="default-textarea"></textarea>
-                                    <input type="text" value="{{ $am->id }}" name="amelioration_id" style="display: none;">
+        <div class="modal fade" tabindex="-1" id="modalConfirme{{ $am->id }}" aria-modal="true" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content"><a href="#" class="close" data-bs-dismiss="modal"><em
+                            class="icon ni ni-cross"></em></a>
+                    <div class="modal-body modal-body-lg text-center">
+                        <div class="nk-modal"><em
+                                class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"></em>
+                            <h4 class="nk-modal-title">Confirmation</h4>
+                            <div class="nk-modal-text">
+                                <div class="caption-text">
+                                    <span>Voulez-vous vraiment confirmer la validation ?</span>
                                 </div>
                             </div>
-                            <div class="form-group text-center">
-                                <button type="submit" class="btn btn-lg btn-success">
-                                    Sauvgarder
-                                </button>
+                            <div class="nk-modal-action">
+                                <a href="/valider/{{ $am->id }}" class="btn btn-lg btn-mw btn-success me-2">
+                                    oui
+                                </a>
+                                <a href="#" class="btn btn-lg btn-mw btn-danger"data-bs-dismiss="modal">
+                                    non
+                                </a>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -330,7 +299,7 @@
                             aria-label="Close"><em class="icon ni ni-cross"></em></a>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post" >
+                        <form action="{{ route('rejet_recla') }}" method="post" >
                             @csrf
                             <div class="form-group">
                                 <label class="form-label" for="pay-amount">Motif</label>

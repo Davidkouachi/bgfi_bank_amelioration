@@ -97,4 +97,35 @@ class ProfilController extends Controller
         return response()->json(['error' => true]);
     }
 
+    public function index_historique()
+    {
+        if (Auth::check() === false ) {
+            return redirect()->route('login');
+        }
+
+        $historiques = Historique_action::join('users', 'historique_actions.user_id', '=', 'users.id')
+                ->join('postes', 'users.poste_id', '=', 'postes.id')
+                ->orderBy('historique_actions.created_at', 'desc')
+                ->select('historique_actions.*', 'postes.nom as poste', 'users.name as nom', 'users.matricule as matricule')
+                ->get();
+
+       return view('historique.historique', ['historiques' => $historiques]);
+    }
+
+    public function index_historique_profil()
+    {
+        if (Auth::check() === false ) {
+            return redirect()->route('login');
+        }
+        
+        $historiques = Historique_action::join('users', 'historique_actions.user_id', '=', 'users.id')
+                ->join('poste', 'users.poste_id', '=', 'postes.id')
+                ->orderBy('historique_actions.created_at', 'desc')
+                ->where('historique_actions.user_id', Auth::user()->id)
+                ->select('historique_actions.*', 'postes.nom as poste', 'users.name as nom', 'users.matricule as matricule')
+                ->get();
+
+       return view('historique.historique_profil', ['historiques' => $historiques]);
+    }
+
 }

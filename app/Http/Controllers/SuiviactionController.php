@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Processuse;
+use App\Models\Amelioration;
+use App\Models\Rejet;
 use App\Models\Cause;
 use App\Models\Action;
 use App\Models\Suivi_action;
@@ -36,36 +38,29 @@ class SuiviactionController extends Controller
         return view('traitement.suiviaction',  ['actions' => $actions]);
     }
 
-    public function add_suivi_action(Request $request, $id)
+    public function valider_recla($id)
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
 
-        $suivi = Suivi_action::where('id', $id)->first();
-        if ($suivi)
+        $am = Amelioration::where('id', $id)->first();
+        if ($am)
         {
-            $suivi->efficacite = $request->input('efficacite');
-            $suivi->commentaires = $request->input('commentaire');
-            $suivi->date_action = $request->input('date_action');
-            $suivi->statut = 'realiser';
-            $suivi->date_suivi = now()->format('Y-m-d\TH:i');
-            $suivi->update();
 
-            if($suivi)
+            $am->statut = 'valider';
+            $am->date_validation = now()->format('Y-m-d\TH:i');
+            $am->update();
+
+            if($am)
             {
 
                 $his = new Historique_action();
-                $his->nom_formulaire = 'Tableau du suivi des actions';
-                $his->nom_action = 'Suivi';
+                $his->nom_formulaire = 'Verification des réclamations';
+                $his->nom_action = 'Valider';
                 $his->user_id = Auth::user()->id;
                 $his->save();
 
-                event(new NotificationAe());
-
                 return redirect()
                     ->back()
-                    ->with('valider', 'Suivi éffectué.');
+                    ->with('success', 'Validation éffectué.');
 
             }
 
@@ -73,38 +68,87 @@ class SuiviactionController extends Controller
 
         return redirect()
             ->back()
-            ->with('error', 'Enregistrement a échoué.');
+            ->with('error', 'La validation a échoué.');
     }
 
-    public function index_historique()
+    public function rejet_recla(Request $request)
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
+        $rejet = Rejet::where('amelioration_id', $request->input('amelioration_id'))->first();
+
+        if ($rejet)
+        {
+            $rejet->motif = $request->input('motif');
+            $rejet->update();
+
+        } else {
+
+            $rejet = new Rejet();
+            $rejet->motif = $request->input('motif');
+            $rejet->amelioration_id = $request->input('amelioration_id');
+            $rejet->save();
+
         }
 
-        $historiques = Historique_action::join('users', 'historique_actions.user_id', '=', 'users.id')
-                ->join('postes', 'users.poste_id', '=', 'postes.id')
-                ->orderBy('historique_actions.created_at', 'desc')
-                ->select('historique_actions.*', 'postes.nom as poste', 'users.name as nom', 'users.matricule as matricule')
-                ->get();
+        if ($rejet)
+        {
+            $valide = Amelioration::where('id', $request->input('amelioration_id'))->first();
 
-       return view('historique.historique', ['historiques' => $historiques]);
-    }
+            if ($valide)
+            {
 
-    public function index_historique_profil()
-    {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
+                $valide->date_validation = now()->format('Y-m-d\TH:i');
+                $valide->statut = 'non-valider';
+                $valide->update();
+
+                if ($valide) {
+
+                    $his = new Historique_action();
+                    $his->nom_formulaire = 'Verification des réclamations';
+                    $his->nom_action = 'Rejet';
+                    $his->user_id = Auth::user()->id;
+                    $his->save();
+
+                    /*$users = Suivi_amelioration::join('ameliorations', 'suivi_ameliorations.amelioration_id', 'ameliorations.id')
+                                ->join('actions', 'suivi_ameliorations.action_id', 'actions.id')
+                                ->join('postes', 'actions.poste_id', 'postes.id')
+                                ->join('users', 'users.poste_id', 'postes.id')
+                                ->where('ameliorations.id', $id)
+                                ->select('users.email as email')
+                                ->get();
+
+                    foreach ($users as $user) {
+
+                        $mail = new PHPMailer(true);
+                        $mail->isHTML(true);
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'coherencemail01@gmail.com';
+                        $mail->Password = 'kiur ejgn ijqt kxam';
+                        $mail->SMTPSecure = 'ssl';
+                        $mail->Port = 465;
+                        // Destinataire, sujet et contenu de l'email
+                        $mail->setFrom('coherencemail01@gmail.com', 'Coherence');
+                        $mail->addAddress($user->email);
+                        $mail->Subject = 'ALERT !';
+                        $mail->Body = 'Nouvelle Action Préventive';
+                        // Envoi de l'email
+                        $mail->send();
+                    }*/
+
+
+                    return redirect()
+                        ->back()
+                        ->with('success', 'Rejet éffectuée.');
+                }
+
+            }
+
         }
-        
-        $historiques = Historique_action::join('users', 'historique_actions.user_id', '=', 'users.id')
-                ->join('poste', 'users.poste_id', '=', 'postes.id')
-                ->orderBy('historique_actions.created_at', 'desc')
-                ->where('historique_actions.user_id', Auth::user()->id)
-                ->select('historique_actions.*', 'postes.nom as poste', 'users.name as nom', 'users.matricule as matricule')
-                ->get();
 
-       return view('historique.historique_profil', ['historiques' => $historiques]);
+        return redirect()
+            ->back()
+            ->with('error', 'Echec du Rejet.');
     }
 
 

@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/Vérification des réclamations', [ListereclamationController::class, 'index_validation'])->name('index_validation_recla');
     Route::get('/Liste des reclamations non acceptées', [ListereclamationController::class, 'index_non_accepte'])->name('index_non_accepte');
+    Route::post('/Réclamations non acceptées', [ListereclamationController::class, 'index_non_accepte2'])->name('index_non_accepte2');
     
     Route::get('/rejet/{id}', [ProcessusController::class, 'cause_rejet'])->name('cause_rejet');
 
@@ -58,7 +59,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/add_user', [AuthController::class, 'add_user'])->name('add_user');
 
     Route::get('/Liste de contrôle des actions', [SuiviactionController::class, 'index_suiviaction'])->name('index_suiviaction');
-    Route::post('/Suivi_action/{id}', [SuiviactionController::class, 'add_suivi_action'])->name('add_suivi_action');
+    Route::get('/valider/{id}', [SuiviactionController::class, 'valider_recla'])->name('valider_recla');
+    Route::post('/Rejet', [SuiviactionController::class, 'rejet_recla'])->name('rejet_recla');
 
     Route::get('/Liste des actions', [ListeactionController::class, 'index'])->name('index_listeaction');
     Route::get('/Liste des actions effectuées', [ListeactionController::class, 'index_effectuer'])->name('index_listeactioneffectuer');
@@ -79,8 +81,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/verifi_session', [AuthController::class, 'verifi_session']);
 
-    Route::get('/Historique', [SuiviactionController::class, 'index_historique'])->name('index_historique');
-    Route::get('/Historique Profil', [SuiviactionController::class, 'index_historique_profil'])->name('index_historique_profil');
+    Route::get('/Historique', [ProfilController::class, 'index_historique'])->name('index_historique');
+    Route::get('/Historique Profil', [ProfilController::class, 'index_historique_profil'])->name('index_historique_profil');
 
     Route::get('/Statistique', [StatistiqueController::class, 'index_stat'])->name('index_stat');
     Route::get('/get_processus/{id}', [StatistiqueController::class, 'get_processus'])->name('get_processus');

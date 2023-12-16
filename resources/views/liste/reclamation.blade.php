@@ -45,7 +45,7 @@
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
                                                     <th>Date</th>
-                                                    <th>Nombre d'actions</th>
+                                                    <th></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -57,7 +57,15 @@
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}</td>
-                                                        <td>{{ $am->nbre_action }}</td>
+                                                        @if ($am->statut === 'valider')
+                                                            <td class="text-success" >Valider</td>
+                                                        @endif
+                                                        @if ($am->statut === 'non-valider')
+                                                            <td class="text-danger" >Non Valider</td>
+                                                        @endif
+                                                        @if ($am->statut === 'soumis')
+                                                            <td class="text-warning" >En attente de validation</td>
+                                                        @endif
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail{{ $am->id }}"
@@ -239,13 +247,24 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @if ($actions['date_action'] <=  $actions['date_suivi'])
                                                 <div class="col-lg-12">
                                                     <div class="form-group text-center">
                                                         <div class="form-control-wrap">
-                                                            <input value="Action Réaliser" readonly type="text" class="form-control text-center bg-success" id="Cause">
+                                                            <input value="Action Réaliser dans les délais" readonly type="text" class="form-control text-center bg-success" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @endif
+                                                @if ($actions['date_action'] >  $actions['date_suivi'])
+                                                <div class="col-lg-12">
+                                                    <div class="form-group text-center">
+                                                        <div class="form-control-wrap">
+                                                            <input value="Action Réaliser hors délais" readonly type="text" class="form-control text-center bg-warning" id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
                                                         <label class="form-label">

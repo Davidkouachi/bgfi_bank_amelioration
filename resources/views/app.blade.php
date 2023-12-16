@@ -590,50 +590,41 @@
             });
     </script>-->
 
-    @if (session('ajouter'))
+    @if (session('success'))
         <script>
-            toastr.success("{{ session('ajouter') }}"," ",
+            toastr.success("{{ session('success') }}"," ",
             {positionClass:"toast-top-left",timeOut:5e3,debug:!1,newestOnTop:!0,
             preventDuplicates:!0,showDuration:"300",hideDuration:"1000",extendedTimeOut:"1000",
             showEasing:"swing",showMethod:"fadeIn",hideMethod:"fadeOut"})
         </script>
-        {{ session()->forget('ajouter') }}
+        {{ session()->forget('success') }}
     @endif
-    @if (session('valider'))
+    @if (session('error'))
         <script>
-            toastr.success("{{ session('valider') }}"," ",
+            toastr.error("{{ session('error') }}"," ",
             {positionClass:"toast-top-left",timeOut:5e3,debug:!1,newestOnTop:!0,
             preventDuplicates:!0,showDuration:"300",hideDuration:"1000",extendedTimeOut:"1000",
             showEasing:"swing",showMethod:"fadeIn",hideMethod:"fadeOut"})
         </script>
-        {{ session()->forget('valider') }}
+        {{ session()->forget('error') }}
     @endif
-    @if (session('rejet'))
+    @if (session('info'))
         <script>
-            toastr.success("{{ session('rejet') }}"," ",
+            toastr.info("{{ session('info') }}"," ",
             {positionClass:"toast-top-left",timeOut:5e3,debug:!1,newestOnTop:!0,
             preventDuplicates:!0,showDuration:"300",hideDuration:"1000",extendedTimeOut:"1000",
             showEasing:"swing",showMethod:"fadeIn",hideMethod:"fadeOut"})
         </script>
-        {{ session()->forget('rejet') }}
+        {{ session()->forget('info') }}
     @endif
-    @if (session('am_choisir'))
+    @if (session('warning'))
         <script>
-            toastr.warning("{{ session('am_choisir') }}"," ",
+            toastr.warning("{{ session('warning') }}"," ",
             {positionClass:"toast-top-left",timeOut:5e3,debug:!1,newestOnTop:!0,
             preventDuplicates:!0,showDuration:"300",hideDuration:"1000",extendedTimeOut:"1000",
             showEasing:"swing",showMethod:"fadeIn",hideMethod:"fadeOut"})
         </script>
-        {{ session()->forget('am_choisir') }}
-    @endif
-    @if (session('echec'))
-        <script>
-            toastr.warning("{{ session('echec') }}"," ",
-            {positionClass:"toast-top-left",timeOut:5e3,debug:!1,newestOnTop:!0,
-            preventDuplicates:!0,showDuration:"300",hideDuration:"1000",extendedTimeOut:"1000",
-            showEasing:"swing",showMethod:"fadeIn",hideMethod:"fadeOut"})
-        </script>
-        {{ session()->forget('echec') }}
+        {{ session()->forget('warning') }}
     @endif
 
 </body>
