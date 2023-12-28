@@ -32,7 +32,7 @@ class SuiviactionController extends Controller
                     ->join('processuses', 'suivi_actions.processus_id', '=', 'processuses.id')
                     ->where('suivi_actions.statut', 'non-realiser')
                     ->where('ameliorations.statut', 'valider')
-                    ->select('suivi_actions.*','postes.nom as responsable','reclamations.nom as reclamation','processuses.nom as processus', 'actions.nom as action', 'causes.nom as cause', 'postes.nom as poste')
+                    ->select('suivi_actions.*','reclamations.nom as reclamation', 'ameliorations.date_fiche as date_fiche' ,'processuses.nom as processus', 'actions.nom as action', 'causes.nom as cause', 'postes.nom as poste')
                     ->get();
 
         return view('traitement.suiviaction',  ['actions' => $actions]);
@@ -149,6 +149,44 @@ class SuiviactionController extends Controller
         return redirect()
             ->back()
             ->with('error', 'Echec du Rejet.');
+    }
+
+    public function add_suivi_action(Request $request, $id)
+    {
+        $suivi = Suivi_action::where('action_id', $id)->first();
+        
+        if ($suivi)
+        {
+            $suivi->efficacite = $request->input('efficacite');
+            $suivi->commentaires = $request->input('commentaire');
+            $suivi->date_action = $request->input('date_action');
+            $suivi->statut = 'realiser';
+            $suivi->date_suivi = now()->format('Y-m-d\TH:i');
+            $suivi->update();
+
+            if ($suivi)
+            {
+                $suivi2 = Suivi_action::where('amelioration_id', $suivi->amelioration_id)->where('statut', 'non-realiser')->count();
+
+                if ($suivi2 === 0 ) {
+
+                    $am = Amelioration::where('id', $suivi->amelioration_id)->first();
+                    $am->date_cloture1 = $request->input('date_action');
+                    $am->update();
+                }
+
+                $his = new Historique_action();
+                $his->nom_formulaire = 'Suivi des actions';
+                $his->nom_action = 'Suivi effectué';
+                $his->user_id = Auth::user()->id;
+                $his->save();
+
+                return back()->with('success', 'Suivi éffectué.');
+            }
+
+        }
+
+        return back()->with('error', 'Suivi non éffectuée.');
     }
 
 

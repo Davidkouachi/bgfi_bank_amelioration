@@ -354,7 +354,7 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="form-group">
                                                                         <label class="form-label" for="controle">
-                                                                            Réclamation
+                                                                            Résumé des réclamations
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                             <input required placeholder="Saisie obligatoire" name="reclamation[]" type="text" class="form-control" >
@@ -500,7 +500,7 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="form-group">
                                                                         <label class="form-label" for="controle">
-                                                                            Réclamation
+                                                                            Résumé des réclamations
                                                                         </label>
                                                                         <div class="form-control-wrap">
                                                                         <input style="display:none;" placeholder="Saisie obligatoire" name="reclamation_id[]" value="${data.reclamations.id}" type="text" class="form-control" >
@@ -738,7 +738,7 @@
                                                                         <div class="col-lg-12">
                                                                             <div class="form-group">
                                                                                 <label class="form-label" for="controle">
-                                                                                    Réclamation
+                                                                                    rRésumé des réclamations
                                                                                 </label>
                                                                                 <div class="form-control-wrap">
                                                                                     <input style="display:none;" name="reclamation_id[]" value="${action.reclamation_id}" type="text" class="form-control" >

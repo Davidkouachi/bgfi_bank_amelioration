@@ -157,6 +157,7 @@
     <div class="modal fade zoom" tabindex="-1" id="modalDetail">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" id="pdfPreviewmodal" data-simplebar>
+                <p class="text-center mt-2"  >Aucun fichier </p>
             </div>
         </div>
     </div>

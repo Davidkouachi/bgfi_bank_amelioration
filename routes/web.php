@@ -24,6 +24,8 @@ Route::get('/Registre', [AuthController::class, 'view_registre'])->name('registr
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/Internet indisponible', [Controller::class, 'internet_indisponible'])->name('internet_indisponible');
+
     Route::get('/suiviactiveoui', [ProfilController::class, 'suivi_oui']);
     Route::get('/suiviactivenon', [ProfilController::class, 'suivi_non']);
     Route::get('/mdp_update', [ProfilController::class, 'mdp_update']);
@@ -48,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/Vérification des réclamations', [ListereclamationController::class, 'index_validation'])->name('index_validation_recla');
     Route::get('/Liste des reclamations non acceptées', [ListereclamationController::class, 'index_non_accepte'])->name('index_non_accepte');
     Route::post('/Réclamations non acceptées', [ListereclamationController::class, 'index_non_accepte2'])->name('index_non_accepte2');
+    Route::post('/Réclamations traitement', [ListereclamationController::class, 'index_non_accepte_traitement'])->name('index_non_accepte_traitement');
     
     Route::get('/rejet/{id}', [ProcessusController::class, 'cause_rejet'])->name('cause_rejet');
 
@@ -73,9 +76,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get_action/{id}', [AmeliorationController::class, 'get_action']);
     Route::post('/add_amelioration', [AmeliorationController::class, 'index_add'])->name('index_add');
 
-    Route::get('/liste des reclamations', [ListereclamationController::class, 'index'])->name('index_listereclamation');
-    Route::get('/liste des causes', [ListereclamationController::class, 'index_cause'])->name('index_listecause');
+    Route::get('/Suivis des reclamations', [ListereclamationController::class, 'index_suivi'])->name('index_listereclamation');
+    Route::get('/liste des causes', [ListereclamationController::class, 'index_list_cause'])->name('index_listecause');
+    Route::get('/liste du resume des reclamations', [ListereclamationController::class, 'index_list_recla'])->name('index_listerecla');
     Route::post('/Modification Cause', [ListereclamationController::class, 'index_modif_cause'])->name('index_modif_cause');
+    Route::post('/Modification Reclamation', [ListereclamationController::class, 'index_modif_recla'])->name('index_modif_recla');
 
     Route::get('/Profil', [ProfilController::class, 'index_profil'])->name('index_profil');
 
@@ -87,6 +92,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/Statistique', [StatistiqueController::class, 'index_stat'])->name('index_stat');
     Route::get('/get_processus/{id}', [StatistiqueController::class, 'get_processus'])->name('get_processus');
     Route::get('/get_date', [StatistiqueController::class, 'get_date'])->name('get_date');
+
+    Route::post('/Suivi_action/{id}', [SuiviactionController::class, 'add_suivi_action'])->name('add_suivi_action');
 
     Route::get('/Res-va', [ResvaController::class, 'index_add_resva'])->name('index_add_resva');
     Route::post('/traitement_resva', [ResvaController::class, 'add_resva'])->name('add_resva');

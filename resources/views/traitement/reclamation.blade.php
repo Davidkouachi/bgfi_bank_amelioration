@@ -25,7 +25,7 @@
                                 <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            <span>Liste des rèclamations</span>
+                                            <span>Suivis des rèclamations</span>
                                             <em class="icon ni ni-list-index"></em>
                                         </h3>
                                     </div>
@@ -41,11 +41,13 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th></th>
-                                                    <th>Réclamation</th>
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
-                                                    <th>Date</th>
-                                                    <th></th>
+                                                    <th>Date de création</th>
+                                                    <th>Date Limite de traitement</th>
+                                                    <th>Nombre d'action</th>
+                                                    <th>Action éffectuée</th>
+                                                    <th>Action non éffectuée</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -53,25 +55,43 @@
                                                 @foreach($ams as $key => $am)
                                                     <tr class="text-center">
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $am->reclamations }}</td>
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}</td>
-                                                        @if ($am->statut === 'valider')
-                                                            <td class="text-success" >Valider</td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}
+                                                        </td>
+                                                        @if(\Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') === \Carbon\Carbon::now()->toDateString())
+                                                        <td class="text-danger" >
+                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}
+                                                        </td>
                                                         @endif
-                                                        @if ($am->statut === 'non-valider')
-                                                            <td class="text-danger" >Non Valider</td>
+                                                        @if(\Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') !== \Carbon\Carbon::now()->toDateString())
+                                                        <td class="text-success" >
+                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}
+                                                        </td>
                                                         @endif
-                                                        @if ($am->statut === 'soumis')
-                                                            <td class="text-warning" >En attente de validation</td>
-                                                        @endif
+                                                        <td class="text-primary" >
+                                                            {{ $am->nbre_action }}
+                                                        </td>
+                                                        <td class="text-success" >
+                                                            {{ $am->nbre_action_eff }}
+                                                        </td>
+                                                        <td class="text-danger" >
+                                                            {{ $am->nbre_action_non }}
+                                                        </td>
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail{{ $am->id }}"
                                                                 href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
                                                                 <em class="icon ni ni-eye"></em>
                                                             </a>
+                                                            @if ($am->nbre_action_non === 0 )
+                                                            <a data-bs-toggle="modal"
+                                                                data-bs-target="#modalEfficacite{{ $am->id }}"
+                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-primary">
+                                                                <em class="icon ni ni-focus"></em>
+                                                            </a>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -292,6 +312,79 @@
                                 @endforeach
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach ($ams as $am)
+        <div class="modal fade zoom" tabindex="-1" id="modalEfficacite{{ $am->id }}">
+            <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Suivi</h5>
+                        <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em
+                                class="icon ni ni-cross"></em></a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="nk-block">
+                            <form class="row g-gs" method="post" action="">
+                                @csrf
+                                <div class="col-lg-12 col-xxl-12" >
+                                    <div class="card">
+                                        <div class="card-inner">
+                                                <div class="row g-4">
+                                                    <div class="col-lg-5">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="email-address-1">
+                                                                Action éfficace
+                                                            </label>
+                                                            <select required name="efficacite" class="form-select ">
+                                                                <option value="">
+                                                                    Choisir
+                                                                </option>
+                                                                <option value="efficace">
+                                                                    oui
+                                                                </option>
+                                                                <option value="non_efficace">
+                                                                    non
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="Coût">
+                                                                Date de vérification de l'éfficacité
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input name="date_action" type="date" class="form-control"  max="{{ \Carbon\Carbon::now()->toDateString() }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-7">
+                                                        <div class="form-group text-center">
+                                                            <label class="form-label" for="description">
+                                                                Commentaire
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea name="commentaire" class="form-control no-resize" id="default-textarea"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group text-center">
+                                                            <button type="submit" class="btn btn-lg btn-success btn-dim">
+                                                                <em class="ni ni-check me-2 "></em>
+                                                                <em >Enregistrer</em>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

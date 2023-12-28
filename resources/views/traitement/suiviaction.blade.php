@@ -39,10 +39,9 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th></th>
-                                                    <th>Processus</th>
-                                                    <th>Risque</th>
+                                                    <th>Cause</th>
                                                     <th>Action</th>
-                                                    <th>Délai</th>
+                                                    <th>Délai de traitement</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -50,10 +49,11 @@
                                                 @foreach ($actions as $key => $action)
                                                     <tr class="text-center">
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $action->reclamation }}</td>
-                                                        <td>{{ $action->cause }}</td>
+                                                        <td>{{ $action->cause }} </td>
                                                         <td>{{ $action->action }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($action->delai)->format('d/m/Y') }}</td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($action->delai)->format('d/m/Y') }}
+                                                        </td>
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail{{ $action->id }}"
@@ -86,7 +86,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="nk-block">
-                            <form class="row g-gs" method="post" action="/Suivi_action/{{ $action->id }}">
+                            <form class="row g-gs" method="post" action="/Suivi_action/{{ $action->action_id }}">
                                 @csrf
                                 <div class="col-lg-12 col-xxl-12" >
                                     <div class="card">
@@ -174,7 +174,7 @@
                                                                 Date d'action éffectuée
                                                             </label>
                                                             <div class="form-control-wrap">
-                                                                <input name="date_action" type="date" class="form-control" max="{{ \Carbon\Carbon::now()->toDateString() }}">
+                                                                <input name="date_action" type="date" class="form-control"  max="{{ \Carbon\Carbon::now()->toDateString() }}">
                                                             </div>
                                                         </div>
                                                     </div>

@@ -183,16 +183,6 @@
                                             </a>
                                         </li>
                                         @endif
-                                        @if (session('user_auto')->list_recla === 'oui')
-                                        <li class="nk-menu-item">
-                                            <a class="nk-menu-link" href="{{ route('index_listereclamation') }}">
-                                                <em class="ni ni-list-index me-1"></em>
-                                                <span class="nk-menu-text">
-                                                    Liste des réclamations
-                                                </span>
-                                            </a>
-                                        </li>
-                                        @endif
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_validation_recla') }}">
                                                 <em class="ni ni-file-docs me-1"></em>
@@ -209,15 +199,25 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        @if (session('user_auto')->list_recla === 'oui')
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_listereclamation') }}">
+                                                <em class="ni ni-list-index me-1"></em>
+                                                <span class="nk-menu-text">
+                                                    Suivis des réclamations
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
                                     </ul>
                                 </li>
                                 @endif
-                                @if (session('user_auto')->list_cause === 'oui')
+                                @if (session('user_auto')->list_cause === 'oui' || session('user_auto')->list_resume_recla === 'oui')
                                 <li class="nk-menu-item has-sub">
                                     <a class="nk-menu-toggle btn " >
-                                        <em class="ni ni-focus me-2"></em>
+                                        <em class="ni ni-list me-2"></em>
                                         <span class="nk-menu-text text-dark">
-                                            Causes
+                                            Listes
                                         </span>
                                     </a>
                                     <ul class="nk-menu-sub">
@@ -226,11 +226,19 @@
                                             <a class="nk-menu-link" href="{{ route('index_listecause') }}">
                                                 <em class="ni ni-list-index me-1"></em>
                                                 <span class="nk-menu-text">
-                                                    Liste des causes
+                                                    Causes
                                                 </span>
                                             </a>
                                         </li>
                                         @endif
+                                        <li class="nk-menu-item">
+                                            <a class="nk-menu-link" href="{{ route('index_listerecla') }}">
+                                                <em class="ni ni-list-index me-1"></em>
+                                                <span class="nk-menu-text">
+                                                    Résumé des reclamtions
+                                                </span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                                 @endif
@@ -373,6 +381,25 @@
         </div>
     </div>
 
+    <script>
+        // Vérifier si la connexion Internet est disponible avant d'utiliser Pusher
+        function checkInternetAndPusher() {
+            const online = navigator.onLine;
+
+            if (online) {
+                // Utiliser Pusher seulement si la connexion est disponible
+                // Votre code pour utiliser Pusher ici
+                // ...
+            } else {
+                // Si la connexion est perdue, rediriger vers une page spécifique
+                window.location.href = "/Internet indisponible"; // Remplacez par votre URL de page d'erreur
+            }
+        }
+
+        // Vérifier régulièrement l'état de la connexion (toutes les 5 secondes ici)
+        setInterval(checkInternetAndPusher, 2000);
+    </script>
+
         <div class="modal fade" tabindex="-1" id="modalAlert2" aria-modal="true" style="position: fixed;" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -381,7 +408,7 @@
                             <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-cross bg-danger"></em>
                             <h4 class="nk-modal-title">Session Expiré!</h4>
                             <div class="nk-modal-action mt-5">
-                                <a href="{{ route('logout') }}" class="btn btn-lg btn-mw btn-light">
+                                <a class="btn btn-lg btn-mw btn-light">
                                     ok
                                 </a>
                             </div>
@@ -391,9 +418,85 @@
             </div>
         </div>
 
+        <script>
+            // Sélectionnez le bouton "ok" dans la modalité
+            const okButton = document.querySelector('#modalAlert2 .btn-light');
+
+            // Ajoutez un gestionnaire d'événements au clic sur le bouton "ok"
+            okButton.addEventListener('click', function() {
+                // Rechargez la page
+                location.reload();
+            });
+
+        </script>
+
         <!--<script>
+
+            let inactivityTimeout;
+
+            function resetTimer() {
+                clearTimeout(inactivityTimeout);
+
+                inactivityTimeout = setTimeout(function() {
+                    // Code à exécuter lorsque l'utilisateur est inactif
+                    $('#modalAlert2').modal('show');
+                }, 300000); // Durée d'inactivité en millisecondes (par exemple, 5 minute ici)
+            }
+
+            // Lancer le minuteur au chargement de la page
+            window.onload = resetTimer;
+
+        </script>-->
+
+        <!--<script>
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('9f9514edd43b1637ff61', {
+              cluster: 'eu'
+            });
+
+            var channel = pusher.subscribe('my-channel-user');
+            channel.bind('my-event-user', function(data) {
+                Swal.fire({
+                            title: "Alert!",
+                            text: "Session Expiré",
+                            icon: "error",
+                            confirmButtonColor: "#00d819",
+                            confirmButtonText: "OK",
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+            });
+        </script>-->
+
+        <!--<script>
+            // JavaScript pour écouter les événements
+            const channel = pusher.subscribe('my-channel-user');
+
+            channel.bind('my-event-user', function(data) {
+                // Code pour afficher l'alerte ou réaliser une action visuelle
+                Swal.fire({
+                    title: "Alert!",
+                    text: "Session Expirée",
+                    icon: "error",
+                    confirmButtonColor: "#00d819",
+                    confirmButtonText: "OK",
+                    allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+            });
+        </script>-->
+
+        <!--<script>
+
             let idleTimer;
-            const idleTime = 60000; 
+            const idleTime = 300000; //5 min
 
             function resetIdleTimer() {
                 clearTimeout(idleTimer);
@@ -403,9 +506,6 @@
             function showLogoutModal() {
                 $('#modalAlert2').modal('show');
             }
-
-            document.addEventListener('mousemove', resetIdleTimer);
-            document.addEventListener('keypress', resetIdleTimer);
         </script>-->
 
     <script src="{{asset('assets/js/bundle0226.js')}}"></script>
@@ -493,6 +593,30 @@
             });
         });
     </script>
+
+    <!--<script>
+        let idleTimer;
+        const idleTime = 1200000;
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(showLogoutModal, idleTime);
+        }
+
+        function showLogoutModal() {
+            $('#modalAlert2').modal('show');
+        }
+
+        document.addEventListener('mousemove', resetIdleTimer);
+        document.addEventListener('keypress', resetIdleTimer);
+    </script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Pour éviter le comportement par défaut du lien
+            window.location.reload();
+        });
+    </script>-->
+
 
 
     <!--<script>

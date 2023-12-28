@@ -98,9 +98,7 @@ class ProcessusController extends Controller
 
         event(new MessageNotification());
 
-        return redirect()
-            ->route('index_add_processus')
-            ->with('ajouter', 'Enregistrement éffectuée.');
+        return redirect()->back()->with('success', 'Enregistrement éffectuée.');
 
     }
 

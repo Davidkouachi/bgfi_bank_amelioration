@@ -56,14 +56,15 @@
                                 <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
                                         <h3 class="text-center">
-                                            <span>Nouvelle réclamation</span>
-                                            <em class="icon ni ni-reports"></em>
+                                            <span>Modification</span>
+                                            <em class="icon ni ni-edit"></em>
                                         </h3>
                                     </div>
                                 </div>
                             </div>
-                    <form class="nk-block" method="post" action="">
+                    <form class="nk-block" method="post" action="{{route('index_non_accepte_traitement')}}">
                         @csrf
+                        <input style="display: none" name="amelioration_id" type="text" value="{{ $am->id }}">
                         <div class="row g-gs">
                             <div class="col-md-12 col-xxl-12" id="groupesContainer">
                                 <div class="card card-bordered">
@@ -75,7 +76,7 @@
                                                             Date 
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input id="date" name="date_fiche" type="date" class="form-control text-center" value="{{ \Carbon\Carbon::now()->toDateString() }}" onchange="checkDate()" max="{{ \Carbon\Carbon::now()->toDateString() }}">
+                                                            <input id="date" name="date_fiche" type="date" class="form-control text-center" value="{{ $am->date_fiche }}" onchange="checkDate()" max="{{ $am->date_fiche }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -85,13 +86,13 @@
                                                             Nombre de jours de traitement
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <select id="nbre_jour" required name="nbre_jour" class="form-select " >
-                                                                @for ($i = 1; $i <= 31; $i++)
-                                                                    <option {{ $i === 5 ? 'selected' : '' }} value="{{ $i }}" >
-                                                                        {{ $i }}
-                                                                    </option>
-                                                                @endfor
-                                                            </select>
+                                                            <select id="nbre_jour" required name="nbre_jour" class="form-select">
+															    @for ($i = 1; $i <= 31; $i++)
+															        <option {{ intval($am->nbre_traitement) === $i ? 'selected' : '' }} value="{{ $i }}">
+															            {{ $i }}
+															        </option>
+															    @endfor
+															</select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -119,7 +120,7 @@
                                                             Lieu
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input required placeholder="Saisie obligatoire" name="lieu" type="text" class="form-control" id="controle">
+                                                            <input required placeholder="Saisie obligatoire" name="lieu" type="text" class="form-control" id="controle" value="{{ $am->lieu }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -129,7 +130,7 @@
                                                             Détecteur (Agent / Client)
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input required placeholder="Saisie obligatoire" name="detecteur" type="text" class="form-control" id="controle">
+                                                            <input required placeholder="Saisie obligatoire" name="detecteur" type="text" class="form-control" id="controle" value="{{ $am->detecteur }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -147,7 +148,7 @@
                                                                 Réclamation(s)
                                                             </label>
                                                             <div class="form-control-wrap" >
-                                                            <textarea required name="reclamations" class="form-control no-resize" id="default-textarea"></textarea>
+                                                            <textarea required name="reclamations" class="form-control no-resize" id="default-textarea">{{ $am->reclamations }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -159,7 +160,7 @@
                                                                     Conséquence(s)
                                                                 </label>
                                                                 <div class="form-control-wrap" >
-                                                                    <textarea required name="consequences" class="form-control no-resize" id="default-textarea"></textarea>
+                                                                    <textarea required name="consequences" class="form-control no-resize" id="default-textarea">{{ $am->consequences }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -169,12 +170,124 @@
                                                                     Cause(s)
                                                                 </label>
                                                                 <div class="form-control-wrap" >
-                                                                    <textarea required name="causes" class="form-control no-resize" id="default-textarea"></textarea>
+                                                                    <textarea required name="causes" class="form-control no-resize" id="default-textarea">{{ $am->causes }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xxl-12 ">
+                            	<div class="card card-bordered">
+								    <div class="card-inner">
+								        <div class="row g-4">
+								        	@foreach($actionsDatam[$am->id] as $key => $actions)
+								            <div class="col-lg-12 col-xxl-12">
+								                <div class="card">
+								                    <div class="card-inner">
+								                        <div class="card-head">
+								                        	{{ $key+1 }}
+								                            <span class="badge badge-dot bg-primary">
+								                                @if($actions['nature'] === 'new')
+								                                	Nouvelle réclamation et nouvelle cause
+								                               	@endif
+								                                @if($actions['nature'] === 'trouve')
+								                                	Réclamation et cause trouvées
+								                                @endif
+								                                @if($actions['nature'] === 'new_cause')
+								                                	Réclamation trouvée et nouvelle cause
+								                                @endif
+								                            </span>
+								                        </div>
+								                        <div class="row g-4">
+								                        	<div class="col-lg-6">
+								                                <div class="form-group">
+								                                    <label class="form-label" for="controle">
+								                                        cause
+								                                    </label>
+								                                    <div class="form-control-wrap">
+								                                        <input readonly placeholder="Saisie obligatoire" name="cause[]" value="{{ $actions['cause'] }}" type="text" class="form-control">
+								                                        <input style="display:none;" name="cause_id[]" type="text" value="{{ $actions['cause_id'] }}">
+								                                    </div>
+								                                </div>
+								                            </div>
+								                            <div class="col-lg-6">
+								                                <div class="form-group">
+								                                    <label class="form-label" for="controle">
+								                                        Réclamation
+								                                    </label>
+								                                    <div class="form-control-wrap">
+								                                        <input readonly placeholder="Saisie obligatoire" name="reclamation[]" value="{{ $actions['reclamation'] }}" type="text" class="form-control">
+								                                        <input style="display:none;" name="reclamation_id[]" type="text" value="{{ $actions['reclamation_id'] }}">
+								                                    </div>
+								                                </div>
+								                            </div>
+								                        	<div class="col-lg-6">
+								                                <div class="form-group">
+								                                    <label class="form-label" for="controle">
+								                                        Action
+								                                    </label>
+								                                    <div class="form-control-wrap">
+								                                        <input readonly placeholder="Saisie obligatoire" name="action[]" value="{{ $actions['action'] }}" type="text" class="form-control">
+								                                        <input style="display:none;" name="action_id[]" type="text" value="{{ $actions['action_id'] }}">
+								                                    </div>
+								                                </div>
+								                            </div>
+								                            <div class="col-lg-6">
+								                                <div class="form-group">
+								                                    <label class="form-label" for="Cause">
+								                                        Responsable
+								                                    </label>
+								                                    <select disabled id="responsable_idc" name="poste_id[]" class="form-select js-select2">
+								                                        @foreach($postes as $poste)
+								                                        <option {{ $actions['poste_id'] === $poste->id ? 'selected' : '' }}  value="{{$poste->id}}">
+								                                            {{$poste->nom}}
+								                                        </option>
+								                                        @endforeach
+								                                    </select>
+								                                </div>
+								                            </div>
+								                            <div class="col-lg-12">
+								                                <div class="form-group text-center">
+								                                    <label class="form-label" for="description">
+								                                        Commentaire
+								                                    </label>
+								                                    <div class="form-control-wrap">
+								                                        <textarea required name="commentaires[]" class="form-control no-resize" id="default-textarea">{{$actions['commentaire_am']}}</textarea>
+								                                    </div>
+								                                </div>
+								                            </div>
+                                                            <div class="col-lg-4 text-left">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input value="{{ $actions['action_id'] }}" name="id_suppr[{{$key+1}}]" type="text" style="display: none;">
+                                                                    <input name="suppr[{{$key+1}}]" value="oui" type="checkbox" class="custom-control-input" id="customCheck1_{{$key+1}}">
+                                                                    <label class="custom-control-label" for="customCheck1_{{$key+1}}">
+                                                                        Supprimé
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+								                        </div>
+								                    </div>
+								                </div>
+								            </div>
+								            @endforeach
+								        </div>
+								    </div>
+								</div>
+                            </div>
+                            <div class="col-md-12 col-xxl-12" id="groupesContainer">
+                                <div class="card card-bordered">
+                                    <div class="card-inner">
+                                        <div class="card-head">
+                                            <h5 class="card-title">
+                                                Recherche
+                                                <span style="color: #abadad;" >(facultatif)</span>
+                                            </h5>
+                                        </div>
+                                            <div class="row g-4">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <div class="form-control-wrap">
@@ -212,14 +325,14 @@
                             <div id="dynamic-fields">
 
                             </div>
-                            <div class="col-md-12 col-xxl-12" id="btn_enrg">
+                            <div class="col-md-12 col-xxl-12">
                                 <div class="card card-bordered card-preview">
                                     <div class="card-inner row g-gs">
                                         <div class="col-12">
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-lg btn-success btn-dim ">
-                                                    <em class="ni ni-check me-2"></em>
-                                                    <em>Soumettre</em>
+                                                <button type="submit" class="btn btn-lg btn-primary btn-dim ">
+                                                    <em class="ni ni-edit me-2"></em>
+                                                    <em>Mise à jour</em>
                                                 </button >
                                             </div>
                                         </div>
@@ -267,8 +380,6 @@
         });
 
         function addGroup(type_new) {
-
-            document.getElementById("btn_enrg").style.display = "block";
 
             var groupe = document.createElement("div");
             groupe.className = "card card-bordered";
@@ -425,8 +536,6 @@
 
         function addGroupscause(data) {
 
-            document.getElementById("btn_enrg").style.display = "block";
-
             var groupe = document.createElement("div");
             groupe.className = "card card-bordered";
             groupe.innerHTML = `
@@ -447,9 +556,10 @@
                                                                             Processus
                                                                         </label>
                                                                         <input required style="display:none;" name="nature[]" value="new_cause" type="text" >
-                                                                        <select readonly id="processus_id" required name="processus_id[]" class="form-select js-select2" placeholder="Choisir un processus" >
+                                                                        <select disabled id="processus_id" class="form-select js-select2" placeholder="Choisir un processus" >
                                                                             ${processuss.map(proces => `<option value="${proces.id}" ${data.processus.id == proces.id ? 'selected' : ''}>${proces.nom}</option>`).join('')}
                                                                         </select>
+                                                                        <input style="display:none;" name="processus_id[]" value="${data.processus.id}" type="text" class="form-control" >
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
@@ -537,9 +647,6 @@
             groupe.querySelector("#suppr_nouvelle_action").addEventListener("click", function(event) {
                 event.preventDefault();
                 groupe.remove();
-
-                if (!groupe.hasChildNodes()) {
-                }
             });
 
             document.getElementById("dynamic-fields").appendChild(groupe);
@@ -550,8 +657,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Initial setup
-            document.getElementById("btn_enrg").style.display = "none";
-
             document.getElementById("slect_recla_id").style.display = "none";
             document.getElementById("slect_cause_id").style.display = "none";
 
@@ -666,8 +771,6 @@
 
                                     function addGroups_action(response) {
 
-                                        document.getElementById("btn_enrg").style.display = "block";
-
                                         response.actions.forEach(function(action) {
                                             var groupe = document.createElement("div");
                                             groupe.className = "card card-bordered";
@@ -689,9 +792,10 @@
                                                                                 <label class="form-label" for="Cause">
                                                                                     Processus
                                                                                 </label>
-                                                                                <select id="processus_id" required name="processus_id[]" class="form-select js-select2" placeholder="Choisir un processus" >
+                                                                                <select id="processus_id" disabled class="form-select js-select2" placeholder="Choisir un processus" >
                                                                                     ${processuss.map(processus => `<option value="${processus.id}" ${action.processus_id == processus.id ? 'selected' : ''}>${processus.nom}</option>`).join('')}
                                                                                 </select>
+                                                                                <input style="display:none;" name="processus_id[]" value="${action.processus_id}" type="text" >
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-6">
@@ -699,9 +803,10 @@
                                                                                 <label class="form-label" for="Coût">
                                                                                     Responsable
                                                                                 </label>
-                                                                                <select required id="responsable_idc" required name="poste_id[]" class="form-select" >
+                                                                                <select disabled id="responsable_idc" class="form-select" >
                                                                                     ${postes.map(poste => `<option value="${poste.id}" ${action.responsable_id == poste.id ? 'selected' : ''}>${poste.nom}</option>`).join('')}
                                                                                 </select>
+                                                                                <input style="display:none;" name="poste_id[]" value="${action.responsable_id}" type="text" >
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-12">
@@ -711,7 +816,7 @@
                                                                                 </label>
                                                                                 <div class="form-control-wrap">
                                                                                     <input style="display:none;" name="reclamation_id[]" value="${action.reclamation_id}" type="text" class="form-control" >
-                                                                                    <input required placeholder="Saisie obligatoire" name="reclamation[]" value="${action.reclamation}" type="text" class="form-control" >
+                                                                                    <input readonly placeholder="Saisie obligatoire" name="reclamation[]" value="${action.reclamation}" type="text" class="form-control" >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -722,7 +827,7 @@
                                                                                 </label>
                                                                                 <div class="form-control-wrap">
                                                                                     <input style="display:none;" name="cause_id[]" value="${action.cause_id}" type="text" class="form-control" >
-                                                                                    <input required placeholder="Saisie obligatoire" name="cause[]" value="${action.cause}" type="text" class="form-control" >
+                                                                                    <input readonly placeholder="Saisie obligatoire" name="cause[]" value="${action.cause}" type="text" class="form-control" >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -733,21 +838,21 @@
                                                                                 </label>
                                                                                 <div class="form-control-wrap">
                                                                                     <input style="display:none;" name="action_id[]" value="${action.id}" type="text" class="form-control" >
-                                                                                    <input required placeholder="Saisie obligatoire" name="action[]" value="${action.nom}" type="text" class="form-control" >
+                                                                                    <input readonly placeholder="Saisie obligatoire" name="action[]" value="${action.nom}" type="text" class="form-control" >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-6">
+                                                                        <div class="col-lg-6" style="display:none;">
                                                                             <div class="form-group text-center">
                                                                                 <label class="form-label" for="description">
                                                                                     Action Corrective
                                                                                 </label>
                                                                                 <div class="form-control-wrap">
-                                                                                    <textarea required name="actions[]" class="form-control no-resize" id="default-textarea">${action.actions}</textarea>
+                                                                                    <textarea readonly required name="actions[]" class="form-control no-resize" id="default-textarea">${action.actions}</textarea>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-6">
+                                                                        <div class="col-lg-12">
                                                                             <div class="form-group text-center">
                                                                                 <label class="form-label" for="description">
                                                                                     Commentaire
@@ -780,9 +885,7 @@
                                             document.getElementById("dynamic-fields").appendChild(groupe);
                                         });
                                     }
-
     </script>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -814,6 +917,25 @@
 
             // Appel initial pour mettre à jour la date limite lors du chargement de la page
             updateDateLimite();
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const checkboxesCause = document.querySelectorAll('input[name^="suppr["]');
+
+            checkboxesCause.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const checkedCount = document.querySelectorAll('input[name^="suppr["]:checked').length;
+
+                    if (checkedCount === checkboxesCause.length) {
+                        // Si toutes les cases sont cochées, décocher la dernière case cochée
+                        checkbox.checked = false;
+
+                        toastr.warning(`Cette cause ou réclamation ne peut etre supprimé `);
+                    }
+                });
+            });
         });
     </script>
 

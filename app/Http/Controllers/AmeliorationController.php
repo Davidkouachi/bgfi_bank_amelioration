@@ -102,7 +102,7 @@ class AmeliorationController extends Controller
     public function get_cause_new($id)
     {
         $reclamations = Reclamation::find($id);
-        $processus = Processuse::where('id',$reclamations->processus_id);
+        $processus = Processuse::where('id', $reclamations->processus_id)->first();
 
         if($reclamations || $processus) {
             return response()->json([
@@ -194,142 +194,110 @@ class AmeliorationController extends Controller
         $am->causes = $causes;
         $am->choix_select = 'neant';
         $am->statut = 'soumis';
+        $am->escaladeur = 'non';
+        $am->nbre_traitement = $nbre_jour;
         $am->save();
 
         if ($am) {
 
-            foreach ($nature as $index => $valeur) {
+            if ($nature) {
 
-                if ($nature[$index] === 'new') {
+                foreach ($nature as $index => $valeur) {
 
-                    $recla = new Reclamation();
-                    $recla->nom = $reclamation[$index];
-                    $recla->processus_id = $processus_id[$index];
-                    $recla->save();
+                    if ($nature[$index] === 'new') {
 
-                    $caus = new Cause();
-                    $caus->nom = $cause[$index];
-                    $caus->reclamation_id = $recla->id;
-                    $caus->save();
+                        $recla = new Reclamation();
+                        $recla->nom = $reclamation[$index];
+                        $recla->processus_id = $processus_id[$index];
+                        $recla->save();
 
-                    $actio = new Action();
-                    $actio->nom = $action[$index];
-                    $actio->actions = $actions[$index];
-                    $actio->poste_id = $poste_id[$index];
-                    $actio->cause_id = $caus->id;
-                    $actio->save();
+                        $caus = new Cause();
+                        $caus->nom = $cause[$index];
+                        $caus->reclamation_id = $recla->id;
+                        $caus->save();
 
-                    $suivi = new Suivi_action();
-                    $suivi->action_id = $actio->id;
-                    $suivi->reclamation_id = $recla->id;
-                    $suivi->cause_id = $caus->id;
-                    $suivi->amelioration_id = $am->id;
-                    $suivi->processus_id = $processus_id[$index];
-                    $suivi->delai = $date_limite;
-                    $suivi->commentaire_am = $commentaires[$index];
-                    $suivi->nature = $nature[$index];
-                    $suivi->statut = 'non-realiser';
-                    $suivi->save();
+                        $actio = new Action();
+                        $actio->nom = $action[$index];
+                        $actio->actions = $actions[$index];
+                        $actio->poste_id = $poste_id[$index];
+                        $actio->cause_id = $caus->id;
+                        $actio->save();
 
-                } else if ($nature[$index] === 'trouve') {
+                        $suivi = new Suivi_action();
+                        $suivi->action_id = $actio->id;
+                        $suivi->reclamation_id = $recla->id;
+                        $suivi->cause_id = $caus->id;
+                        $suivi->amelioration_id = $am->id;
+                        $suivi->processus_id = $processus_id[$index];
+                        $suivi->delai = $date_limite;
+                        $suivi->commentaire_am = $commentaires[$index];
+                        $suivi->nature = $nature[$index];
+                        $suivi->statut = 'non-realiser';
+                        $suivi->save();
 
-                    $suivi = new Suivi_action();
-                    $suivi->action_id = $action_id[$index];
-                    $suivi->reclamation_id = $reclamation_id[$index];
-                    $suivi->cause_id = $cause_id[$index];
-                    $suivi->amelioration_id = $am->id;
-                    $suivi->processus_id = $processus_id[$index];
-                    $suivi->delai = $date_limite;
-                    $suivi->commentaire_am = $commentaires[$index];
-                    $suivi->nature = $nature[$index];
-                    $suivi->statut = 'non-realiser';
-                    $suivi->save();
+                    } else if ($nature[$index] === 'trouve') {
 
-                    if ($suivi) {
+                        $suivi = new Suivi_action();
+                        $suivi->action_id = $action_id[$index];
+                        $suivi->reclamation_id = $reclamation_id[$index];
+                        $suivi->cause_id = $cause_id[$index];
+                        $suivi->amelioration_id = $am->id;
+                        $suivi->processus_id = $processus_id[$index];
+                        $suivi->delai = $date_limite;
+                        $suivi->commentaire_am = $commentaires[$index];
+                        $suivi->nature = $nature[$index];
+                        $suivi->statut = 'non-realiser';
+                        $suivi->save();
 
-                        $reclat = new Reclamationtrouver();
-                        $reclat->reclamation_id = $reclamation_id[$index];
-                        $reclat->amelioration_id = $am->id;
-                        $reclat->save();
+                        if ($suivi) {
 
-                        $causet = new Causetrouver();
-                        $causet->cause_id = $cause_id[$index];
-                        $causet->amelioration_id = $am->id;
-                        $causet->save();
-                    }
+                            $reclat = new Reclamationtrouver();
+                            $reclat->reclamation_id = $reclamation_id[$index];
+                            $reclat->amelioration_id = $am->id;
+                            $reclat->save();
 
-                } else if ($nature[$index] === 'new_cause') {
+                            $causet = new Causetrouver();
+                            $causet->cause_id = $cause_id[$index];
+                            $causet->amelioration_id = $am->id;
+                            $causet->save();
+                        }
 
-                    $caus = new Cause();
-                    $caus->nom = $cause[$index];
-                    $caus->reclamation_id = $reclamation_id[$index];
-                    $caus->save();
+                    } else if ($nature[$index] === 'new_cause') {
 
-                    $actio = new Action();
-                    $actio->nom = $action[$index];
-                    $actio->actions = $actions[$index];
-                    $actio->poste_id = $poste_id[$index];
-                    $actio->cause_id = $caus->id;
-                    $actio->save();
+                        $caus = new Cause();
+                        $caus->nom = $cause[$index];
+                        $caus->reclamation_id = $reclamation_id[$index];
+                        $caus->save();
 
-                    $suivi = new Suivi_action();
-                    $suivi->action_id = $actio->id;
-                    $suivi->reclamation_id = $reclamation_id[$index];
-                    $suivi->cause_id = $caus->id;
-                    $suivi->amelioration_id = $am->id;
-                    $suivi->processus_id = $processus_id[$index];
-                    $suivi->delai = $date_limite;
-                    $suivi->statut = 'non-realiser';
-                    $suivi->commentaire_am = $commentaires[$index];
-                    $suivi->nature = $nature[$index];
-                    $suivi->save();
+                        $actio = new Action();
+                        $actio->nom = $action[$index];
+                        $actio->actions = $actions[$index];
+                        $actio->poste_id = $poste_id[$index];
+                        $actio->cause_id = $caus->id;
+                        $actio->save();
 
-                    if ($suivi) {
+                        $suivi = new Suivi_action();
+                        $suivi->action_id = $actio->id;
+                        $suivi->reclamation_id = $reclamation_id[$index];
+                        $suivi->cause_id = $caus->id;
+                        $suivi->amelioration_id = $am->id;
+                        $suivi->processus_id = $processus_id[$index];
+                        $suivi->delai = $date_limite;
+                        $suivi->statut = 'non-realiser';
+                        $suivi->commentaire_am = $commentaires[$index];
+                        $suivi->nature = $nature[$index];
+                        $suivi->save();
 
-                        $reclat = new Reclamationtrouver();
-                        $reclat->reclamation_id = $reclamation_id[$index];
-                        $reclat->amelioration_id = $am->id;
-                        $reclat->save();
-                    }
+                        if ($suivi) {
 
-                }
+                            $reclat = new Reclamationtrouver();
+                            $reclat->reclamation_id = $reclamation_id[$index];
+                            $reclat->amelioration_id = $am->id;
+                            $reclat->save();
+                        }
 
-                if ($choix_alert_email === 'email') {
-
-                    $post = User::join('postes', 'users.poste_id', 'postes.id')
-                                ->where('postes.id', '=', $poste_id[$index])
-                                ->first();
-                    if ($post) {
-                        $his = new Historique_action();
-                        $his->nom_formulaire = 'Nouveau Utilisateur';
-                        $his->nom_action = 'Ajouter';
-                        $his->user_id = Auth::user()->id;
-                        $his->save();
-
-                        $mail = new PHPMailer(true);
-                        $mail->isHTML(true);
-                        $mail->isSMTP();
-                        $mail->Host = 'smtp.gmail.com';
-                        $mail->SMTPAuth = true;
-                        $mail->Username = 'bgfibankmail01@gmail.com';
-                        $mail->Password = 'uxqu rotm ibpc yvxa';
-                        $mail->SMTPSecure = 'ssl';
-                        $mail->Port = 465;
-                        // Destinataire, sujet et contenu de l'email
-                        $mail->setFrom('bgfibankmail01@gmail.com', 'BGFIBank');
-                        $mail->addAddress($post->email);
-                        $mail->Subject = 'Alert';
-                        $mail->Body = 'Nouvelle(s) Action(s)';
-                        // Envoi de l'email
-                        $mail->send();
-                    } else {
-                        return redirect()
-                                ->back()
-                                ->with('error', 'Email non envoyé.');
                     }
                 }
-
-
             }
 
         } else {
@@ -349,8 +317,7 @@ class AmeliorationController extends Controller
 
         return redirect()
             ->back()
-            ->with('ajouter', 'Enregistrement éffectuée.');
-
+            ->with('success', 'Enregistrement éffectuée.');
     }
 
 }

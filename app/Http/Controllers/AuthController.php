@@ -123,7 +123,7 @@ class AuthController extends Controller
                 $mail->send();
             }
 
-            return back()->with('ajouter', 'Enregistrement éffectuée.');
+            return back()->with('success', 'Enregistrement éffectuée.');
         }
     }
 

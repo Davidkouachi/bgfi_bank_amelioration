@@ -17,8 +17,6 @@ return [
     |            "memcached", "redis", "dynamodb", "array"
     |
     */
-   'lifetime' => env('SESSION_LIFETIME', 1440),
-
 
     'driver' => env('SESSION_DRIVER', 'database'),
 
@@ -32,10 +30,13 @@ return [
     | to immediately expire on the browser closing, set that option.
     |
     */
+    'csrf_token_lifetime' => 120, // Durée de vie du jeton CSRF en minutes
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => env('SESSION_LIFETIME', 120), // Durée de vie de la session en minutes
 
-    'expire_on_close' => false,
+    'expire_on_close' => true, // Session n'expire pas à la fermeture du navigateur
+
+    'timeout' => 120, // Délai d'expiration de la session après inactivité (en minutes)
 
     /*
     |--------------------------------------------------------------------------

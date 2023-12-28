@@ -67,9 +67,9 @@ class ListeuserController extends Controller
             $his->user_id = Auth::user()->id;
             $his->save();
 
-            return back()->with('valider', 'Mise à jour éffectuée.');
+            return back()->with('success', 'Mise à jour éffectuée.');
         } else {
-            return back()->with('echec', 'Mise à jour non éffectuée.');
+            return back()->with('error', 'Mise à jour non éffectuée.');
         }
     }
 }

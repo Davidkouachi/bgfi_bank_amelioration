@@ -16,6 +16,7 @@ class CreateAmeliorationsTable extends Migration
         Schema::create('ameliorations', function (Blueprint $table) {
             $table->id();
             $table->date('date_fiche');
+            $table->date('date_cloture1')->nullable();
             $table->string('lieu');
             $table->string('detecteur');
             $table->text('consequences');
@@ -23,6 +24,8 @@ class CreateAmeliorationsTable extends Migration
             $table->text('reclamations');
             $table->string('choix_select');
             $table->string('statut');
+            $table->string('escaladeur');
+            $table->string('nbre_traitement');
             $table->datetime('date_validation')->nullable();
             $table->timestamps();
         });

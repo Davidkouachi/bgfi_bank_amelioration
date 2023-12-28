@@ -41,11 +41,11 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th></th>
-                                                    <th>Réclamation</th>
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
-                                                    <th>Date</th>
-                                                    <th></th>
+                                                    <th>Date de création</th>
+                                                    <th>Date limite de traitement</th>
+                                                    <th>Statut</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -53,10 +53,14 @@
                                                 @foreach($ams as $key => $am)
                                                     <tr class="text-center">
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $am->reclamations }}</td>
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}</td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}
+                                                        </td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}
+                                                        </td>
                                                         @if ($am->statut === 'update')
                                                             <td class="text-success" >Modification détecter</td>
                                                         @endif

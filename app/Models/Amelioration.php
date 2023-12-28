@@ -20,6 +20,9 @@ class Amelioration extends Model
         'choix_select',
         'statut',
         'date_validation',
+        'date_cloture1',
+        'nbre_traitement',
+        'escaladeur',
     ];
 
 }

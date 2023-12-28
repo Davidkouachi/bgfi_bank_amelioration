@@ -11,7 +11,15 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array<int, string>
      */
-    protected $except = [
-        //
-    ];
+    protected $except = [];
+
+    /**
+     * Get the CSRF token expiration time.
+     *
+     * @return int
+     */
+    protected function csrfTokenExpiration()
+    {
+        return now()->addMinutes(60); // Définir la durée de vie du jeton CSRF en minutes (par exemple, 120 minutes)
+    }
 }
