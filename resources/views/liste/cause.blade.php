@@ -44,7 +44,6 @@
                                                     <th>Cause</th>
                                                     <th>Reclamation</th>
                                                     <th>Processus</th>
-                                                    <th>Nombre d'actions</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -55,7 +54,6 @@
                                                         <td>{{ $cause->nom }}</td>
                                                         <td>{{ $cause->reclamation }}</td>
                                                         <td>{{ $cause->processus }}</td>
-                                                        <td>{{ $cause->nbre_action }}</td>
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail{{ $cause->id }}"
@@ -133,11 +131,11 @@
                                 </div>
                                 @foreach($actionsData[$cause->id] as $key => $action)
                                 <div class="col-md-12 col-xxl-122" id="groupesContainer">
-                                    <div class="card card-bordered">
+                                    <div class="card ">
                                         <div class="card-inner">
                                             <div class="card-head">
                                                 <h5 class="card-title">
-                                                    Action {{ $key+1 }}
+                                                    Action
                                                 </h5>
                                             </div>
                                             <div class="row g-4">
@@ -194,7 +192,7 @@
                                             Cause
                                         </label>
                                         <div class="form-control-wrap">
-                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" value="{{ $cause->nom }}" name="cause" oninput="this.value = this.value.toUpperCase()">
+                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" value="{{ $cause->nom }}" name="cause">
                                             <input type="text" name="cause_id" value="{{ $cause->id }}" style="display: none;">
                                         </div>
                                     </div>

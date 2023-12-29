@@ -27,6 +27,10 @@ class CreateAmeliorationsTable extends Migration
             $table->string('escaladeur');
             $table->string('nbre_traitement');
             $table->datetime('date_validation')->nullable();
+            $table->date('date1')->nullable();
+            $table->date('date2')->nullable();
+            $table->string('efficacite')->nullable();
+            $table->text('commentaire_eff')->nullable();
             $table->timestamps();
         });
     }

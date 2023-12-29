@@ -14,6 +14,7 @@ use App\Http\Controllers\ListeprocessusController;
 use App\Http\Controllers\ListeactionController;
 use App\Http\Controllers\ListereclamationController;
 use App\Http\Controllers\ListeuserController;
+use App\Http\Controllers\SuivireclaController;
 
 
 Route::get('/Login', [AuthController::class, 'view_login'])->name('login');
@@ -77,6 +78,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/add_amelioration', [AmeliorationController::class, 'index_add'])->name('index_add');
 
     Route::get('/Suivis des reclamations', [ListereclamationController::class, 'index_suivi'])->name('index_listereclamation');
+    Route::post('/traitement_date', [SuivireclaController::class, 'date_recla'])->name('date_recla');
+    Route::post('/traitement_eff', [SuivireclaController::class, 'efficacite_recla'])->name('efficacite_recla');
+
     Route::get('/liste des causes', [ListereclamationController::class, 'index_list_cause'])->name('index_listecause');
     Route::get('/liste du resume des reclamations', [ListereclamationController::class, 'index_list_recla'])->name('index_listerecla');
     Route::post('/Modification Cause', [ListereclamationController::class, 'index_modif_cause'])->name('index_modif_cause');

@@ -165,7 +165,7 @@
                                             Réclamation
                                         </label>
                                         <div class="form-control-wrap">
-                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" value="{{ $recla->nom }}" name="reclamation" oninput="this.value = this.value.toUpperCase()">
+                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center" value="{{ $recla->nom }}" name="reclamation">
                                             <input type="text" name="reclamation_id" value="{{ $recla->id }}" style="display: none;">
                                         </div>
                                     </div>

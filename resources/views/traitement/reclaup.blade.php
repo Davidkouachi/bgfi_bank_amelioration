@@ -41,7 +41,6 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th></th>
-                                                    <th>Réclamation</th>
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
                                                     <th>Date</th>
@@ -53,7 +52,6 @@
                                                 @foreach($ams as $key => $am)
                                                     <tr class="text-center">
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $am->reclamations }}</td>
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}</td>

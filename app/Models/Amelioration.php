@@ -23,6 +23,10 @@ class Amelioration extends Model
         'date_cloture1',
         'nbre_traitement',
         'escaladeur',
+        'date1',
+        'date2',
+        'efficacite',
+        'commentaire_eff',
     ];
 
 }

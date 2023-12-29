@@ -51,7 +51,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-dim btn-lg btn-success btn-block">Connexion</button>
+                                        <button class="btn btn-lg btn-success btn-block">Connexion</button>
                                     </div>
                                 </form>
                             </div>

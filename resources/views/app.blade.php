@@ -381,7 +381,7 @@
         </div>
     </div>
 
-    <script>
+    <!--<script>
         // Vérifier si la connexion Internet est disponible avant d'utiliser Pusher
         function checkInternetAndPusher() {
             const online = navigator.onLine;
@@ -398,7 +398,7 @@
 
         // Vérifier régulièrement l'état de la connexion (toutes les 5 secondes ici)
         setInterval(checkInternetAndPusher, 2000);
-    </script>
+    </script>-->
 
         <div class="modal fade" tabindex="-1" id="modalAlert2" aria-modal="true" style="position: fixed;" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog" role="document">

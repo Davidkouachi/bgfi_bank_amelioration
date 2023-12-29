@@ -47,7 +47,8 @@
                                                     <th>Date Limite de traitement</th>
                                                     <th>Nombre d'action</th>
                                                     <th>Action éffectuée</th>
-                                                    <th>Action non éffectuée</th>
+                                                    <th>Date de réalisation</th>
+                                                    <th>Statut</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -58,7 +59,9 @@
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
                                                         <td>
-                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}
+                                                            {{ 
+                                                                \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y')
+                                                            }}
                                                         </td>
                                                         @if(\Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') === \Carbon\Carbon::now()->toDateString())
                                                         <td class="text-danger" >
@@ -76,9 +79,34 @@
                                                         <td class="text-success" >
                                                             {{ $am->nbre_action_eff }}
                                                         </td>
-                                                        <td class="text-danger" >
-                                                            {{ $am->nbre_action_non }}
+                                                        @if ($am->date_cloture1 !== null)
+                                                        <td>
+                                                            {{ 
+                                                                \Carbon\Carbon::parse($am->date_cloture1)->format('d/m/Y')
+                                                            }}
                                                         </td>
+                                                        @endif
+                                                        @if ($am->date_cloture1 === null)
+                                                        <td>
+                                                            Action(s) à réaliser {{$am->nbre_action_non}}
+                                                        </td>
+                                                        @endif
+                                                        @if ( $am->statut === 'valider' )
+                                                            <td class="text-center" >Valider</td>
+                                                        @endif
+                                                        @if ( $am->statut === 'terminer' )
+                                                            <td class="text-center">
+                                                                En attente du delai de traiatement de l'éfficacité
+                                                            </td>
+                                                        @endif
+                                                        @if ( $am->statut === 'date_efficacite' )
+                                                            <td class="text-center">
+                                                                En attente de l'évaluation de l'éfficacité
+                                                            </td>
+                                                        @endif
+                                                        @if ( $am->statut === 'cloturer' )
+                                                            <td class="text-center" >Clôturer</td>
+                                                        @endif
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail{{ $am->id }}"
@@ -86,6 +114,13 @@
                                                                 <em class="icon ni ni-eye"></em>
                                                             </a>
                                                             @if ($am->nbre_action_non === 0 )
+                                                            <a data-bs-toggle="modal"
+                                                                data-bs-target="#modalDate{{ $am->id }}"
+                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-info">
+                                                                <em class="icon ni ni-calendar"></em>
+                                                            </a>
+                                                            @endif
+                                                            @if ($am->date1 !== null && $am->date1 <= \Carbon\Carbon::now()->toDateString() && $am->date2 >= \Carbon\Carbon::now()->toDateString() )
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalEfficacite{{ $am->id }}"
                                                                 href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-primary">
@@ -357,7 +392,7 @@
                                                                 Date de vérification de l'éfficacité
                                                             </label>
                                                             <div class="form-control-wrap">
-                                                                <input name="date_action" type="date" class="form-control"  max="{{ \Carbon\Carbon::now()->toDateString() }}">
+                                                                <input readonly name="date_efficacite" type="date" class="form-control"  value="{{ \Carbon\Carbon::now()->toDateString() }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -390,6 +425,114 @@
             </div>
         </div>
     @endforeach
+
+    @foreach ($ams as $am)
+        <div class="modal fade zoom" tabindex="-1" id="modalDate{{ $am->id }}">
+            <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Intervale d'évaluation de l'éfficacitée</h5>
+                        <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <em class="icon ni ni-cross"></em>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="nk-block">
+                            <form class="row g-gs" method="post" action="{{ route('date_recla') }}">
+                                @csrf
+                                <input type="text" name="amelioration_id" value="{{ $am->id }}" style="display: none;">
+                                <div class="col-lg-12 col-xxl-12" >
+                                    <div class="card">
+                                        <div class="card-inner">
+                                                <div class="row g-4">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label">
+                                                                Début
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input id="date1" name="date1" type="date" class="form-control text-center" value="{{ \Carbon\Carbon::now()->toDateString() }}" onchange="checkDate()" min="{{ \Carbon\Carbon::now()->toDateString() }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label">
+                                                                Jours
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <select id="nbre_jour_eff" class="form-select " >
+                                                                    @for ($i = 1; $i <= 31; $i++)
+                                                                        <option {{ $i === 1 ? 'selected' : '' }} value="{{ $i }}" >
+                                                                            {{ $i }} Jour
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label">
+                                                                Fin
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input readonly id="date2" name="date2" type="text" class="form-control text-center">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-xxl-12">
+                                                        <div class="form-group text-center">
+                                                            <button type="submit" class="btn btn-lg btn-success btn-dim">
+                                                                <em class="ni ni-check me-2 "></em>
+                                                                <em >Enregistrer</em>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Écoute des changements sur le champ de date et le champ du nombre de jours
+            document.getElementById('date1').addEventListener('change', updateDateLimite);
+            document.getElementById('nbre_jour_eff').addEventListener('change', updateDateLimite);
+
+            function updateDateLimite() {
+                var dateDebut = document.getElementById('date1').value;
+                var nbreJours = parseInt(document.getElementById('nbre_jour_eff').value);
+
+                // Vérification si la date de début est sélectionnée et le nombre de jours est valide
+                if (dateDebut && !isNaN(nbreJours)) {
+                    var dateLimite = new Date(dateDebut);
+                    dateLimite.setDate(dateLimite.getDate() + nbreJours);
+
+                    // Extraction des éléments de date individuels
+                    var jour = ('0' + dateLimite.getDate()).slice(-2); // Jour
+                    var mois = ('0' + (dateLimite.getMonth() + 1)).slice(-2); // Mois (ajouter +1 car les mois commencent à 0)
+                    var annee = dateLimite.getFullYear(); // Année
+
+                    // Formatage de la date au format dd/mm/aaaa
+                    var formattedDate = jour + '/' + mois + '/' + annee;
+
+                    // Mettre à jour la valeur du champ "Date limite de traitement"
+                    document.getElementById('date2').value = formattedDate;
+                }
+            }
+
+            // Appel initial pour mettre à jour la date limite lors du chargement de la page
+            updateDateLimite();
+        });
+    </script>
 
     <script>
         Pusher.logToConsole = true;
