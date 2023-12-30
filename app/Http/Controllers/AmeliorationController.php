@@ -20,8 +20,7 @@ use App\Models\Historique_action;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-use App\Events\NotificationEvent;
-use App\Events\NotificationA;
+use App\Events\NotificationNewRecla;
 
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -298,6 +297,24 @@ class AmeliorationController extends Controller
 
                     }
                 }
+
+                event(new NotificationNewRecla());
+
+                $his = new Historique_action();
+                $his->nom_formulaire = 'Fiche de réclamation';
+                $his->nom_action = 'Ajouter';
+                $his->user_id = Auth::user()->id;
+                $his->save();
+
+                return redirect()
+                    ->back()
+                    ->with('success', 'Enregistrement éffectuée.');
+
+            } else {
+
+                return redirect()
+                        ->back()
+                        ->with('error', 'Enregistrement a échoué.');
             }
 
         } else {
@@ -307,17 +324,6 @@ class AmeliorationController extends Controller
                 ->with('error', 'Reclamation non enregistrer.');
         }
 
-        event(new NotificationA());
-
-        $his = new Historique_action();
-        $his->nom_formulaire = 'Fiche de réclamation';
-        $his->nom_action = 'Ajouter';
-        $his->user_id = Auth::user()->id;
-        $his->save();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Enregistrement éffectuée.');
     }
 
 }

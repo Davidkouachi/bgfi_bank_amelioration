@@ -31,6 +31,7 @@ class CreateAmeliorationsTable extends Migration
             $table->date('date2')->nullable();
             $table->string('efficacite')->nullable();
             $table->text('commentaire_eff')->nullable();
+            $table->date('date_eff')->nullable();
             $table->timestamps();
         });
     }

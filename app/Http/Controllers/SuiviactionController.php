@@ -14,7 +14,9 @@ use App\Models\Suivi_action;
 use App\Models\User;
 use App\Models\Historique_action;
 
-use App\Events\NotificationAe;
+use App\Events\NotificationRejetRecla;
+use App\Events\NotificationValideRecla;
+use App\Events\NotificationSuiviActionRecla;
 
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -51,6 +53,7 @@ class SuiviactionController extends Controller
 
             if($am)
             {
+                event(new NotificationValideRecla());
 
                 $his = new Historique_action();
                 $his->nom_formulaire = 'Verification des réclamations';
@@ -101,6 +104,8 @@ class SuiviactionController extends Controller
                 $valide->update();
 
                 if ($valide) {
+
+                    event(new NotificationRejetRecla());
 
                     $his = new Historique_action();
                     $his->nom_formulaire = 'Verification des réclamations';
@@ -153,7 +158,7 @@ class SuiviactionController extends Controller
 
     public function add_suivi_action(Request $request, $id)
     {
-        $suivi = Suivi_action::where('action_id', $id)->first();
+        $suivi = Suivi_action::find($id);
         
         if ($suivi)
         {
@@ -166,6 +171,8 @@ class SuiviactionController extends Controller
 
             if ($suivi)
             {
+                event(new NotificationSuiviActionRecla());
+                
                 $suivi2 = Suivi_action::where('amelioration_id', $suivi->amelioration_id)->where('statut', 'non-realiser')->count();
 
                 if ($suivi2 === 0 ) {

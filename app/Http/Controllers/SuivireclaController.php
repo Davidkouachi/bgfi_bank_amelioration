@@ -50,20 +50,19 @@ class SuivireclaController extends Controller
         }
 
         return back()->with('error', 'Echec');
-
     }
 
-    public function efficacite_recla(Request $request)
+    public function eff_recla(Request $request)
     {
         $amelioration_id = $request->input('amelioration_id');
         $efficacite = $request->input('efficacite');
-        $date_efficacite = $request->input('date_efficacite');
+        $date_eff = $request->input('date_eff');
         $commentaire = $request->input('commentaire');
 
         $am = Amelioration::find($amelioration_id);
         $am->efficacite = $efficacite;
-        $am->date_efficacite = $date_efficacite;
-        $am->commentaire = $commentaire;
+        $am->date_eff = $date_eff;
+        $am->commentaire_eff= $commentaire;
         $am->statut = 'cloturer';
         $am->update();
 

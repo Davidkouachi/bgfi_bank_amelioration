@@ -10,17 +10,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationAe implements ShouldBroadcast
+class NotificationRejetRecla implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-      public function broadcastOn()
+    public function broadcastOn()
       {
-          return ['my-channel-action-e'];
+          return ['my-channel-rejet-recla'];
       }
 
       public function broadcastAs()
       {
-          return 'my-event-action-e';
+          return 'my-event-rejet-recla';
       }
 }

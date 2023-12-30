@@ -63,11 +63,9 @@
                                                         </td>
                                                         @if ($am->statut === 'update')
                                                             <td class="text-success" >Modification détecter</td>
-                                                        @endif
-                                                        @if ($am->statut === 'non-valider')
+                                                        @elseif ($am->statut === 'non-valider')
                                                             <td class="text-info" >En attente de modification</td>
-                                                        @endif
-                                                        @if ($am->statut === 'soumis')
+                                                        @elseif ($am->statut === 'soumis')
                                                             <td class="text-warning" >En attente de validation</td>
                                                         @endif
                                                         <td>
@@ -323,6 +321,54 @@
             </div>
         </div>
     @endforeach
+
+    <script>
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('9f9514edd43b1637ff61', {
+          cluster: 'eu'
+        });
+
+        var channel = pusher.subscribe('my-channel-new-recla');
+        channel.bind('my-event-new-recla', function(data) {
+            Swal.fire({
+                        title: "Alert!",
+                        text: "Nouvelle(s) Réclamation(s)",
+                        icon: "info",
+                        confirmButtonColor: "#00d819",
+                        confirmButtonText: "OK",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+        });
+    </script>
+
+    <script>
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('9f9514edd43b1637ff61', {
+          cluster: 'eu'
+        });
+
+        var channel = pusher.subscribe('my-channel-update-recla');
+        channel.bind('my-event-update-recla', function(data) {
+            Swal.fire({
+                        title: "Alert!",
+                        text: "Modification(S) Détectée(s)",
+                        icon: "info",
+                        confirmButtonColor: "#00d819",
+                        confirmButtonText: "OK",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+        });
+    </script>
 
 
 @endsection

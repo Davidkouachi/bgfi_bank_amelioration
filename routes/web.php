@@ -79,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/Suivis des reclamations', [ListereclamationController::class, 'index_suivi'])->name('index_listereclamation');
     Route::post('/traitement_date', [SuivireclaController::class, 'date_recla'])->name('date_recla');
-    Route::post('/traitement_eff', [SuivireclaController::class, 'efficacite_recla'])->name('efficacite_recla');
+    Route::post('/traitement_eff', [SuivireclaController::class, 'eff_recla'])->name('eff_recla');
 
     Route::get('/liste des causes', [ListereclamationController::class, 'index_list_cause'])->name('index_listecause');
     Route::get('/liste du resume des reclamations', [ListereclamationController::class, 'index_list_recla'])->name('index_listerecla');

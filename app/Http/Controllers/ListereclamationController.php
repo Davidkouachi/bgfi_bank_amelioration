@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-use App\Events\NotificationAcorrective;
-
 use App\Models\Processuse;
 use App\Models\Objectif;
 use App\Models\Resva;
@@ -23,6 +21,8 @@ use App\Models\Historique_action;
 use App\Models\Reclamationtrouver;
 use App\Models\Causetrouver;
 
+use App\Events\NotificationUpdateRecla;
+
 use Carbon\Carbon;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -33,7 +33,7 @@ class ListereclamationController extends Controller
     public function index_suivi()
     {
 
-        $ams = Amelioration::where('statut', 'valider')->get();
+        $ams = Amelioration::all();
 
         $actionsData = [];
 
@@ -192,7 +192,10 @@ class ListereclamationController extends Controller
 
     public function index_validation()
     {
-        $ams = Amelioration::where('statut', '!=', 'valider')->get();
+        $ams = Amelioration::where('statut', '=', 'update')
+                            ->orWhere('statut', '=', 'non-valider')
+                            ->orWhere('statut', '=', 'soumis')
+                            ->get();
 
         $actionsData = [];
 
@@ -545,6 +548,8 @@ class ListereclamationController extends Controller
                 }
 
                 //--------------------------------------------------------------------------------------------
+
+                event(new NotificationUpdateRecla());
 
                 $his = new Historique_action();
                 $his->nom_formulaire = 'Réclamations non acceptées';

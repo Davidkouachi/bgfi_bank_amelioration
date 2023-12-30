@@ -86,7 +86,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="nk-block">
-                            <form class="row g-gs" method="post" action="/Suivi_action/{{ $action->action_id }}">
+                            <form class="row g-gs" method="post" action="/Suivi_action/{{ $action->id }}">
                                 @csrf
                                 <div class="col-lg-12 col-xxl-12" >
                                     <div class="card">
@@ -161,11 +161,11 @@
                                                                 <option value="">
                                                                     Choisir
                                                                 </option>
-                                                                <option value="efficace">
-                                                                    efficace
+                                                                <option value="oui">
+                                                                    Oui
                                                                 </option>
-                                                                <option value="non_efficace">
-                                                                    non-efficace
+                                                                <option value="non">
+                                                                    Non
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -215,8 +215,8 @@
           cluster: 'eu'
         });
 
-        var channel = pusher.subscribe('my-channel-action');
-        channel.bind('my-event-actionr', function(data) {
+        var channel = pusher.subscribe('my-channel-valide-recla');
+        channel.bind('my-event-valide-recla', function(data) {
             Swal.fire({
                         title: "Alert!",
                         text: "Nouvelle(s) Action(s)",

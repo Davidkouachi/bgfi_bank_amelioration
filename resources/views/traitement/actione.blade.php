@@ -212,11 +212,11 @@
           cluster: 'eu'
         });
 
-        var channel = pusher.subscribe('my-channel-action-e');
-        channel.bind('my-event-action-e', function(data) {
+        var channel = pusher.subscribe('my-channel-suivi-action-recla');
+        channel.bind('my-event-suivi-action-recla', function(data) {
             Swal.fire({
                         title: "Alert!",
-                        text: "Nouvelle(s) Action(s) éffectée(s)",
+                        text: "Action(s) Réalisée(s)",
                         icon: "info",
                         confirmButtonColor: "#00d819",
                         confirmButtonText: "OK",

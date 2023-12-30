@@ -26,6 +26,7 @@ class Amelioration extends Model
         'date1',
         'date2',
         'efficacite',
+        'date_eff',
         'commentaire_eff',
     ];
 

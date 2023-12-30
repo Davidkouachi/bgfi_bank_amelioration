@@ -79,5 +79,29 @@
         </div>
     </div>
 
+    <script>
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('9f9514edd43b1637ff61', {
+          cluster: 'eu'
+        });
+
+        var channel = pusher.subscribe('my-channel-rejet-recla');
+        channel.bind('my-event-rejet-recla', function(data) {
+            Swal.fire({
+                        title: "Alert!",
+                        text: "Nouvelle Fiche(s) de Réclamation(s) non-valider",
+                        icon: "info",
+                        confirmButtonColor: "#00d819",
+                        confirmButtonText: "OK",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+        });
+    </script>
+
 
 @endsection

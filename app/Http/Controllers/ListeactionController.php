@@ -27,9 +27,6 @@ class ListeactionController extends Controller
 {
     public function index()
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
 
         $actions = Action::join('causes', 'actions.cause_id', 'causes.id')
                         ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
