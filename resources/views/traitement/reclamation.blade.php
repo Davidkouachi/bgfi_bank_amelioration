@@ -123,7 +123,8 @@
                                                                         href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-danger">
                                                                         <em class="icon ni ni-calendar"></em>
                                                                     </a>
-                                                                @elseif ($am->date1 !== null && $am->date1 <= \Carbon\Carbon::now()->toDateString() && $am->date2 >= \Carbon\Carbon::now()->toDateString() )
+                                                                @endif
+                                                                @if ($am->date1 !== null && $am->date1 <= \Carbon\Carbon::now()->toDateString() && $am->date2 >= \Carbon\Carbon::now()->toDateString() )
                                                                     <a data-bs-toggle="modal"
                                                                         data-bs-target="#modalEfficacite{{ $am->id }}"
                                                                         href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-primary">
@@ -231,7 +232,7 @@
                                                         </div>
                                                     </div>
                                                 @endif
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label class="form-label" for="Cause">
                                                             Lieu
@@ -241,13 +242,28 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label class="form-label" for="Cause">
                                                             Détecteur
                                                         </label>
                                                         <div class="form-control-wrap">
                                                             <input value="{{ $am->detecteur }}" readonly type="text" class="form-control" id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="Cause">
+                                                            Escaladeur
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            @if ($am->escaladeur === 'oui')
+                                                            <input value="Oui" readonly type="text" class="form-control bg-danger" id="Cause">
+                                                            @endif
+                                                            @if ($am->escaladeur === 'non')
+                                                            <input value="Non" readonly type="text" class="form-control bg-success" id="Cause">
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -410,7 +426,7 @@
                                     </div>
                                 </div>
                                 @endforeach
-                                @if($am->efficacite !== null)
+                                @if($am->efficacite !== null || $am->date1 !== null)
                                 <div class="col-md-12 col-xxl-122" id="groupesContainer">
                                     <div class="card ">
                                         <div class="card-inner">
@@ -420,6 +436,7 @@
                                                 </h5>
                                             </div>
                                             <div class="row g-4">
+                                                @if($am->date1 !== null)
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label class="form-label" for="Cause">
@@ -455,6 +472,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @endif
+                                                @if($am->efficacite !== null)
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label class="form-label" for="Cause">
@@ -510,6 +529,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                @endif
                                                 @endif
                                             </div>
                                         </div>
@@ -622,7 +642,7 @@
                                                             Début
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input id="date1" name="date1" type="date" class="form-control text-center" value="{{ \Carbon\Carbon::now()->toDateString() }}" min="{{ \Carbon\Carbon::now()->toDateString() }}">
+                                                            <input id="date1_{{ $am->id }}" name="date1" type="date" class="form-control text-center" value="{{ \Carbon\Carbon::now()->toDateString() }}" min="{{ \Carbon\Carbon::now()->toDateString() }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -632,7 +652,7 @@
                                                             Nombre de jours
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <select id="nbre_jour_eff" class="form-select ">
+                                                            <select id="nbre_jour_eff_{{ $am->id }}" class="form-select ">
                                                                 @for ($i = 1; $i <= 31; $i++) 
                                                                     <option {{ $i === 1 ? 'selected' : '' }} value="{{ $i }}">
                                                                         {{ $i }} Jour(s)
@@ -648,7 +668,7 @@
                                                             Fin
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input readonly id="date2" name="date2" type="text" class="form-control text-center">
+                                                            <input readonly id="date2_{{ $am->id }}" name="date2" type="text" class="form-control text-center">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -674,35 +694,47 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Écoute des changements sur le champ de date et le champ du nombre de jours
-            document.getElementById('date1').addEventListener('change', updateDateLimite);
-            document.getElementById('nbre_jour_eff').addEventListener('change', updateDateLimite);
+            // Écoute des changements sur le champ de date et le champ du nombre de jours pour chaque élément du foreach
+            var ams = document.querySelectorAll('[id^=date1_]'); // Sélection de tous les champs de date1
+            var nbreJoursElements = document.querySelectorAll('[id^=nbre_jour_eff_]'); // Sélection de tous les champs de nbre_jour_eff
 
-            function updateDateLimite() {
-                var dateDebut = document.getElementById('date1').value;
-                var nbreJours = parseInt(document.getElementById('nbre_jour_eff').value);
+            ams.forEach(function(element, index) {
+                var dateInput = element;
+                var nbreJourInput = nbreJoursElements[index];
 
-                // Vérification si la date de début est sélectionnée et le nombre de jours est valide
-                if (dateDebut && !isNaN(nbreJours)) {
-                    var dateLimite = new Date(dateDebut);
-                    dateLimite.setDate(dateLimite.getDate() + nbreJours);
+                dateInput.addEventListener('change', function() {
+                    updateDateLimite(dateInput, nbreJourInput);
+                });
 
-                    // Extraction des éléments de date individuels
-                    var jour = ('0' + dateLimite.getDate()).slice(-2); // Jour
-                    var mois = ('0' + (dateLimite.getMonth() + 1)).slice(-2); // Mois (ajouter +1 car les mois commencent à 0)
-                    var annee = dateLimite.getFullYear(); // Année
+                nbreJourInput.addEventListener('change', function() {
+                    updateDateLimite(dateInput, nbreJourInput);
+                });
 
-                    // Formatage de la date au format dd/mm/aaaa
-                    var formattedDate = jour + '/' + mois + '/' + annee;
+                function updateDateLimite(dateInput, nbreJourInput) {
+                    var dateDebut = dateInput.value;
+                    var nbreJours = parseInt(nbreJourInput.value);
 
-                    // Mettre à jour la valeur du champ "Date limite de traitement"
-                    document.getElementById('date2').value = formattedDate;
+                    var date2Id = dateInput.id.replace('date1_', 'date2_'); // Générer l'ID pour le champ 'date2'
+
+                    if (dateDebut && !isNaN(nbreJours)) {
+                        var dateLimite = new Date(dateDebut);
+                        dateLimite.setDate(dateLimite.getDate() + nbreJours);
+
+                        var jour = ('0' + dateLimite.getDate()).slice(-2);
+                        var mois = ('0' + (dateLimite.getMonth() + 1)).slice(-2);
+                        var annee = dateLimite.getFullYear();
+
+                        var formattedDate = jour + '/' + mois + '/' + annee;
+
+                        document.getElementById(date2Id).value = formattedDate;
+                    }
                 }
-            }
 
-            // Appel initial pour mettre à jour la date limite lors du chargement de la page
-            updateDateLimite();
+                // Appel initial pour mettre à jour la date limite lors du chargement de la page
+                updateDateLimite(dateInput, nbreJourInput);
+            });
         });
+
     </script>
 
     <script>
