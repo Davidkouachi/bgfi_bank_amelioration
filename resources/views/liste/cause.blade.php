@@ -39,29 +39,43 @@
                                     <div class="card-inner">
                                         <table class="datatable-init table">
                                             <thead>
-                                                <tr class="text-center">
+                                                <tr>
                                                     <th></th>
                                                     <th>Cause</th>
                                                     <th>Reclamation</th>
                                                     <th>Processus</th>
+                                                    <th>Pourcentage</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($causes as $key => $cause)
-                                                    <tr class="text-center">
+                                                @foreach($causes->toArray() as $key => $cause)
+                                                    @php
+                                                        $isMax = $cause['progess'] == max(array_column($causes->toArray(), 'progess'));
+                                                    @endphp
+                                                    <tr>
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $cause->nom }}</td>
-                                                        <td>{{ $cause->reclamation }}</td>
-                                                        <td>{{ $cause->processus }}</td>
+                                                        <td>{{ $cause['nom'] }}</td>
+                                                        <td>{{ $cause['reclamation'] }}</td>
+                                                        <td>{{ $cause['processus'] }}</td>
+                                                        <td>
+                                                            <div class="project-list-progress">
+                                                                <div class="progress progress-pill progress-md bg-light">
+                                                                    <div class="progress-bar {{ $isMax ? 'bg-danger' : '' }}" data-progress="{{$cause['progess']}}" style="width: 100%;"></div>
+                                                                </div>
+                                                                <div class="project-progress-percent {{ $isMax ? 'text-danger' : '' }}">
+                                                                    {{$cause['progess']}}%
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                         <td>
                                                             <a data-bs-toggle="modal"
-                                                                data-bs-target="#modalDetail{{ $cause->id }}"
+                                                                data-bs-target="#modalDetail{{ $cause['id'] }}"
                                                                 href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
                                                                 <em class="icon ni ni-eye"></em>
                                                             </a>
                                                             <a data-bs-toggle="modal"
-                                                                data-bs-target="#modalModif{{ $cause->id }}"
+                                                                data-bs-target="#modalModif{{ $cause['id'] }}"
                                                                 href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-info">
                                                                 <em class="icon ni ni-edit"></em>
                                                             </a>
@@ -80,8 +94,8 @@
         </div>
     </div>
 
-    @foreach($causes as $key => $cause)
-        <div class="modal fade zoom" tabindex="-1" id="modalDetail{{ $cause->id }}">
+    @foreach($causes->toArray() as $key => $cause)
+        <div class="modal fade zoom" tabindex="-1" id="modalDetail{{ $cause['id'] }}">
             <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -101,7 +115,7 @@
                                                             Cause
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $cause->nom }}" readonly type="text" class="form-control" id="Cause">
+                                                            <input value="{{ $cause['nom'] }}" readonly type="text" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -111,7 +125,7 @@
                                                             Réclamation
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $cause->reclamation }}" readonly type="text" class="form-control" id="Cause">
+                                                            <input value="{{ $cause['reclamation'] }}" readonly type="text" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -121,7 +135,7 @@
                                                             Processus
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $cause->processus }}" readonly type="text" class="form-control" id="Cause">
+                                                            <input value="{{ $cause['processus'] }}" readonly type="text" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -129,7 +143,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @foreach($actionsData[$cause->id] as $key => $action)
+                                @foreach($actionsData[$cause['id']] as $key => $action)
                                 <div class="col-md-12 col-xxl-122" id="groupesContainer">
                                     <div class="card ">
                                         <div class="card-inner">
@@ -149,12 +163,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row g-4">
                                                 <div class="col-lg-12">
                                                     <div class="form-group text-center">
                                                         <label class="form-label" for="Cause">
-                                                            Responsable
+                                                                Responsable
                                                         </label>
                                                         <div class="form-control-wrap">
                                                             <input value="{{ $action['poste'] }}" readonly type="text" class="form-control text-center" id="Cause">
@@ -174,8 +186,8 @@
         </div>
     @endforeach
 
-    @foreach($causes as $key => $cause)
-        <div class="modal fade zoom" tabindex="-1" id="modalModif{{ $cause->id }}">
+    @foreach($causes->toArray() as $key => $cause)
+        <div class="modal fade zoom" tabindex="-1" id="modalModif{{ $cause['id'] }}">
             <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -192,8 +204,8 @@
                                             Cause
                                         </label>
                                         <div class="form-control-wrap">
-                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" value="{{ $cause->nom }}" name="cause">
-                                            <input type="text" name="cause_id" value="{{ $cause->id }}" style="display: none;">
+                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" value="{{ $cause['nom'] }}" name="cause">
+                                            <input type="text" name="cause_id" value="{{ $cause['id'] }}" style="display: none;">
                                         </div>
                                     </div>
                                 </div>

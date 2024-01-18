@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Events\MessageNotification;
-
 use App\Models\Processuse;
 use App\Models\Objectif;
 use App\Models\Risque;
@@ -95,8 +93,6 @@ class ProcessusController extends Controller
             $his->user_id = Auth::user()->id;
             $his->save();
         }
-
-        event(new MessageNotification());
 
         return redirect()->back()->with('success', 'Enregistrement éffectuée.');
 

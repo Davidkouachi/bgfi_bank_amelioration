@@ -147,6 +147,8 @@ class AuthController extends Controller
                 session(['user_auto' => $auto]);
             }
 
+            
+
             return redirect()->intended(route('index_accueil'));
         }
 

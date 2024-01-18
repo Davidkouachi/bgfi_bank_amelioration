@@ -89,9 +89,16 @@ class ListereclamationController extends Controller
                     ->select('causes.*','processuses.nom as processus', 'reclamations.nom as reclamation')
                     ->get();
 
+        $nbre_total = Suivi_action::all()->count();
+
         $actionsData = [];
 
         foreach ($causes as $key => $cause) {
+
+            $cause->nbre = Suivi_action::where('cause_id', $cause->id)->count();
+
+            $cause->progess = ($cause->nbre / $nbre_total) * 100;
+            $cause->progess = number_format($cause->progess, 2);
 
             $cause->nbre_action = Action::where('cause_id', $cause->id)->count();
 
@@ -119,9 +126,16 @@ class ListereclamationController extends Controller
                     ->select('reclamations.*','processuses.nom as processus')
                     ->get();
 
+        $nbre_total = Suivi_action::all()->count();
+
         $causeData = [];
 
         foreach ($reclas as $key => $recla) {
+
+            $recla->nbre = Suivi_action::where('reclamation_id', $recla->id)->count();
+
+            $recla->progess = ($recla->nbre / $nbre_total) * 100;
+            $recla->progess = number_format($recla->progess, 2);
 
             $causes = Cause::where('reclamation_id', $recla->id)->get();
             $recla->nbre_cause = count($causes);

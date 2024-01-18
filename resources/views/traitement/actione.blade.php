@@ -56,10 +56,20 @@
                                                         <td>{{ \Carbon\Carbon::parse($action->delai)->format('d/m/Y') }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($action->date_action)->format('d/m/Y') }}</td>
                                                         @if ( $action->delai >= $action->date_action )
-                                                            <td class="text-center text-success" >Réaliser dans le délai</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-success">
+                                                                    <em class="icon ni ni-info"></em>
+                                                                    <span class="fs-12px" >Réaliser dans le délai</span>
+                                                                </span>
+                                                            </td>
                                                         @endif
                                                         @if ( $action->delai < $action->date_action )
-                                                            <td class="text-center text-danger" >Réaliser hors délai</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-danger">
+                                                                    <em class="icon ni ni-info"></em>
+                                                                    <span class="fs-12px" >Réaliser hors délai</span>
+                                                                </span>
+                                                            </td>
                                                         @endif
                                                         <td>
                                                             <a data-bs-toggle="modal"

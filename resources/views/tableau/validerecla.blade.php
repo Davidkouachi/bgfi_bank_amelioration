@@ -62,11 +62,26 @@
                                                             {{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}
                                                         </td>
                                                         @if ($am->statut === 'update')
-                                                            <td class="text-success" >Modification détecter</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-info">
+                                                                    <em class="icon ni ni-info"></em>
+                                                                    <span class="fs-12px" >Modification détecter</span>
+                                                                </span>
+                                                            </td>
                                                         @elseif ($am->statut === 'non-valider')
-                                                            <td class="text-info" >En attente de modification</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-danger">
+                                                                    <em class="icon ni ni-alert"></em>
+                                                                    <span class="fs-12px" >Non valider</span>
+                                                                </span>
+                                                            </td>
                                                         @elseif ($am->statut === 'soumis')
-                                                            <td class="text-warning" >En attente de validation</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-warning">
+                                                                    <em class="icon ni ni-stop-circle"></em>
+                                                                    <span class="fs-12px" >En attente de validation</span>
+                                                                </span>
+                                                            </td>
                                                         @endif
                                                         <td>
                                                             <a data-bs-toggle="modal"

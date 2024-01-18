@@ -43,11 +43,11 @@
                                                     <th></th>
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
-                                                    <th>Date de création</th>
+                                                    <th>Date d'enregistrement</th>
                                                     <th>Date Limite de traitement</th>
                                                     <th>Nombre d'action</th>
                                                     <th>Action éffectuée</th>
-                                                    <th>Date de réalisation</th>
+                                                    <!--<th>Date de réalisation</th>-->
                                                     <th>Statut</th>
                                                     <th></th>
                                                 </tr>
@@ -82,32 +82,63 @@
                                                             </td>
                                                         @endif
 
-                                                        @if ($am->date_cloture1 !== null)
+                                                        <!--@if ($am->date_cloture1 !== null)
                                                             <td> {{ \Carbon\Carbon::parse($am->date_cloture1)->format('d/m/Y') }} </td>
                                                         @else
                                                             <td>
                                                                 Néant
                                                             </td>
-                                                        @endif
+                                                        @endif-->
 
                                                         @if ( $am->statut === 'valider' )
-                                                            <td class="text-center text-primary" >Valider</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-primary">
+                                                                    <em class="icon ni ni-check"></em>
+                                                                    <span class="fs-12px" >Valider</span>
+                                                                </span>
+                                                            </td>
                                                         @elseif ( $am->statut === 'terminer' )
-                                                            <td class="text-center text-info">
-                                                                Réaliser
+                                                            <td>
+                                                                <span class="badge badge-dim bg-info">
+                                                                    <em class="icon ni ni-info"></em>
+                                                                    <span class="fs-12px" >Réaliser</span>
+                                                                </span>
                                                             </td>
                                                         @elseif ( $am->statut === 'date_efficacite' )
-                                                            <td class="text-center text-warning">
-                                                                En attente de l'évaluation de l'éfficacité
+                                                            <td>
+                                                                <span class="badge badge-dim bg-warning">
+                                                                    <em class="icon ni ni-stop-circle"></em>
+                                                                    <span class="fs-12px" >En attente de l'évaluation de l'éfficacité</span>
+                                                                </span>
                                                             </td>
                                                         @elseif ( $am->statut === 'cloturer' )
-                                                            <td class="text-center text-success" >Clôturer</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-success">
+                                                                    <em class="icon ni ni-check"></em>
+                                                                    <span class="fs-12px" >Clôturer</span>
+                                                                </span>
+                                                            </td>
                                                         @elseif ( $am->statut === 'soumis' )
-                                                            <td class="text-center text-warning" >En attente de validation</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-warning">
+                                                                    <em class="icon ni ni-stop-circle"></em>
+                                                                    <span class="fs-12px" >En attente de validation</span>
+                                                                </span>
+                                                            </td>
                                                         @elseif ( $am->statut === 'non-valider' )
-                                                            <td class="text-center text-danger" >Rejeter</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-danger">
+                                                                    <em class="icon ni ni-alert"></em>
+                                                                    <span class="fs-12px" >Rejeter</span>
+                                                                </span>
+                                                            </td>
                                                         @elseif ( $am->statut === 'update' )
-                                                            <td class="text-center text-info" >Modification en cours</td>
+                                                            <td>
+                                                                <span class="badge badge-dim bg-info">
+                                                                    <em class="icon ni ni-info"></em>
+                                                                    <span class="fs-12px" >Modification en cours</span>
+                                                                </span>
+                                                            </td>
                                                         @endif
 
                                                         <td>
@@ -162,29 +193,59 @@
                                     <div class="">
                                         <div class="card-inner">
                                             <div class="row g-4">
-                                                @if ($am->date_cloture1 !== null)
-                                                    @if ($am->date_fiche <= $am->date_cloture1 && \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('Y-m-d') >= $am->date_cloture1)
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group text-center">
-                                                                <div class="form-control-wrap">
-                                                                    <input value="Fiche réaliser dans les delais" readonly type="text" class="form-control text-center bg-success" id="Cause">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @elseif ($am->date_fiche > $am->date_cloture1 && \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('Y-m-d') >= $am->date_cloture1 || $am->date_fiche <= $am->date_cloture1 && \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('Y-m-d') < $am->date_cloture1)
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group text-center">
-                                                                <div class="form-control-wrap">
-                                                                    <input value="Fiche réaliser hors delais" readonly type="text" class="form-control text-center bg-warning" id="Cause">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                @else
+                                                @if ($am->statut === 'soumis')
                                                     <div class="col-lg-12">
                                                         <div class="form-group text-center">
                                                             <div class="form-control-wrap">
-                                                                <input value="Fiche non réaliser" readonly type="text" class="form-control text-center bg-danger" id="Cause">
+                                                                <input value="Fiche en attente de validation" readonly type="text" class="form-control text-center bg-warning" id="Cause">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif ($am->statut === 'update' )
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Fiche en cours de modification" readonly type="text" class="form-control text-center bg-info" id="Cause">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif ($am->statut === 'non-valider')
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Fiche rejeter" readonly type="text" class="form-control text-center bg-danger" id="Cause">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif ($am->statut === 'valider')
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Fiche valider" readonly type="text" class="form-control text-center bg-info" id="Cause">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif ($am->statut === 'cloturer')
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Fiche Clôturer" readonly type="text" class="form-control text-center bg-success" id="Cause">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif ($am->statut === 'date_efficacite')
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Fiche en attente de verification de l'éfficacité" readonly type="text" class="form-control text-center bg-warning" id="Cause">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif ($am->statut === 'terminer')
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Fiche réaliser" readonly type="text" class="form-control text-center bg-info" id="Cause">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -259,10 +320,10 @@
                                                         </label>
                                                         <div class="form-control-wrap">
                                                             @if ($am->escaladeur === 'oui')
-                                                            <input value="Oui" readonly type="text" class="form-control bg-danger" id="Cause">
+                                                            <input value="Oui" readonly type="text" class="form-control text-center bg-danger" id="Cause">
                                                             @endif
                                                             @if ($am->escaladeur === 'non')
-                                                            <input value="Non" readonly type="text" class="form-control bg-success" id="Cause">
+                                                            <input value="Non" readonly type="text" class="form-control text-center bg-success" id="Cause">
                                                             @endif
                                                         </div>
                                                     </div>
@@ -479,18 +540,31 @@
                                                         <label class="form-label" for="Cause">
                                                             Action efficace
                                                         </label>
+                                                        @if ($am->efficacite === 'oui')
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $am->efficacite }}" readonly type="text" class="form-control" id="Cause">
+                                                            <input value="{{ $am->efficacite }}" readonly type="text" class="form-control bg-success text-center" id="Cause">
                                                         </div>
+                                                        @endif
+                                                        @if ($am->efficacite === 'non')
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ $am->efficacite }}" readonly type="text" class="form-control bg-danger text-center" id="Cause">
+                                                        </div>
+                                                        @endif
                                                     </div>
                                                     @if ($am->date_eff !== null)
                                                     <div class="form-group">
                                                         <label class="form-label" for="Cause">
                                                             Date de verification de l'éfficacité
                                                         </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($am->date_eff)->format('d/m/Y') }}" readonly type="text" class="form-control" id="Cause">
-                                                        </div>
+                                                        @if ($am->date1 <= $am->date_eff && $am->date2 >= $am->date_eff)
+                                                            <div class="form-control-wrap">
+                                                                <input value="{{ \Carbon\Carbon::parse($am->date_eff)->format('d/m/Y') }}" readonly type="text" class="form-control text-center bg-success" id="Cause">
+                                                            </div>
+                                                        @elseif ($am->date1 > $am->date_eff && $am->date2 >= $am->date_eff || $am->date1 <= $am->date_eff && $am->date2 < $am->date_eff)
+                                                            <div class="form-control-wrap">
+                                                                <input value="{{ \Carbon\Carbon::parse($am->date_eff)->format('d/m/Y') }}" readonly type="text" class="form-control text-center bg-danger" id="Cause">
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     @else
                                                     <div class="form-group">
@@ -734,7 +808,6 @@
                 updateDateLimite(dateInput, nbreJourInput);
             });
         });
-
     </script>
 
     <script>

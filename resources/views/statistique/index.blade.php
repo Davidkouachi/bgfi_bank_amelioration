@@ -32,25 +32,25 @@
                 </div>
                 <div class="nk-block">
                     <div class="row g-gs">
-                        @foreach ($statistics as $key => $stat)
-                            <div class="col-md-4">
+                            <div class="col-lg-12">
                                 <div class="card card-bordered card-full">
                                     <div class="card-inner">
-                                        <div class="card-amount">
-                                            <span class="amount">Statistique
-                                                <span class="currency currency-usd">
-                                                    (0)
-                                                </span>
-                                            </span>
-                                        </div>
                                         <div class="invest-data">
                                             <div class="invest-data-amount g-2">
+                                                <div class="invest-data-history">
+                                                    <div class="title text-center">
+                                                        Utilisateur(s)
+                                                    </div>
+                                                    <div class="amount text-center">
+                                                        {{ $users_nbre }}
+                                                    </div>
+                                                </div>
                                                 <div class="invest-data-history">
                                                     <div class="title text-center">
                                                         Processus(s)
                                                     </div>
                                                     <div class="amount text-center">
-                                                        {{ $stat['processus'] }}
+                                                        {{ $proces_nbre }}
                                                     </div>
                                                 </div>
                                                 <div class="invest-data-history">
@@ -58,7 +58,15 @@
                                                         Réclamation(s)
                                                     </div>
                                                     <div class="amount text-center">
-                                                        {{ $stat['reclamation'] }}
+                                                        {{ $ams_nbre }}
+                                                    </div>
+                                                </div>
+                                                <div class="invest-data-history">
+                                                    <div class="title text-center">
+                                                        Résumés des réclamation(s)
+                                                    </div>
+                                                    <div class="amount text-center">
+                                                        {{ $reclas_nbre }}
                                                     </div>
                                                 </div>
                                                 <div class="invest-data-history">
@@ -66,49 +74,128 @@
                                                         Cause(s)
                                                     </div>
                                                     <div class="amount text-center">
-                                                        {{ $stat['cause'] }}
+                                                        {{ $causes_nbre }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        
-
-                                        <!--<div class="card-amount">
-                                            <div >
-                                                <a class="btn btn-outline-warning btn-dim">
-                                                    <span  class="me-2" >Détails</span>
-                                                    <span>
-                                                        <em class="ni ni-chevron-right-circle" > </em>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>-->
-
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                            <div class="col-md-6">
+
+                            <div class="col-lg-4 col-xxl-4">
+                                <div class="card card-bordered card-full">
+                                    <div class="card-inner-group">
+                                        <div class="card-inner">
+                                            <div class="card-title-group">
+                                                <div class="card-title">
+                                                    <h6 class="title">Utlisateurs</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @foreach($users_tri as $key => $users_tr)
+                                        <div class="card-inner card-inner-md">
+                                            <div class="user-card">
+                                                <div class="user-avatar bg-primary-dim">
+                                                    <em class="ni ni-user" ></em>
+                                                </div>
+                                                <div class="user-info">
+                                                    <span class="lead-text">
+                                                        {{ $users_tr->name }} ( {{ $users_tr->poste }} )
+                                                    </span>
+                                                    <span class="sub-text">
+                                                        Email :{{ $users_tr->email }} / Tel : {{ $users_tr->tel }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xxl-4">
+                                <div class="card card-bordered card-full">
+                                    <div class="card-inner border-bottom">
+                                        <div class="card-title-group">
+                                            <div class="card-title">
+                                                <h6 class="title">Résumés des réclamations</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="nk-activity">
+                                        @foreach($reclas_tri as $key => $reclas_tr)
+                                        <li class="nk-activity-item">
+                                            <div class="nk-activity-media user-avatar bg-primary">
+                                                <em class="ni ni-cards" ></em>
+                                            </div>
+                                            <div class="nk-activity-data">
+                                                <div class="label">
+                                                    {{ $reclas_tr->nom }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xxl-4">
+                                <div class="card card-bordered card-full">
+                                    <div class="card-inner border-bottom">
+                                        <div class="card-title-group">
+                                            <div class="card-title">
+                                                <h6 class="title">Causes</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="nk-activity">
+                                        @foreach($causes_tri as $key => $causes_tr)
+                                        <li class="nk-activity-item">
+                                            <div class="nk-activity-media user-avatar bg-primary">
+                                                <em class="ni ni-clipboard" ></em>
+                                            </div>
+                                            <div class="nk-activity-data">
+                                                <div class="label">
+                                                    {{ $causes_tr->nom }} -> {{ $causes_tr->nbre_suivi }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="card card-bordered card-full">
                                     <div class="card-inner" >
-                                        <div class="form-group text-center">
-                                            <label class="form-label" for="cf-full-name">Processus</label>
-                                            <select name="processus_id" class="form-select text-center" id="selectProcessus">
-                                                <option value="">
-                                                    Choisir un processus
-                                                </option>
-                                                @foreach ($processus as $processus)
-                                                <option value="{{$processus->id}}">
-                                                    {{$processus->nom}}
-                                                </option>
-                                                @endforeach
-                                            </select>
+                                        <div>
+                                            <canvas id="myChart"></canvas>
                                         </div>
 
-                                        <div id="camenber">
-
-                                        </div>
+                                        <script>
+                                            var ctx = document.getElementById('myChart').getContext('2d');
+                                            var myChart = new Chart(ctx, {
+                                                type: 'bar',
+                                                data: {
+                                                    labels: <?php echo json_encode($dataLabels); ?>,
+                                                    datasets: [{
+                                                        label: 'Nombre de Suivis par Cause',
+                                                        data: <?php echo json_encode($dataCounts); ?>,
+                                                        backgroundColor: 'blue',
+                                                        borderColor: 'white',
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        y: {
+                                                            beginAtZero: true,
+                                                            ticks: {
+                                                                stepSize: 1
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        </script>
 
                                     </div>
                                 </div>
@@ -148,103 +235,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Écouteur pour le changement de sélection
-        document.getElementById('selectProcessus').addEventListener('change', function() {
-            var selectedProcessus = this.value;
-            if (selectedProcessus !== '') {
-                $.ajax({
-                    url: '/get_processus/' + selectedProcessus,
-                    method: 'GET',
-                    success: function (data) {
-                        addGroups(selectedProcessus, data);
-                    },
-                    error: function () {
-                        toastr.info("Aucune données n'a été trouver.");
-                    }
-                });
-            } else {
-                toastr.warning("Veuillez selectionner un processus.");
-            }
-        });
-
-        function addGroups(selectedProcessus, data) {
-
-            var dynamicFields = document.getElementById("camenber");
-
-            // Supprimer le contenu existant
-            while (dynamicFields.firstChild) {
-                dynamicFields.removeChild(dynamicFields.firstChild);
-            }
-
-            var groupe = document.createElement("div");
-            groupe.className = "";
-            groupe.innerHTML = `
-                <canvas id="myChart"></canvas>
-            `;
-
-            var groupe2 = document.createElement("div");
-            groupe2.className = "invest-data mt-2";
-            groupe2.innerHTML = `
-                <div class="invest-data-amount g-2">
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Non conformité interne
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        ${data.data[0]}
-                                                    </div>
-                                                </div>
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Réclamation
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        ${data.data[1]}
-                                                    </div>
-                                                </div>
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Contentieux
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        ${data.data[2]}
-                                                    </div>
-                                                </div>
-                                            </div>
-            `;
-
-            document.getElementById("camenber").appendChild(groupe);
-            document.getElementById("camenber").appendChild(groupe2);
-
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['non_conformite_interne', 'reclamation', 'contentieux'],
-                    datasets: [{
-                        data: data.data,
-                        backgroundColor: ['orange', 'skyblue', 'red'],
-                        borderColor: 'white',
-                        borderWidth: 1
-                    }],
-                    hoverOffset: 4
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                    }
-                }
-            });
-        }
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Écouteur pour le changement de sélection
         document.getElementById('btn_rech').addEventListener('click', function() {
             var date1 = document.getElementById('date1').value;
             var date2 = document.getElementById('date2').value;
@@ -276,60 +266,29 @@
                 <canvas id="myChart2"></canvas>
             `;
 
-            var groupe2 = document.createElement("div");
-            groupe2.className = "invest-data mt-2";
-            groupe2.innerHTML = `
-                <div class="invest-data-amount g-2">
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Non conformité interne
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        ${data.data[0]}
-                                                    </div>
-                                                </div>
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Réclamation
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        ${data.data[1]}
-                                                    </div>
-                                                </div>
-                                                <div class="invest-data-history">
-                                                    <div class="title text-center">
-                                                        Contentieux
-                                                    </div>
-                                                    <div class="amount text-center">
-                                                        ${data.data[2]}
-                                                    </div>
-                                                </div>
-                                            </div>
-            `;
-
             document.getElementById("camenber2").appendChild(groupe);
-            document.getElementById("camenber2").appendChild(groupe2);
 
-            var ctx = document.getElementById('myChart2').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'doughnut',
+            var ctx = document.getElementById('camenber2').getContext('2d');
+            var camenber2 = new camenber2(ctx, {
+                type: 'bar',
                 data: {
-                    labels: ['non_conformite_interne', 'reclamation', 'contentieux'],
+                    labels: data.dataLs,
                     datasets: [{
-                        data: [data.data[0],data.data[1],data.data[2]],
-                        backgroundColor: ['orange', 'skyblue', 'red'],
+                        label: 'Nombre de Suivis par Cause',
+                        data: data.dataCs,
+                        backgroundColor: 'blue',
                         borderColor: 'white',
                         borderWidth: 1
-                    }],
-                    hoverOffset: 4
+                    }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
                     }
                 }
             });
