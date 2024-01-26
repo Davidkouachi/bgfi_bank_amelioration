@@ -109,6 +109,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/Nouveau Poste', [Controller::class, 'index_add_poste'])->name('index_add_poste');
     Route::post('/Nouveau Poste', [Controller::class, 'index_add_poste_traitement'])->name('index_add_poste_traitement');
+
+
+    
         
 });
 
