@@ -24,7 +24,7 @@
                         <div class="nk-block-head nk-block-head-sm" >
                                 <div class="nk-block-between">
                                     <div class="nk-block-head-content" style="margin:0px auto;">
-                                        <h3 class="text-center">
+                                        <h3 class="">
                                             <span>Vérifications des réclamations </span>
                                             <em class="icon ni ni-list-index"></em>
                                         </h3>
@@ -39,7 +39,7 @@
                                     <div class="card-inner">
                                         <table class="datatable-init table">
                                             <thead>
-                                                <tr class="text-center">
+                                                <tr class="">
                                                     <th></th>
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
@@ -51,15 +51,15 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($ams as $key => $am)
-                                                    <tr class="text-center">
+                                                    <tr class="">
                                                         <td>{{ $key+1 }}</td>
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
                                                         <td>
-                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}
+                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->translatedFormat('j F Y ') }}
                                                         </td>
                                                         <td>
-                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}
+                                                            {{ \Carbon\Carbon::parse($am->date_limite)->translatedFormat('j F Y ') }}
                                                         </td>
                                                         @if ($am->statut === 'update')
                                                             <td>
@@ -196,7 +196,7 @@
                                     </div>
                                 </div>
                                 @foreach($actionsData[$am->id] as $key => $actions)
-                                <div class="col-md-12 col-xxl-122" id="groupesContainer">
+                                <div class="col-md-12 col-xxl-122">
                                     <div class="card">
                                         <div class="card-inner">
                                             <div class="card-head">
@@ -206,52 +206,52 @@
                                             </div>
                                             <div class="row g-4">
                                                 <div class="col-lg-12">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Processus
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ $actions['processus'] }}" readonly type="text" class="form-control text-center" id="Cause">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Réclamation
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ $actions['reclamation'] }}" readonly type="text" class="form-control text-center" id="Cause">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Causes
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ $actions['cause'] }}" readonly type="text" class="form-control text-center" id="Cause">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-group text-center">
+                                                    <div class="form-group ">
                                                         <label class="form-label" for="Cause">
                                                             Action
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $actions['action'] }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                            <input value="{{ $actions['action'] }}" readonly type="text" class="form-control " id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <div class="form-group text-center">
+                                                    <div class="form-group ">
+                                                        <label class="form-label" for="Cause">
+                                                            Causes
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ $actions['cause'] }}" readonly type="text" class="form-control " id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group ">
+                                                        <label class="form-label" for="Cause">
+                                                            Réclamation
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ $actions['reclamation'] }}" readonly type="text" class="form-control " id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group ">
+                                                        <label class="form-label" for="Cause">
+                                                            Processus
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ $actions['processus'] }}" readonly type="text" class="form-control " id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group ">
                                                         <label class="form-label" for="Cause">
                                                             Délai
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($actions['delai'])->format('d/m/Y') }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                            <input value="{{ \Carbon\Carbon::parse($actions['delai'])->translatedFormat('j F Y ') }}" readonly type="text" class="form-control " id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -284,8 +284,10 @@
                 <div class="modal-content"><a href="#" class="close" data-bs-dismiss="modal"><em
                             class="icon ni ni-cross"></em></a>
                     <div class="modal-body modal-body-lg text-center">
-                        <div class="nk-modal"><em
-                                class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"></em>
+                        <div class="nk-modal">
+                            <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success">
+                                
+                            </em>
                             <h4 class="nk-modal-title">Confirmation</h4>
                             <div class="nk-modal-text">
                                 <div class="caption-text">
@@ -325,7 +327,7 @@
                                     <input type="text" value="{{ $am->id }}" name="amelioration_id" style="display: none;">
                                 </div>
                             </div>
-                            <div class="form-group text-center">
+                            <div class="form-group ">
                                 <button type="submit" class="btn btn-lg btn-success">
                                     Sauvgarder
                                 </button>

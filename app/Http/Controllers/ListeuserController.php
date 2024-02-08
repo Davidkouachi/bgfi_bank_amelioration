@@ -40,7 +40,7 @@ class ListeuserController extends Controller
         return view('liste.user',['users' => $users]);
     }
 
-    public function index_modif(Request $request)
+    public function index_modif_auto(Request $request)
     {
         $auto = Autorisation::where('user_id', $request->user_id)->first();
         $auto->new_user = $request->nouveau_user;
@@ -67,9 +67,9 @@ class ListeuserController extends Controller
             $his->user_id = Auth::user()->id;
             $his->save();
 
-            return back()->with('success', 'Mise à jour éffectuée.');
+            return redirect()->route('index_liste_resva')->with('success', 'Mise à jour éffectuée.');
         } else {
-            return back()->with('error', 'Mise à jour non éffectuée.');
+            return redirect()->route('index_liste_resva')->with('error', 'Mise à jour non éffectuée.');
         }
     }
 }

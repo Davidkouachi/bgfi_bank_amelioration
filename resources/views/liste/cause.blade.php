@@ -188,7 +188,7 @@
 
     @foreach($causes->toArray() as $key => $cause)
         <div class="modal fade zoom" tabindex="-1" id="modalModif{{ $cause['id'] }}">
-            <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
+            <div class="modal-dialog modal-md" role="document" style="width: 100%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Modification </h5>
@@ -199,14 +199,26 @@
                             @csrf
                             <div class="row g-4 mb-4" id="poste-container">
                                 <div class="col-lg-12">
-                                    <div class="form-group text-center">
+                                    <div class="form-group">
                                         <label class="form-label" for="poste">
                                             Cause
                                         </label>
                                         <div class="form-control-wrap">
-                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center poste" value="{{ $cause['nom'] }}" name="cause">
+                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control poste" value="{{ $cause['nom'] }}" name="cause">
                                             <input type="text" name="cause_id" value="{{ $cause['id'] }}" style="display: none;">
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <label class="form-label" for="poste">
+                                        Réclamation
+                                    </label>
+                                    <div class="form-control-wrap">
+                                        <select name="reclamation_id" class="form-select js-select2">
+                                            @foreach($reclamations as $recla)
+                                                <option value="{{ $recla->id }}" {{ $cause['reclamation_id'] == $recla->id ? 'selected' : '' }}>{{ $recla->nom }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -18,21 +18,16 @@ class CreateSuiviActionsTable extends Migration
             $table->string('efficacite')->nullable();
             $table->text('commentaires')->nullable();
             $table->date('date_action')->nullable();
-            $table->date('delai');
             $table->string('statut');
             $table->string('nature');
             $table->string('commentaire_am');
             $table->dateTime('date_suivi')->nullable();
             $table->unsignedBigInteger('action_id');
             $table->foreign('action_id')->references('id')->on('actions');
-            $table->unsignedBigInteger('processus_id');
-            $table->foreign('processus_id')->references('id')->on('processuses');
             $table->unsignedBigInteger('amelioration_id');
             $table->foreign('amelioration_id')->references('id')->on('ameliorations');
-            $table->unsignedBigInteger('cause_id');
-            $table->foreign('cause_id')->references('id')->on('causes');
-            $table->unsignedBigInteger('reclamation_id');
-            $table->foreign('reclamation_id')->references('id')->on('reclamations');
+            $table->unsignedBigInteger('poste_id');
+            $table->foreign('poste_id')->references('id')->on('postes');
             $table->timestamps();
         });
     }

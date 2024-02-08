@@ -43,7 +43,8 @@
                                                     <th></th>
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
-                                                    <th>Date</th>
+                                                    <th>Date création</th>
+                                                    <th>Date limite de traitement</th>
                                                     <th>Nombre d'actions</th>
                                                     <th></th>
                                                 </tr>
@@ -54,7 +55,9 @@
                                                         <td>{{ $key+1 }}</td>
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y') }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($am->date_fiche)->translatedFormat('j F Y ') }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($am->date_limite)->translatedFormat('j F Y ') }}</td>
+
                                                         <td>{{ $am->nbre_action }}</td>
                                                         <td>
                                                             <form method="post" action="{{ route('index_non_accepte2') }}">

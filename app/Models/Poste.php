@@ -12,5 +12,6 @@ class Poste extends Model
     protected $fillable = [
         'id',
         'nom',
+        'occupe'
     ];
 }

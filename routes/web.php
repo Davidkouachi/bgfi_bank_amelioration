@@ -15,6 +15,7 @@ use App\Http\Controllers\ListeactionController;
 use App\Http\Controllers\ListereclamationController;
 use App\Http\Controllers\ListeuserController;
 use App\Http\Controllers\SuivireclaController;
+use App\Http\Controllers\EtatController;
 
 
 Route::get('/Login', [AuthController::class, 'view_login'])->name('login');
@@ -25,6 +26,11 @@ Route::get('/Registre', [AuthController::class, 'view_registre'])->name('registr
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::post('/Etat processus', [EtatController::class, 'index_etat_processus'])->name('index_etat_processus');
+    Route::post('/Etat reclamation', [EtatController::class, 'index_etat_reclamation'])->name('index_etat_reclamation');
+    Route::post('/traitement modif processus', [ListeprocessusController::class, 'processus_modif'])->name('processus_modif');
+    Route::post('/modif processus', [ListeprocessusController::class, 'index_processus_modif'])->name('index_processus_modif');
+
     Route::get('/Internet indisponible', [Controller::class, 'internet_indisponible'])->name('internet_indisponible');
 
     Route::get('/suiviactiveoui', [ProfilController::class, 'suivi_oui']);
@@ -33,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/info_update', [ProfilController::class, 'info_update']);
     
     Route::get('/', [Controller::class, 'index_accueil'])->name('index_accueil');
+    Route::get('/Escaladeur', [AuthController::class, 'index_accueil_escaladeur'])->name('index_accueil_escaladeur');
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -61,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/traitement_resva', [ResvaController::class, 'add_resva'])->name('add_resva');
     Route::post('/add_user', [AuthController::class, 'add_user'])->name('add_user');
+    Route::post('/Modification des autorisations', [ResvaController::class, 'index_user_modif'])->name('index_user_modif');
+    Route::post('/Modif', [ListeuserController::class, 'index_modif_auto'])->name('index_modif_auto');
 
     Route::get('/Liste de contrôle des actions', [SuiviactionController::class, 'index_suiviaction'])->name('index_suiviaction');
     Route::get('/valider/{id}', [SuiviactionController::class, 'valider_recla'])->name('valider_recla');
@@ -105,7 +114,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/Liste des utilisateurs', [ListeuserController::class, 'index'])->name('index_liste_resva');
 
-    Route::post('/Modif', [ListeuserController::class, 'index_modif'])->name('index_modif_auto');
+    
 
     Route::get('/Nouveau Poste', [Controller::class, 'index_add_poste'])->name('index_add_poste');
     Route::post('/Nouveau Poste', [Controller::class, 'index_add_poste_traitement'])->name('index_add_poste_traitement');

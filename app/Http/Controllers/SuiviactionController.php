@@ -25,19 +25,46 @@ class SuiviactionController extends Controller
 {
     public function index_suiviaction()
     {
+        
+        $ams = Amelioration::where('statut', '=', 'valider')->get();
 
-        $actions = Suivi_action::join('actions', 'suivi_actions.action_id', '=', 'actions.id')
-                    ->join('postes', 'actions.poste_id', '=', 'postes.id')
-                    ->join('ameliorations', 'suivi_actions.amelioration_id', '=', 'ameliorations.id')
-                    ->join('causes', 'actions.cause_id', '=', 'causes.id')
-                    ->join('reclamations', 'suivi_actions.reclamation_id', '=', 'reclamations.id')
-                    ->join('processuses', 'suivi_actions.processus_id', '=', 'processuses.id')
-                    ->where('suivi_actions.statut', 'non-realiser')
-                    ->where('ameliorations.statut', 'valider')
-                    ->select('suivi_actions.*','reclamations.nom as reclamation', 'ameliorations.date_fiche as date_fiche' ,'processuses.nom as processus', 'actions.nom as action', 'causes.nom as cause', 'postes.nom as poste')
-                    ->get();
+        $actionsData = [];
 
-        return view('traitement.suiviaction',  ['actions' => $actions]);
+        foreach ($ams as $am) {
+
+            $suivi = Suivi_action::join('postes', 'suivi_actions.poste_id', 'postes.id')
+                                    ->where('amelioration_id', '=', $am->id)
+                                    ->select('suivi_actions.*', 'postes.nom as poste')
+                                    ->where('suivi_actions.statut', '=', 'non-realiser')
+                                    ->get();
+            $actionsData[$am->id] = [];
+            foreach ($suivi as $suivis) {
+
+                    $action= null;
+
+                    $action = Action::join('causes', 'actions.cause_id', 'causes.id')
+                                    ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
+                                    ->join('processuses', 'reclamations.processus_id', 'processuses.id')
+                                    ->where('actions.id', '=', $suivis->action_id)
+                                    ->select('actions.nom as action', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
+                                    ->first();
+
+                if ($action) {
+                    $actionsData[$am->id][] = [
+                        'id' => $suivis->id,
+                        'action' => $action->action,
+                        'responsable' => $suivis->poste,
+                        'delai' => $am->date_limite,
+                        'processus' => $action->processus,
+                        'reclamation' => $action->reclamation,
+                        'cause' => $action->cause,
+                    ];
+                }
+
+            }
+        }
+
+        return view('traitement.suiviaction', ['ams' => $ams, 'actionsData' => $actionsData ]);
     }
 
     public function valider_recla($id)

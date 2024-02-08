@@ -16,6 +16,7 @@ class CreateAmeliorationsTable extends Migration
         Schema::create('ameliorations', function (Blueprint $table) {
             $table->id();
             $table->date('date_fiche');
+            $table->date('date_limite');
             $table->date('date_cloture1')->nullable();
             $table->string('lieu');
             $table->string('detecteur');
@@ -32,6 +33,10 @@ class CreateAmeliorationsTable extends Migration
             $table->string('efficacite')->nullable();
             $table->text('commentaire_eff')->nullable();
             $table->date('date_eff')->nullable();
+            $table->unsignedBigInteger('reclamation_id')->nullable();
+            $table->foreign('reclamation_id')->references('id')->on('reclamations');
+            $table->unsignedBigInteger('cause_id')->nullable();
+            $table->foreign('cause_id')->references('id')->on('causes');
             $table->timestamps();
         });
     }

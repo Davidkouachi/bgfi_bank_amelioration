@@ -59,16 +59,20 @@
                                                         <td>{{ $user->tel }}</td>
                                                         <td>{{ $user->poste }}</td>
                                                         <td>
-                                                            <a data-bs-toggle="modal"
-                                                                data-bs-target="#modalDetail{{ $user->id }}"
-                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
-                                                                <em class="icon ni ni-eye"></em>
-                                                            </a>
-                                                            <a data-bs-toggle="modal"
-                                                                data-bs-target="#modalModif{{ $user->id }}"
-                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-info">
-                                                                <em class="icon ni ni-edit"></em>
-                                                            </a>
+                                                        	<div class="d-flex">
+															    <form method="post" action="{{ route('index_user_modif') }}">
+															        @csrf
+															        <input type="text" name="id" value="{{ $user->id }}" style="display: none;">
+															        <a data-bs-toggle="modal"
+		                                                                data-bs-target="#modalDetail{{ $user->id }}"
+		                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
+		                                                                <em class="icon ni ni-eye"></em>
+		                                                            </a>
+															        <button type="submit" class="btn btn-icon btn-white btn-dim btn-sm btn-info">
+															            <em class="icon ni ni-edit"></em>
+															        </button>
+															    </form>
+															</div>
                                                             <!--<a data-bs-toggle="modal"
                                                                 data-bs-target="#modalConfirmelock"
                                                                 href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-danger">
@@ -188,7 +192,6 @@
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Nouveau Utilisateur
 		                                                        	@if ($user->new_user === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -199,13 +202,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                        	Nouveau Utilisateur
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Liste des Utilisateurs
 		                                                        	@if ($user->list_user === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -216,13 +219,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Liste des Utilisateurs
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Nouveau Poste
 		                                                        	@if ($user->new_poste === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -233,13 +236,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Nouveau Poste
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Liste des Postes
 		                                                        	@if ($user->list_poste === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -250,13 +253,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Liste des Postes
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Historique
 		                                                        	@if ($user->historiq === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -267,13 +270,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Historique
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Statistique
 		                                                        	@if ($user->stat === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -284,6 +287,7 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Statistique
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
@@ -297,7 +301,6 @@
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-			                                                        Nouveau Processus
 			                                                        @if ($user->new_proces === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -308,13 +311,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Nouveau Processus
 			                                                    </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Liste des Processus
 		                                                        	@if ($user->list_proces === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -325,6 +328,7 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Liste des Processus
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
@@ -338,7 +342,6 @@
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Nouvelle Réclamation
 		                                                        	@if ($user->new_recla === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -349,13 +352,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Nouvelle Réclamation
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Liste des Réclamations
 		                                                        	@if ($user->list_recla === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -366,13 +369,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Liste des Réclamations
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Liste des Causes
 		                                                        	@if ($user->list_cause === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -383,6 +386,7 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Liste des Causes
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
@@ -396,7 +400,6 @@
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Suivis des actions
 		                                                        	@if ($user->suivi_act === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -407,13 +410,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Suivis des actions
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Actions éffectuées
 		                                                        	@if ($user->act_eff === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -424,13 +427,13 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Actions éffectuées
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	Liste des Actions
 		                                                        	@if ($user->list_act === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -441,6 +444,7 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
+		                                                            Liste des Actions
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
@@ -457,581 +461,6 @@
 		    </div>
 		</div>
 	@endforeach
-
-	@foreach($users as $key => $user)
-        <div class="modal fade zoom" tabindex="-1" id="modalModif{{ $user->id }}">
-		    <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <h5 class="modal-title">Modification des Autorisations</h5>
-		                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
-		            </div>
-		            <div class="modal-body">
-		                <form class="nk-block" method="post" action="{{ route('index_modif_auto') }}">
-		                	@csrf
-		                    <div class="row g-gs">
-		                        <div class="col-lg-12">
-		                            <div class="row g-gs">
-		                                <div class="col-lg-12 ">
-		                                    <div class="card">
-		                                        <div class="card-inner">
-		                                            <!--<div class="card-head">
-		                                                <h5 class="card-title">
-		                                                    Autorisation des différentes fenêtres
-		                                                </h5>
-		                                            </div>-->
-		                                            <input style="display: none" name="user_id" type="text" value="{{ $user->id }}">
-		                                            <div class="row g-4">
-		                                                <div class="col-lg-12">
-		                                                    <div class="form-group">
-		                                                        <label class="form-label" for="Cause">
-		                                                            ADMINISTRATION
-		                                                        </label>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Nouveau Utilisateur</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio1" name="nouveau_user"
-		                                                                        @php  
-		                                                                        	if ($user->new_user === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp 
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio1">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio2" name="nouveau_user" 
-		                                                                        @php  
-		                                                                        	if ($user->new_user === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp 
-		                                                                        class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio2">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Liste des Utilisateurs</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio1ll" name="liste_user"
-		                                                                        @php  
-		                                                                        	if ($user->list_user === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp 
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio1ll">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio2ll" name="liste_user" 
-		                                                                        @php  
-		                                                                        	if ($user->list_user === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp 
-		                                                                        class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio2ll">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Nouveau Poste</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio3" name="nouveau_poste"
-		                                                                        @php  
-		                                                                        	if ($user->new_poste === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio3">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio4" name="nouveau_poste"
-		                                                                        @php  
-		                                                                        	if ($user->new_poste === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio4">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Liste des Postes</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio3ll" name="liste_poste"
-		                                                                        @php  
-		                                                                        	if ($user->list_poste === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio3ll">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio4ll" name="liste_poste"
-		                                                                        @php  
-		                                                                        	if ($user->list_poste === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio4ll">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Historique</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio5" name="historique"
-		                                                                        @php  
-		                                                                        	if ($user->historiq === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio5">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio6" name="historique"
-		                                                                        @php  
-		                                                                        	if ($user->historiq === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio6">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Statistique</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio7" name="statistique"
-		                                                                        @php  
-		                                                                        	if ($user->stat === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio7">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio8" name="statistique"
-		                                                                        @php  
-		                                                                        	if ($user->stat === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio8">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-12">
-		                                                    <div class="form-group">
-		                                                        <label class="form-label" for="Cause">
-		                                                            PROCESSUS
-		                                                        </label>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Nouveau Processus</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio9" name="nouveau_proces"
-		                                                                        @php  
-		                                                                        	if ($user->new_proces === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio9">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio10" name="nouveau_proces"
-		                                                                        @php  
-		                                                                        	if ($user->new_proces === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio10">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Liste des Processus</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio11" name="liste_proces"
-		                                                                        @php  
-		                                                                        	if ($user->list_proces === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio11">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio12" name="liste_proces"
-		                                                                        @php  
-		                                                                        	if ($user->list_proces === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio12">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-12">
-		                                                    <div class="form-group">
-		                                                        <label class="form-label" for="Cause">
-		                                                            RÉCLAMATION
-		                                                        </label>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Nouvelle Réclamation</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio13" name="nouvelle_recla"
-		                                                                        @php  
-		                                                                        	if ($user->new_recla === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio13">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio14" name="nouvelle_recla"
-		                                                                        @php  
-		                                                                        	if ($user->new_recla === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio14">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Liste des Réclamations</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio15" name="liste_recla"
-		                                                                        @php  
-		                                                                        	if ($user->list_recla === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                        class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio15">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio16" name="liste_recla"
-		                                                                        @php  
-		                                                                        	if ($user->list_recla === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio16">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Liste des Causes</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio0" name="liste_cause"
-		                                                                        @php  
-		                                                                        	if ($user->list_cause === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                        class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio0">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio00" name="liste_cause"
-		                                                                        @php  
-		                                                                        	if ($user->list_cause === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio00">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-12">
-		                                                    <div class="form-group">
-		                                                        <label class="form-label" for="Cause">
-		                                                            ACTIONS
-		                                                        </label>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Suivis des actions</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio17" name="suivi"
-		                                                                        @php  
-		                                                                        	if ($user->suivi_act === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio17">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio18" name="suivi"
-		                                                                        @php  
-		                                                                        	if ($user->suivi_act === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio18">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Actions éffectuées</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio19" name="action_e"
-		                                                                        @php  
-		                                                                        	if ($user->act_eff === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio19">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio20" name="action_e"
-		                                                                        @php  
-		                                                                        	if ($user->act_eff === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio20">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">Liste des Actions</span>
-		                                                        <div class="row gy-4">
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio21" name="liste_action"
-		                                                                        @php  
-		                                                                        	if ($user->list_act === 'oui') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="oui">
-		                                                                        <label class="custom-control-label" for="customRadio21">Oui</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                            <div class="col-md-3 col-sm-6">
-		                                                                <div class="preview-block">
-		                                                                    <div class="custom-control custom-radio">
-		                                                                        <input type="radio" id="customRadio22" name="liste_action"
-		                                                                        @php  
-		                                                                        	if ($user->list_act === 'non') {
-		                                                                        		echo 'checked';
-		                                                                        	}
-		                                                                        @endphp
-		                                                                         class="custom-control-input" value="non">
-		                                                                        <label class="custom-control-label" for="customRadio22">Non</label>
-		                                                                    </div>
-		                                                                </div>
-		                                                            </div>
-		                                                        </div>
-		                                                    </div>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-		                        <div class="col-lg-12">
-		                            <div class="row g-gs">
-		                                <div class="col-md-12">
-		                                    <div class="card card-preview">
-		                                        <div class="card-inner row g-gs">
-		                                            <div class="col-md-12">
-		                                                <div class="form-group text-center">
-		                                                    <button type="submit" class="btn btn-lg btn-primary btn-dim">
-		                                                        <em class="ni ni-edit me-2 "></em>
-		                                                        <em>Mise à jour</em>
-		                                                    </button>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </form>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-	@endforeach
-
 
         <div class="modal fade" tabindex="-1" id="modalConfirmelock" aria-modal="true" role="dialog">
             <div class="modal-dialog" role="document">

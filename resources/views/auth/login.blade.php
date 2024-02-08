@@ -40,7 +40,6 @@
                                     <div class="form-group">
                                         <div class="form-label-group">
                                             <label class="form-label" for="password">Mot de passe</label>
-                                            <a class="link link-primary link-sm" href="auth-reset-v2.html">Mot de passe oublié?</a>
                                         </div>
                                         <div class="form-control-wrap">
                                             <a href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">
@@ -78,9 +77,9 @@
         setInterval(refreshPage, 300000);
     </script>
 
-    @if (session('error_login'))
+    @if (session('error'))
         <script>
-            toastr.error("{{ session('error_login') }}", " ", {
+            toastr.error("{{ session('error') }}", " ", {
                 positionClass: "toast-top-left",
                 timeOut: 5e3,
                 debug: !1,
@@ -94,7 +93,26 @@
                 hideMethod: "fadeOut"
             })
         </script>
-        {{ session()->forget('error_login') }}
+        {{ session()->forget('error') }}
+    @endif
+
+    @if (session('info'))
+        <script>
+            toastr.info("{{ session('info') }}", " ", {
+                positionClass: "toast-top-left",
+                timeOut: 5e3,
+                debug: !1,
+                newestOnTop: !0,
+                preventDuplicates: !0,
+                showDuration: "300",
+                hideDuration: "1000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            })
+        </script>
+        {{ session()->forget('info') }}
     @endif
 </body>
 

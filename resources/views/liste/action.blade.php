@@ -39,21 +39,23 @@
                                     <div class="card-inner">
                                         <table class="datatable-init table">
                                             <thead>
-                                                <tr class="text-center">
+                                                <tr class="">
                                                     <th></th>
                                                     <th>Action</th>
                                                     <th>Cause</th>
                                                     <th>Reclamation</th>
+                                                    <th>Date de création</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach($actions as $key => $action)
-                                                    <tr class="text-center">
+                                                    <tr class="">
                                                         <td>{{ $key+1 }}</td>
                                                         <td>{{ $action->nom }}</td>
                                                         <td>{{ $action->cause }}</td>
                                                         <td>{{ $action->reclamation }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($action->created_at)->translatedFormat('j F Y '.' à '.' H:i:s') }}</td>
                                                         <td>
                                                             <a data-bs-toggle="modal"
                                                                 data-bs-target="#modalDetail"

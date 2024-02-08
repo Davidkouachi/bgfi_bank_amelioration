@@ -15,15 +15,9 @@ class Action extends Model
     protected $fillable = [
         'id',
         'nom',
-        'poste_id',
         'cause_id',
         'actions',
     ];
-
-    public function poste()
-    {
-        return $this->belongsTo(Poste::class, 'poste_id');
-    }
 
     public function cause()
     {

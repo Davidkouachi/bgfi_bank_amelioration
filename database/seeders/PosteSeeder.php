@@ -10,11 +10,11 @@ class PosteSeeder extends Seeder
 
     public function run()
     {
-        Poste::create(['nom' => 'ADMINISTRATEUR']);
-        Poste::create(['nom' => 'ESCALADEUR']);
-        Poste::create(['nom' => 'CONTRÔLEUR']);
-        Poste::create(['nom' => 'OPÉRATEUR DE SAISIE']);
-        Poste::create(['nom' => 'PRODUCTION']);
-        Poste::create(['nom' => 'VALIDATEUR']);
+        Poste::create(['nom' => 'ADMINISTRATEUR','occupe' => 'oui']);
+        Poste::create(['nom' => 'ESCALADEUR','occupe' => 'oui']);
+        Poste::create(['nom' => 'CONTRÔLEUR','occupe' => 'non']);
+        Poste::create(['nom' => 'OPÉRATEUR DE SAISIE','occupe' => 'non']);
+        Poste::create(['nom' => 'PRODUCTION','occupe' => 'non']);
+        Poste::create(['nom' => 'VALIDATEUR','occupe' => 'non']);
     }
 }

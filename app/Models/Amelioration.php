@@ -12,6 +12,7 @@ class Amelioration extends Model
     protected $fillable = [
         'id',
         'date_fiche',
+        'date_limite',
         'lieu',
         'detecteur',
         'consequences',
@@ -28,6 +29,7 @@ class Amelioration extends Model
         'efficacite',
         'date_eff',
         'commentaire_eff',
+        'cause_id',
+        'reclamation_id',
     ];
-
 }

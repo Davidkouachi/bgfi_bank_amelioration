@@ -51,7 +51,7 @@
                                                 @foreach ($historiques as $key => $historique)
                                                     <tr class="text-center">
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $historique->created_at }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($historique->created_at)->translatedFormat('j F Y '.' à '.' H:i:s') }}</td>
                                                         <td>{{ $historique->nom_action }}</td>
                                                         <td>{{ $historique->nom_formulaire }}</td>
                                                         <td>{{ $historique->nom }}</td>

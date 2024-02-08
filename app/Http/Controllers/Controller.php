@@ -48,6 +48,7 @@ class Controller extends BaseController
         foreach ($nom as $nom) {
             $poste = new Poste();
             $poste->nom = $nom;
+            $poste->occupe = 'non';
             $poste->save();
         }
         

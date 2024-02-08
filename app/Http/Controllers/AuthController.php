@@ -31,23 +31,35 @@ class AuthController extends Controller
 
         }
     }
+
+    public function index_accueil_escaladeur()
+    {
+        if (Auth::check()) {
+
+            return view('escaladeur.index');
+
+        } else {
+
+            return redirect()->route('login');
+
+        }
+    }
     
     public function view_login()
     {
         return view('auth.login');
     }
 
-    public function view_registre()
-    {
-        return view('auth.registre');
-    }
-
     public function logout(Request $request)
     {
-        $user = Auth::user();
-        $user->logoutOtherDevices($user->password);
+        Auth::logout();
 
-        return redirect()->route('login');
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('info', 'Vous avez été déconnecté avec succès.');
+
     }
 
     public function add_user(Request $request)
@@ -94,36 +106,48 @@ class AuthController extends Controller
                 $auto->user_id = $user->id;
                 $auto->save();
 
-                $his = new Historique_action();
-                $his->nom_formulaire = 'Nouveau Utilisateur';
-                $his->nom_action = 'Ajouter';
-                $his->user_id = Auth::user()->id;
-                $his->save();
+                $rech = Poste::find($request->poste_id);
+                if ($rech) {
+                    
+                    $rech->occupe = 'oui';
+                    $rech->save();
+                }
 
-                $mail = new PHPMailer(true);
-                $mail->isHTML(true);
-                $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'bgfibankmail01@gmail.com';
-                $mail->Password = 'uxqu rotm ibpc yvxa';
-                $mail->SMTPSecure = 'ssl';
-                $mail->Port = 465;
-                // Destinataire, sujet et contenu de l'email
-                $mail->setFrom('bgfibankmail01@gmail.com', 'BGFIBank');
-                $mail->addAddress($user->email);
-                $mail->Subject = 'Coordonnées utilisateur';
-                $mail->Body = 'Bienvenue à BGFIBank ! <br><br>'.'<br>'
-                        . 'Voici vos informations pour vous connecter :<br>'
-                        . 'Matricule : ' . $request->matricule.'<br>'
-                        . 'Email : ' . $user->email . '<br>'
-                        . 'Mot de passe : ' . $request->mdp.'<br>'
-                        . 'NB : Vous pouvez modifier le mot de passe selon votre choix.';
-                // Envoi de l'email
-                $mail->send();
+                if ($auto) {
+
+                    $his = new Historique_action();
+                    $his->nom_formulaire = 'Nouveau Utilisateur';
+                    $his->nom_action = 'Ajouter';
+                    $his->user_id = Auth::user()->id;
+                    $his->save();
+
+                    $mail = new PHPMailer(true);
+                    $mail->isHTML(true);
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'bgfibankmail01@gmail.com';
+                    $mail->Password = 'uxqu rotm ibpc yvxa';
+                    $mail->SMTPSecure = 'ssl';
+                    $mail->Port = 465;
+                    // Destinataire, sujet et contenu de l'email
+                    $mail->setFrom('bgfibankmail01@gmail.com', 'BGFIBank');
+                    $mail->addAddress($user->email);
+                    $mail->Subject = 'Coordonnées utilisateur';
+                    $mail->Body = 'Bienvenue à BGFIBank ! <br><br>'.'<br>'
+                            . 'Voici vos informations pour vous connecter :<br>'
+                            . 'Matricule : ' . $request->matricule.'<br>'
+                            . 'Email : ' . $user->email . '<br>'
+                            . 'Mot de passe : ' . $request->mdp.'<br>'
+                            . 'NB : Vous pouvez modifier le mot de passe selon votre choix.';
+                    // Envoi de l'email
+                    $mail->send();
+
+                    return back()->with('success', 'Enregistrement éffectuée.');
+                } 
             }
 
-            return back()->with('success', 'Enregistrement éffectuée.');
+            return back()->with('error', 'Echec de l\'enregistrement.');
         }
     }
 
@@ -133,38 +157,31 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
-            Auth::user()->logoutOtherDevices($request->password);
+            //Auth::logoutOtherDevices($request->password);
+            
             $poste_id = Auth::user()->poste_id;
             $user_id = Auth::user()->id;
-
-            $poste = Poste::find($poste_id);
-            if ($poste) {
-                session(['user_poste' => $poste]);
-            }
 
             $auto = Autorisation::where('user_id', $user_id)->first();
             if ($auto) {
                 session(['user_auto' => $auto]);
             }
 
-            
+            $poste = Poste::find($poste_id);
+            if ($poste) {
+                session(['user_poste' => $poste]);
 
-            return redirect()->intended(route('index_accueil'));
+                if (session('user_poste')->nom === 'ESCALADEUR') {
+                    return redirect()->intended(route('index_accueil_escaladeur'))->with('success', 'Connexion réussi.');
+                }
+            }
+
+            return redirect()->intended(route('index_accueil'))->with('success', 'Connexion réussi.');
         }
 
-        return redirect()->back()->withInput($request->only('email'))->with([
-            'error_login' => 'Email ou Mot de passe Incorrect. Veuillez réessayer.',
+        return redirect()->back()->withInput(['email' => $request->input('email'), 'password' => $request->input('password')])->with([
+            'error' => 'L\'authentification a échoué. Veuillez vérifier vos informations d\'identification et réessayer.',
         ]);
-    }
-
-    public function verifi_session(Request $request)
-    {
-        $mdp = Auth::user()->password;
-        $verifi_mdp = bcrypt($request->input('password'));
-
-        if ($mdp === $verifi_mdp) {
-            return back();
-        }
     }
 
 }

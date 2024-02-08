@@ -24,11 +24,8 @@ class ProcessusController extends Controller
 {
     public function index_add_processus()
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
-        
-        return view('add.processus');
+        $pdfFiles = Pdf_file::all();
+        return view('add.processus',['pdfFiles' => $pdfFiles]);
     }
 
     public function add_processus(Request $request)

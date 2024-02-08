@@ -39,7 +39,7 @@
                                     <div class="card-inner">
                                         <table class="datatable-init table">
                                             <thead>
-                                                <tr class="text-center">
+                                                <tr class="">
                                                     <th></th>
                                                     <th>Lieu</th>
                                                     <th>Détecteur</th>
@@ -54,18 +54,16 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($ams as $key => $am)
-                                                    <tr class="text-center">
+                                                    <tr class="">
                                                         <td>{{ $key+1 }}</td>
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
                                                         <td>
-                                                            {{ 
-                                                                \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y')
-                                                            }}
+                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->translatedFormat('j F Y ') }}
                                                         </td>
 
                                                         <td>
-                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}
+                                                            {{ \Carbon\Carbon::parse($am->date_limite)->translatedFormat('j F Y ') }}
                                                         </td>
 
                                                         <td class="text-primary" >
@@ -142,27 +140,36 @@
                                                         @endif
 
                                                         <td>
-                                                            <a data-bs-toggle="modal"
-                                                                data-bs-target="#modalDetail{{ $am->id }}"
-                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
-                                                                <em class="icon ni ni-eye"></em>
-                                                            </a>
-                                                            @if ($am->statut !== 'cloturer')
-                                                                @if ($am->nbre_action_non === 0 )
+                                                            <div class="d-flex">
+                                                                <form method="post" action="{{ route('index_etat_reclamation') }}">
+                                                                    @csrf
+                                                                    <input type="text" name="id" value="{{ $am->id }}" style="display: none;">
                                                                     <a data-bs-toggle="modal"
-                                                                        data-bs-target="#modalDate{{ $am->id }}"
-                                                                        href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-danger">
-                                                                        <em class="icon ni ni-calendar"></em>
+                                                                        data-bs-target="#modalDetail{{ $am->id }}"
+                                                                        href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning">
+                                                                        <em class="icon ni ni-eye"></em>
                                                                     </a>
-                                                                @endif
-                                                                @if ($am->date1 !== null && $am->date1 <= \Carbon\Carbon::now()->toDateString() && $am->date2 >= \Carbon\Carbon::now()->toDateString() )
-                                                                    <a data-bs-toggle="modal"
-                                                                        data-bs-target="#modalEfficacite{{ $am->id }}"
-                                                                        href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-primary">
-                                                                        <em class="icon ni ni-focus"></em>
-                                                                    </a>
-                                                                @endif
-                                                            @endif
+                                                                    @if ($am->statut !== 'cloturer')
+                                                                        @if ($am->nbre_action_non === 0 )
+                                                                            <a data-bs-toggle="modal"
+                                                                                data-bs-target="#modalDate{{ $am->id }}"
+                                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-danger">
+                                                                                <em class="icon ni ni-calendar"></em>
+                                                                            </a>
+                                                                        @endif
+                                                                        @if ($am->date1 !== null && $am->date1 <= \Carbon\Carbon::now()->toDateString() && $am->date2 >= \Carbon\Carbon::now()->toDateString() )
+                                                                            <a data-bs-toggle="modal"
+                                                                                data-bs-target="#modalEfficacite{{ $am->id }}"
+                                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-primary">
+                                                                                <em class="icon ni ni-focus"></em>
+                                                                            </a>
+                                                                        @endif
+                                                                    @endif
+                                                                    <button class="btn btn-icon btn-white btn-dim btn-sm btn-primary">
+                                                                        <em class="icon ni ni-printer-fill"></em>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -256,7 +263,7 @@
                                                             Date
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $am->date_fiche }}" readonly type="date" class="form-control" id="Cause">
+                                                            <input value="{{ \Carbon\Carbon::parse($am->date_fiche)->translatedFormat('j F Y ') }}" readonly type="date" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -266,33 +273,28 @@
                                                             Date limite de traitement
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}" readonly type="text" class="form-control" id="Cause">
+                                                            <input value="{{ \Carbon\Carbon::parse($am->date_limite)->translatedFormat('j F Y ') }}" readonly type="text" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @if ($am->date_cloture1 !== null)
-                                                    <div class="col-lg-4">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="Cause">
-                                                                Date de réalisation
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="{{ \Carbon\Carbon::parse($am->date_cloture1)->format('d/m/Y') }}" readonly type="text" class="form-control" id="Cause">
-                                                            </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="Cause">
+                                                            Date de réalisation
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            @if ($am->date_cloture1 !== null)
+                                                                @if ($am->date_limite >= $am->date_cloture1)
+                                                                    <input value="{{ \Carbon\Carbon::parse($am->date_cloture1)->translatedFormat('j F Y ') }}" readonly type="text" class="form-control bg-success" id="Cause">
+                                                                @else
+                                                                    <input value="{{ \Carbon\Carbon::parse($am->date_cloture1)->translatedFormat('j F Y ') }}" readonly type="text" class="form-control bg-danger" id="Cause">
+                                                                @endif
+                                                            @else
+                                                                <input value="Néant" readonly type="text" class="form-control bg-warning text-white" id="Cause">
+                                                            @endif
                                                         </div>
                                                     </div>
-                                                @else
-                                                    <div class="col-lg-4">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="Cause">
-                                                                Date de réalisation
-                                                            </label>
-                                                            <div class="form-control-wrap">
-                                                                <input value="Néant" readonly type="text" class="form-control" id="Cause">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                </div>
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label class="form-label" for="Cause">
@@ -374,106 +376,104 @@
                                             </div>
                                             <div class="row g-4">
                                                 <div class="col-lg-12">
-                                                    <div class="form-group text-center">
+                                                    <div class="form-group ">
                                                         <label class="form-label" for="Cause">
                                                             Action
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $actions['action'] }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                            <input value="{{ $actions['action'] }}" readonly type="text" class="form-control " id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <div class="form-group text-center">
+                                                    <div class="form-group ">
                                                         <label class="form-label" for="Cause">
                                                             Causes
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $actions['cause'] }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                            <input value="{{ $actions['cause'] }}" readonly type="text" class="form-control " id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <div class="form-group text-center">
+                                                    <div class="form-group ">
                                                         <label class="form-label" for="Cause">
                                                             Réclamation
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $actions['reclamation'] }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                            <input value="{{ $actions['reclamation'] }}" readonly type="text" class="form-control " id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <div class="form-group text-center">
+                                                    <div class="form-group ">
                                                         <label class="form-label" for="Cause">
                                                             Processus
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ $actions['processus'] }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                            <input value="{{ $actions['processus'] }}" readonly type="text" class="form-control " id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 @if ($actions['statut'] === 'realiser')
-                                                <div class="col-lg-4">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Délai
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($actions['delai'])->format('d/m/Y') }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group ">
+                                                            <label class="form-label" for="Cause">
+                                                                Délai
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input value="{{ \Carbon\Carbon::parse($actions['delai'])->translatedFormat('j F Y ') }}" readonly type="text" class="form-control " id="Cause">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Date de realisation
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($actions['date_action'])->format('d/m/Y') }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group ">
+                                                            <label class="form-label" for="Cause">
+                                                                Date de realisation
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input value="{{ \Carbon\Carbon::parse($actions['date_action'])->translatedFormat('j F Y ') }}" readonly type="text" class="form-control " id="Cause">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group text-center">
-                                                        <label class="form-label" for="Cause">
-                                                            Date du Suivi
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($actions['date_suivi'])->format('d/m/Y H:i:s') }}" readonly type="text" class="form-control text-center" id="Cause">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group ">
+                                                            <label class="form-label" for="Cause">
+                                                                Date du Suivi
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input value="{{ \Carbon\Carbon::parse($actions['date_suivi'])->translatedFormat('j F Y'.' à '.'H:i:s') }}" readonly type="text" class="form-control " id="Cause">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                @if ($actions['date_action'] <=  $actions['date_suivi'])
-                                                <div class="col-lg-12">
-                                                    <div class="form-group text-center">
-                                                        <div class="form-control-wrap">
-                                                            <input value="Action Réaliser dans les délais" readonly type="text" class="form-control text-center bg-success" id="Cause">
+                                                    @if ($actions['date_action'] <=  $actions['date_suivi'])
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Action Réaliser dans les délais" readonly type="text" class="form-control text-center bg-success" id="Cause">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                @endif
-                                                @if ($actions['date_action'] >  $actions['date_suivi'])
-                                                <div class="col-lg-12">
-                                                    <div class="form-group text-center">
-                                                        <div class="form-control-wrap">
-                                                            <input value="Action Réaliser hors délais" readonly type="text" class="form-control text-center bg-warning" id="Cause">
+                                                    @elseif ($actions['date_action'] >  $actions['date_suivi'])
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group text-center">
+                                                            <div class="form-control-wrap">
+                                                                <input value="Action Réaliser hors délais" readonly type="text" class="form-control text-center bg-warning" id="Cause">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                @endif
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <label class="form-label">
-                                                            Commentaire
-                                                        </label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea readonly required name="causes" class="form-control no-resize" id="default-textarea">{{ $actions['commentaire_am'] }}</textarea>
+                                                    @endif
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label">
+                                                                Commentaire
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea readonly required name="causes" class="form-control no-resize" id="default-textarea">{{ $actions['commentaire_am'] }}</textarea>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                @endif
-                                                @if ($actions['statut'] === 'non-realiser')
+                                                @elseif ($actions['statut'] === 'non-realiser')
                                                 <div class="col-lg-12">
                                                     <div class="form-group text-center">
                                                         <div class="form-control-wrap">
@@ -504,7 +504,7 @@
                                                             Du
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($am->date1)->format('d/m/Y') }}" readonly type="text" class="form-control" id="Cause">
+                                                            <input value="{{ \Carbon\Carbon::parse($am->date1)->translatedFormat('j F Y ') }}" readonly type="text" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -514,7 +514,7 @@
                                                             au
                                                         </label>
                                                         <div class="form-control-wrap">
-                                                            <input value="{{ \Carbon\Carbon::parse($am->date2)->format('d/m/Y') }}" readonly type="text" class="form-control" id="Cause">
+                                                            <input value="{{ \Carbon\Carbon::parse($am->date2)->translatedFormat('j F Y ') }}" readonly type="text" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -558,11 +558,11 @@
                                                         </label>
                                                         @if ($am->date1 <= $am->date_eff && $am->date2 >= $am->date_eff)
                                                             <div class="form-control-wrap">
-                                                                <input value="{{ \Carbon\Carbon::parse($am->date_eff)->format('d/m/Y') }}" readonly type="text" class="form-control text-center bg-success" id="Cause">
+                                                                <input value="{{ \Carbon\Carbon::parse($am->date_eff)->translatedFormat('j F Y ') }}" readonly type="text" class="form-control text-center bg-success" id="Cause">
                                                             </div>
                                                         @elseif ($am->date1 > $am->date_eff && $am->date2 >= $am->date_eff || $am->date1 <= $am->date_eff && $am->date2 < $am->date_eff)
                                                             <div class="form-control-wrap">
-                                                                <input value="{{ \Carbon\Carbon::parse($am->date_eff)->format('d/m/Y') }}" readonly type="text" class="form-control text-center bg-danger" id="Cause">
+                                                                <input value="{{ \Carbon\Carbon::parse($am->date_eff)->translatedFormat('j F Y ') }}" readonly type="text" class="form-control text-center bg-danger" id="Cause">
                                                             </div>
                                                         @endif
                                                     </div>

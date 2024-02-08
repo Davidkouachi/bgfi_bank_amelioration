@@ -30,10 +30,6 @@ class AmeliorationController extends Controller
     public function index()
     {
 
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
-
         $reclas = Reclamation::join('processuses', 'reclamations.processus_id', '=', 'processuses.id')
                 ->select('reclamations.*','processuses.nom as processus')
                 ->get();
@@ -72,10 +68,7 @@ class AmeliorationController extends Controller
             }
         }
 
-        $postes = Poste::join('users', 'users.poste_id', 'postes.id')
-                        ->select('postes.*') // Sélectionne les colonnes de la table 'postes'
-                        ->distinct() // Rend les résultats uniques
-                        ->get();
+        $postes = Poste::where('occupe', 'oui')->where('nom', '!=', 'ESCALADEUR')->get();
         $processuss = Processuse::all();
 
         return view('add.ficheamelioration',
@@ -117,10 +110,9 @@ class AmeliorationController extends Controller
     public function get_action($id)
     {
 
-        $actions = Action::join('postes', 'actions.poste_id', '=', 'postes.id')
-                    ->join('causes', 'actions.cause_id', '=', 'causes.id')
+        $actions = Action::join('causes', 'actions.cause_id', '=', 'causes.id')
                     ->where('actions.cause_id', '=', $id)
-                    ->select('actions.*', 'postes.nom as responsable','postes.id as responsable_id','causes.nom as cause','causes.reclamation_id as reclamation_id','causes.id as cause_id')
+                    ->select('actions.*','causes.nom as cause','causes.reclamation_id as reclamation_id','causes.id as cause_id')
                     ->get();
 
         $nbre_action = $actions->count();
@@ -148,6 +140,7 @@ class AmeliorationController extends Controller
 
     public function index_add(Request $request) 
     {
+        //dd($request->all());
 
         $date_fiche = $request->input('date_fiche');
         $nbre_jour = $request->input('nbre_jour');
@@ -164,9 +157,9 @@ class AmeliorationController extends Controller
         $causes = $request->input('causes');
         $consequences = $request->input('consequences');
 
-        $choix_recla = $request->input('choix_recla');
-
         $choix_select = $request->input('choix_select');
+        $select_recla = $request->input('select_recla');
+        $select_cause = $request->input('select_cause');
 
         $nature = $request->input('nature');
         $processus_id = $request->input('processus_id');
@@ -186,14 +179,17 @@ class AmeliorationController extends Controller
 
         $am = new Amelioration();
         $am->date_fiche = $date_fiche;
+        $am->date_limite = $date_limite;
         $am->lieu =$lieu;
         $am->detecteur = $detecteur;
         $am->reclamations = $reclamations;
         $am->consequences = $consequences;
         $am->causes = $causes;
-        $am->choix_select = 'neant';
+        $am->choix_select = $choix_select;
         $am->statut = 'soumis';
         $am->escaladeur = 'non';
+        if($choix_select === 'cause'){ $am->cause_id = $select_cause; }
+        elseif($choix_select === 'reclamation'){ $am->reclamation_id = $select_recla; }
         $am->nbre_traitement = $nbre_jour;
         $am->save();
 
@@ -218,48 +214,28 @@ class AmeliorationController extends Controller
                         $actio = new Action();
                         $actio->nom = $action[$index];
                         $actio->actions = $actions[$index];
-                        $actio->poste_id = $poste_id[$index];
                         $actio->cause_id = $caus->id;
                         $actio->save();
 
                         $suivi = new Suivi_action();
                         $suivi->action_id = $actio->id;
-                        $suivi->reclamation_id = $recla->id;
-                        $suivi->cause_id = $caus->id;
                         $suivi->amelioration_id = $am->id;
-                        $suivi->processus_id = $processus_id[$index];
-                        $suivi->delai = $date_limite;
                         $suivi->commentaire_am = $commentaires[$index];
                         $suivi->nature = $nature[$index];
                         $suivi->statut = 'non-realiser';
+                        $suivi->poste_id = $poste_id[$index];
                         $suivi->save();
 
                     } else if ($nature[$index] === 'trouve') {
 
                         $suivi = new Suivi_action();
                         $suivi->action_id = $action_id[$index];
-                        $suivi->reclamation_id = $reclamation_id[$index];
-                        $suivi->cause_id = $cause_id[$index];
                         $suivi->amelioration_id = $am->id;
-                        $suivi->processus_id = $processus_id[$index];
-                        $suivi->delai = $date_limite;
                         $suivi->commentaire_am = $commentaires[$index];
                         $suivi->nature = $nature[$index];
                         $suivi->statut = 'non-realiser';
+                        $suivi->poste_id = $poste_id[$index];
                         $suivi->save();
-
-                        if ($suivi) {
-
-                            $reclat = new Reclamationtrouver();
-                            $reclat->reclamation_id = $reclamation_id[$index];
-                            $reclat->amelioration_id = $am->id;
-                            $reclat->save();
-
-                            $causet = new Causetrouver();
-                            $causet->cause_id = $cause_id[$index];
-                            $causet->amelioration_id = $am->id;
-                            $causet->save();
-                        }
 
                     } else if ($nature[$index] === 'new_cause') {
 
@@ -271,29 +247,17 @@ class AmeliorationController extends Controller
                         $actio = new Action();
                         $actio->nom = $action[$index];
                         $actio->actions = $actions[$index];
-                        $actio->poste_id = $poste_id[$index];
                         $actio->cause_id = $caus->id;
                         $actio->save();
 
                         $suivi = new Suivi_action();
                         $suivi->action_id = $actio->id;
-                        $suivi->reclamation_id = $reclamation_id[$index];
-                        $suivi->cause_id = $caus->id;
                         $suivi->amelioration_id = $am->id;
-                        $suivi->processus_id = $processus_id[$index];
-                        $suivi->delai = $date_limite;
                         $suivi->statut = 'non-realiser';
                         $suivi->commentaire_am = $commentaires[$index];
                         $suivi->nature = $nature[$index];
+                        $suivi->poste_id = $poste_id[$index];
                         $suivi->save();
-
-                        if ($suivi) {
-
-                            $reclat = new Reclamationtrouver();
-                            $reclat->reclamation_id = $reclamation_id[$index];
-                            $reclat->amelioration_id = $am->id;
-                            $reclat->save();
-                        }
 
                     }
                 }

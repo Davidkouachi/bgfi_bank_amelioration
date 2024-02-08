@@ -39,7 +39,7 @@
                                     <div class="card-inner">
                                         <table class="datatable-init table">
                                             <thead>
-                                                <tr class="text-center">
+                                                <tr class="">
                                                     <th></th>
                                                     <th>Reclamation</th>
                                                     <th>Processus</th>
@@ -156,7 +156,7 @@
 
     @foreach($reclas->toArray() as $key => $recla)
         <div class="modal fade zoom" tabindex="-1" id="modalModif{{ $recla['id'] }}">
-            <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
+            <div class="modal-dialog modal-md" role="document" style="width: 100%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Modification </h5>
@@ -167,14 +167,26 @@
                             @csrf
                             <div class="row g-4 mb-4" id="poste-container">
                                 <div class="col-lg-12">
-                                    <div class="form-group text-center">
+                                    <div class="form-group">
                                         <label class="form-label" for="poste">
                                             Réclamation
                                         </label>
                                         <div class="form-control-wrap">
-                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control text-center" value="{{ $recla['nom'] }}" name="reclamation">
+                                            <input placeholder="Saisie obligatoire" required type="text" class="form-control" value="{{ $recla['nom'] }}" name="reclamation">
                                             <input type="text" name="reclamation_id" value="{{ $recla['id'] }}" style="display: none;">
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <label class="form-label" for="poste">
+                                        Processus
+                                    </label>
+                                    <div class="form-control-wrap">
+                                        <select name="processus_id" class="form-select js-select2">
+                                            @foreach($processus as $proces)
+                                                <option value="{{ $proces->id }}" {{ $recla['processus_id'] == $proces->id ? 'selected' : '' }}>{{ $proces->nom }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>

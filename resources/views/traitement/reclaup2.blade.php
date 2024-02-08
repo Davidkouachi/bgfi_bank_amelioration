@@ -66,7 +66,26 @@
                         @csrf
                         <input style="display: none" name="amelioration_id" type="text" value="{{ $am->id }}">
                         <div class="row g-gs">
-                            <div class="col-md-12 col-xxl-12" id="groupesContainer">
+                            <div class="col-lg-12 col-xxl-12" id="groupesContainer">
+                                <div class="card card-bordered">
+                                    <div class="card-inner">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group text-center">
+                                                    <label class="form-label" for="description">
+                                                        Motifs
+                                                    </label>
+                                                    <div class="form-control-wrap">
+                                                        <textarea disabled class="form-control no-resize" id="default-textarea">{{$am->rejet}}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-xxl-6" id="groupesContainer">
                                 <div class="card card-bordered">
                                     <div class="card-inner">
                                             <div class="row g-4">
@@ -110,7 +129,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 col-xxl-12" id="groupesContainer">
+                            <div class="col-lg-6 col-xxl-6" id="groupesContainer">
                                 <div class="card card-bordered">
                                     <div class="card-inner">
                                             <div class="row g-4">
@@ -180,104 +199,100 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 col-xxl-12 ">
-                            	<div class="card card-bordered">
-								    <div class="card-inner">
-								        <div class="row g-4">
-								        	@foreach($actionsDatam[$am->id] as $key => $actions)
-								            <div class="col-lg-12 col-xxl-12">
-								                <div class="card">
-								                    <div class="card-inner">
-								                        <div class="card-head">
-								                        	{{ $key+1 }}
-								                            <span class="badge badge-dot bg-primary">
-								                                @if($actions['nature'] === 'new')
-								                                	Nouvelle réclamation et nouvelle cause
-								                               	@endif
-								                                @if($actions['nature'] === 'trouve')
-								                                	Réclamation et cause trouvées
-								                                @endif
-								                                @if($actions['nature'] === 'new_cause')
-								                                	Réclamation trouvée et nouvelle cause
-								                                @endif
-								                            </span>
-								                        </div>
-								                        <div class="row g-4">
-								                        	<div class="col-lg-6">
-								                                <div class="form-group">
-								                                    <label class="form-label" for="controle">
-								                                        cause
-								                                    </label>
-								                                    <div class="form-control-wrap">
-								                                        <input readonly placeholder="Saisie obligatoire" name="cause[]" value="{{ $actions['cause'] }}" type="text" class="form-control">
-								                                        <input style="display:none;" name="cause_id[]" type="text" value="{{ $actions['cause_id'] }}">
-								                                    </div>
-								                                </div>
-								                            </div>
-								                            <div class="col-lg-6">
-								                                <div class="form-group">
-								                                    <label class="form-label" for="controle">
-								                                        Réclamation
-								                                    </label>
-								                                    <div class="form-control-wrap">
-								                                        <input readonly placeholder="Saisie obligatoire" name="reclamation[]" value="{{ $actions['reclamation'] }}" type="text" class="form-control">
-								                                        <input style="display:none;" name="reclamation_id[]" type="text" value="{{ $actions['reclamation_id'] }}">
-								                                    </div>
-								                                </div>
-								                            </div>
-								                        	<div class="col-lg-6">
-								                                <div class="form-group">
-								                                    <label class="form-label" for="controle">
-								                                        Action
-								                                    </label>
-								                                    <div class="form-control-wrap">
-								                                        <input readonly placeholder="Saisie obligatoire" name="action[]" value="{{ $actions['action'] }}" type="text" class="form-control">
-								                                        <input style="display:none;" name="action_id[]" type="text" value="{{ $actions['action_id'] }}">
-								                                    </div>
-								                                </div>
-								                            </div>
-								                            <div class="col-lg-6">
-								                                <div class="form-group">
-								                                    <label class="form-label" for="Cause">
-								                                        Responsable
-								                                    </label>
-								                                    <select disabled id="responsable_idc" name="poste_id[]" class="form-select js-select2">
-								                                        @foreach($postes as $poste)
-								                                        <option {{ $actions['poste_id'] === $poste->id ? 'selected' : '' }}  value="{{$poste->id}}">
-								                                            {{$poste->nom}}
-								                                        </option>
-								                                        @endforeach
-								                                    </select>
-								                                </div>
-								                            </div>
-								                            <div class="col-lg-12">
-								                                <div class="form-group text-center">
-								                                    <label class="form-label" for="description">
-								                                        Commentaire
-								                                    </label>
-								                                    <div class="form-control-wrap">
-								                                        <textarea required name="commentaires[]" class="form-control no-resize" id="default-textarea">{{$actions['commentaire_am']}}</textarea>
-								                                    </div>
-								                                </div>
-								                            </div>
-                                                            <div class="col-lg-4 text-left">
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input value="{{ $actions['action_id'] }}" name="id_suppr[{{$key+1}}]" type="text" style="display: none;">
-                                                                    <input name="suppr[{{$key+1}}]" value="oui" type="checkbox" class="custom-control-input" id="customCheck1_{{$key+1}}">
-                                                                    <label class="custom-control-label" for="customCheck1_{{$key+1}}">
-                                                                        Supprimé
-                                                                    </label>
+                            @foreach($actionsDatam[$am->id] as $key => $actions)
+                                <div class="col-md-12 col-xxl-12 ">
+                                	<div class="card card-bordered">
+    								    <div class="card-inner">
+    								        <div class="row g-4">
+    								            <div class="col-lg-12 col-xxl-12">
+    								                <div class="card">
+    								                    <div class="card-inner">
+    								                        <div class="card-head">
+    								                        	{{ $key+1 }}
+    								                            <span class="badge badge-dot bg-primary">
+    								                                @if($actions['nature'] === 'new')
+    								                                	Nouvelle réclamation
+    								                               	@endif
+    								                                @if($actions['nature'] === 'trouve')
+    								                                	Cause trouvées
+    								                                @endif
+    								                                @if($actions['nature'] === 'new_cause')
+    								                                	Nouvelle cause
+    								                                @endif
+    								                            </span>
+    								                        </div>
+                                                            <input style="display:none;" name="suivi_id[]" type="text" value="{{ $actions['suivi_id'] }}">
+    								                        <div class="row g-4">
+    								                        	<div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="controle">
+                                                                            Action
+                                                                        </label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input readonly value="{{ $actions['action'] }}" type="text" class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="Cause">
+                                                                            Responsable
+                                                                        </label>
+                                                                        <select id="responsable_idc" name="suivi_poste_id[]" class="form-select js-select2">
+                                                                            @foreach($postes as $poste)
+                                                                            <option {{ $actions['poste_id'] === $poste->id ? 'selected' : '' }}  value="{{$poste->id}}">
+                                                                                {{$poste->nom}}
+                                                                            </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+    								                            </div>
+    								                            <div class="col-lg-6">
+    								                                <div class="form-group text-center">
+    								                                    <label class="form-label" for="description">
+    								                                        Commentaire
+    								                                    </label>
+    								                                    <div class="form-control-wrap">
+    								                                        <textarea required name="suivi_commentaire_am[]" class="form-control no-resize" id="default-textarea">{{$actions['commentaire_am']}}</textarea>
+    								                                    </div>
+    								                                </div>
+    								                            </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="controle">
+                                                                            cause
+                                                                        </label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input readonly value="{{ $actions['cause'] }}" type="text" class="form-control">
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-								                        </div>
-								                    </div>
-								                </div>
-								            </div>
-								            @endforeach
-								        </div>
-								    </div>
-								</div>
-                            </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="controle">
+                                                                            Réclamation
+                                                                        </label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input readonly value="{{ $actions['reclamation'] }}" type="text" class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4 text-left">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input value="{{ $actions['suivi_id'] }}" name="id_suppr[{{$key+1}}]" type="text" style="display: none;">
+                                                                        <input name="suppr[{{$key+1}}]" value="oui" type="checkbox" class="custom-control-input" id="customCheck1_{{$key+1}}">
+                                                                        <label class="custom-control-label" for="customCheck1_{{$key+1}}">
+                                                                            Supprimé
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+    								                        </div>
+    								                    </div>
+    								                </div>
+    								            </div>
+    								        </div>
+    								    </div>
+    								</div>
+                                </div>
+                            @endforeach
                             <div class="col-md-12 col-xxl-12" id="groupesContainer">
                                 <div class="card card-bordered">
                                     <div class="card-inner">
@@ -428,7 +443,6 @@
                                                                             </option>
                                                                             @endforeach
                                                                         </select>
-
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-12">
@@ -571,9 +585,12 @@
                                                                             <option value="" >
                                                                                 Choisir le responsable
                                                                             </option>
-                                                                            ${postes.map(postes => `<option value="${postes.id}">${postes.nom}</option>`).join('')}
+                                                                            @foreach($postes as $poste)
+                                                                            <option value="{{$poste->id}}" >
+                                                                                {{$poste->nom}}
+                                                                            </option>
+                                                                            @endforeach
                                                                         </select>
-
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-12">
@@ -803,10 +820,16 @@
                                                                                 <label class="form-label" for="Coût">
                                                                                     Responsable
                                                                                 </label>
-                                                                                <select disabled id="responsable_idc" class="form-select" >
-                                                                                    ${postes.map(poste => `<option value="${poste.id}" ${action.responsable_id == poste.id ? 'selected' : ''}>${poste.nom}</option>`).join('')}
+                                                                                <select required id="responsable_idc" required name="poste_id[]" class="form-select js-select2">
+                                                                                    <option value="" >
+                                                                                        Choisir le responsable
+                                                                                    </option>
+                                                                                    @foreach($postes as $poste)
+                                                                                    <option value="{{$poste->id}}" >
+                                                                                        {{$poste->nom}}
+                                                                                    </option>
+                                                                                    @endforeach
                                                                                 </select>
-                                                                                <input style="display:none;" name="poste_id[]" value="${action.responsable_id}" type="text" >
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-12">

@@ -33,7 +33,10 @@ class ListereclamationController extends Controller
     public function index_suivi()
     {
 
-        $ams = Amelioration::all();
+        $ams = Amelioration::where('statut', '!=', 'soumis')
+                            ->where('statut', '!=', 'non-valider')
+                            ->where('statut', '!=', 'update')
+                            ->get();
 
         $actionsData = [];
 
@@ -47,24 +50,26 @@ class ListereclamationController extends Controller
                                                 ->where('statut', 'non-realiser')
                                                 ->count();
 
-            $suivi = Suivi_action::where('amelioration_id', '=', $am->id)->get();
+            $suivi = Suivi_action::join('postes', 'suivi_actions.poste_id', 'postes.id')
+                                    ->where('amelioration_id', '=', $am->id)
+                                    ->select('suivi_actions.*', 'postes.nom as poste')
+                                    ->get();
             $actionsData[$am->id] = [];
             foreach ($suivi as $suivis) {
 
                     $action= null;
 
-                    $action = Action::join('postes', 'actions.poste_id', 'postes.id')
-                                    ->join('causes', 'actions.cause_id', 'causes.id')
+                    $action = Action::join('causes', 'actions.cause_id', 'causes.id')
                                     ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
                                     ->join('processuses', 'reclamations.processus_id', 'processuses.id')
                                     ->where('actions.id', '=', $suivis->action_id)
-                                    ->select('actions.nom as action', 'postes.nom as poste', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
+                                    ->select('actions.nom as action', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
                                     ->first();
 
                 if ($action) {
                     $actionsData[$am->id][] = [
                         'action' => $action->action,
-                        'responsable' => $action->poste,
+                        'responsable' => $suivis->poste,
                         'delai' => $suivis->delai,
                         'date_action' => $suivis->date_action,
                         'date_suivi' => $suivis->date_suivi,
@@ -86,26 +91,25 @@ class ListereclamationController extends Controller
     {
         $causes = Cause::join('reclamations', 'causes.reclamation_id', 'reclamations.id')
                     ->join('processuses', 'reclamations.processus_id', 'processuses.id')
-                    ->select('causes.*','processuses.nom as processus', 'reclamations.nom as reclamation')
+                    ->select('causes.*','processuses.nom as processus', 'reclamations.nom as reclamation', 'reclamations.id as reclamation_id')
                     ->get();
 
-        $nbre_total = Suivi_action::all()->count();
+        $reclamations = Reclamation::all();
+
+        $nbre_total = Amelioration::all()->count();
 
         $actionsData = [];
 
         foreach ($causes as $key => $cause) {
 
-            $cause->nbre = Suivi_action::where('cause_id', $cause->id)->count();
+            $cause->nbre = Amelioration::where('cause_id', $cause->id)->count();
 
             $cause->progess = ($cause->nbre / $nbre_total) * 100;
             $cause->progess = number_format($cause->progess, 2);
 
             $cause->nbre_action = Action::where('cause_id', $cause->id)->count();
 
-            $action = Action::join('postes', 'actions.poste_id', 'postes.id')
-                            ->where('cause_id', $cause->id)
-                            ->select('actions.*','postes.nom as poste')
-                            ->first();
+            $action = Action::where('cause_id', $cause->id)->first();
 
             if ($action) {
 
@@ -117,22 +121,24 @@ class ListereclamationController extends Controller
 
         }
 
-        return view('liste.cause', ['causes' => $causes, 'actionsData' => $actionsData ]);
+        return view('liste.cause', ['causes' => $causes, 'actionsData' => $actionsData, 'reclamations' => $reclamations ]);
     }
 
     public function index_list_recla()
     {
         $reclas = Reclamation::join('processuses', 'reclamations.processus_id', 'processuses.id')
-                    ->select('reclamations.*','processuses.nom as processus')
+                    ->select('reclamations.*','processuses.nom as processus','processuses.id as processus_id')
                     ->get();
 
-        $nbre_total = Suivi_action::all()->count();
+        $processus = Processuse::all();
+
+        $nbre_total = Amelioration::all()->count();
 
         $causeData = [];
 
         foreach ($reclas as $key => $recla) {
 
-            $recla->nbre = Suivi_action::where('reclamation_id', $recla->id)->count();
+            $recla->nbre = Amelioration::where('reclamation_id', $recla->id)->count();
 
             $recla->progess = ($recla->nbre / $nbre_total) * 100;
             $recla->progess = number_format($recla->progess, 2);
@@ -151,7 +157,7 @@ class ListereclamationController extends Controller
 
         }
 
-        return view('liste.recla', ['reclas' => $reclas, 'causeData' => $causeData ]);
+        return view('liste.recla', ['reclas' => $reclas, 'causeData' => $causeData, 'processus' => $processus ]);
     }
 
     public function index_modif_cause(Request $request)
@@ -161,6 +167,7 @@ class ListereclamationController extends Controller
         if ($rech) {
 
             $rech->nom = $request->cause;
+            $rech->reclamation_id = $request->reclamation_id;
             $rech->update();
 
             $his = new Historique_action();
@@ -186,6 +193,7 @@ class ListereclamationController extends Controller
         if ($rech) {
 
             $rech->nom = $request->reclamation;
+            $rech->processus_id = $request->processus_id;
             $rech->update();
 
             $his = new Historique_action();
@@ -216,25 +224,27 @@ class ListereclamationController extends Controller
         foreach ($ams as $am) {
             $am->nbre_action = Suivi_action::where('amelioration_id', '=', $am->id)->count();
 
-            $suivi = Suivi_action::where('amelioration_id', '=', $am->id)->get();
+            $suivi = Suivi_action::join('postes', 'suivi_actions.poste_id', 'postes.id')
+                                    ->where('amelioration_id', '=', $am->id)
+                                    ->select('suivi_actions.*', 'postes.nom as poste')
+                                    ->get();
             $actionsData[$am->id] = [];
             foreach ($suivi as $suivis) {
 
                     $action= null;
 
-                    $action = Action::join('postes', 'actions.poste_id', 'postes.id')
-                                    ->join('causes', 'actions.cause_id', 'causes.id')
+                    $action = Action::join('causes', 'actions.cause_id', 'causes.id')
                                     ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
                                     ->join('processuses', 'reclamations.processus_id', 'processuses.id')
                                     ->where('actions.id', '=', $suivis->action_id)
-                                    ->select('actions.nom as action', 'postes.nom as poste', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
+                                    ->select('actions.nom as action', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
                                     ->first();
 
                 if ($action) {
                     $actionsData[$am->id][] = [
                         'action' => $action->action,
-                        'responsable' => $action->poste,
-                        'delai' => $suivis->delai,
+                        'responsable' => $suivis->poste,
+                        'delai' => $am->date_limite,
                         'date_action' => $suivis->date_action,
                         'date_suivi' => $suivis->date_suivi,
                         'statut' => $suivis->statut,
@@ -256,44 +266,11 @@ class ListereclamationController extends Controller
 
         $ams = Amelioration::where('statut', '=', 'non-valider')->get();
 
-        $actionsData = [];
-
         foreach ($ams as $am) {
             $am->nbre_action = Suivi_action::where('amelioration_id', '=', $am->id)->count();
-
-            $suivi = Suivi_action::where('amelioration_id', '=', $am->id)->get();
-            $actionsData[$am->id] = [];
-            foreach ($suivi as $suivis) {
-
-                    $action= null;
-
-                    $action = Action::join('postes', 'actions.poste_id', 'postes.id')
-                                    ->join('causes', 'actions.cause_id', 'causes.id')
-                                    ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
-                                    ->join('processuses', 'reclamations.processus_id', 'processuses.id')
-                                    ->where('actions.id', '=', $suivis->action_id)
-                                    ->select('actions.nom as action', 'postes.nom as poste', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
-                                    ->first();
-
-                if ($action) {
-                    $actionsData[$am->id][] = [
-                        'action' => $action->action,
-                        'responsable' => $action->poste,
-                        'delai' => $suivis->delai,
-                        'date_action' => $suivis->date_action,
-                        'date_suivi' => $suivis->date_suivi,
-                        'statut' => $suivis->statut,
-                        'processus' => $action->processus,
-                        'reclamation' => $action->reclamation,
-                        'cause' => $action->cause,
-                        'commentaire_am' => $suivis->commentaire_am,
-                    ];
-                }
-
-            }
         }
 
-        return view('traitement.reclaup', ['ams' => $ams, 'actionsData' => $actionsData ]);
+        return view('traitement.reclaup', ['ams' => $ams]);
     }
 
     public function index_non_accepte2(Request $request)
@@ -304,7 +281,15 @@ class ListereclamationController extends Controller
 
         if ($am) {
 
-            $suivi = Suivi_action::where('amelioration_id', '=', $am->id)->get();
+            $rejet = rejet::where('amelioration_id', $am->id)->first();
+            if ($rejet) {
+                $am->rejet = $rejet->motif;
+            }
+
+            $suivi = Suivi_action::join('postes', 'suivi_actions.poste_id', 'postes.id')
+                                    ->where('amelioration_id', '=', $am->id)
+                                    ->select('suivi_actions.*', 'postes.id as poste_id')
+                                    ->get();
 
             $actionsDatam[$am->id] = [];
 
@@ -312,27 +297,22 @@ class ListereclamationController extends Controller
 
                     $action= null;
 
-                    $action = Action::join('postes', 'actions.poste_id', 'postes.id')
-                                    ->join('causes', 'actions.cause_id', 'causes.id')
+                    $action = Action::join('causes', 'actions.cause_id', 'causes.id')
                                     ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
                                     ->join('processuses', 'reclamations.processus_id', 'processuses.id')
                                     ->where('actions.id', '=', $suivis->action_id)
-                                    ->select('actions.nom as action', 'actions.id as action_id', 'postes.id as poste_id', 'processuses.id as processus_id', 'reclamations.id as reclamation_id', 'reclamations.nom as reclamation', 'causes.nom as cause' , 'causes.id as cause_id')
+                                    ->select('actions.nom as action', 'actions.id as action_id', 'processuses.nom as processus', 'reclamations.id as reclamation_id', 'reclamations.nom as reclamation', 'causes.nom as cause' , 'causes.id as cause_id')
                                     ->first();
 
                 if ($action) {
                     $actionsDatam[$am->id][] = [
-                        'action_id' => $action->action_id,
+                        'suivi_id' => $suivis->id,
                         'action' => $action->action,
-                        'poste_id' => $action->poste_id,
-                        'delai' => $suivis->delai,
+                        'poste_id' => $suivis->poste_id,
                         'nature' => $suivis->nature,
-                        'date_action' => $suivis->date_action,
-                        'processus_id' => $action->processus_id,
-                        'reclamation_id' => $action->reclamation_id,
+                        'processus' => $action->processus,
                         'reclamation' => $action->reclamation,
                         'cause' => $action->cause,
-                        'cause_id' => $action->cause_id,
                         'commentaire_am' => $suivis->commentaire_am,
                     ];
                 }
@@ -382,10 +362,7 @@ class ListereclamationController extends Controller
             }
         }
 
-        $postes = Poste::join('users', 'users.poste_id', 'postes.id')
-                        ->select('postes.*') // Sélectionne les colonnes de la table 'postes'
-                        ->distinct() // Rend les résultats uniques
-                        ->get();
+        $postes = Poste::where('occupe', 'oui')->where('nom', '!=', 'ESCALADEUR')->get();
         $processuss = Processuse::all();
 
         return view('traitement.reclaup2',
@@ -413,10 +390,6 @@ class ListereclamationController extends Controller
         $causes = $request->input('causes');
         $consequences = $request->input('consequences');
 
-        $choix_recla = $request->input('choix_recla');
-
-        $choix_select = $request->input('choix_select');
-
         $nature = $request->input('nature');
         $processus_id = $request->input('processus_id');
         $poste_id = $request->input('poste_id');
@@ -436,6 +409,7 @@ class ListereclamationController extends Controller
         if ($am) {
 
             $am->date_fiche = $date_fiche;
+            $am->date_limite = $date_limite;
             $am->lieu =$lieu;
             $am->detecteur = $detecteur;
             $am->reclamations = $reclamations;
@@ -447,14 +421,29 @@ class ListereclamationController extends Controller
 
             if ($am) {
 
+                $suivi_id = $request->input('suivi_id');
+                $suivi_poste_id = $request->input('suivi_poste_id');
+                $suivi_commentaire_am = $request->input('suivi_commentaire_am');
+
+                foreach ($suivi_id as $index => $value) {
+
+                    $modif = Suivi_action::where('id', $value)->first();
+
+                    if($modif){
+                        $modif->poste_id = $suivi_poste_id[$index];
+                        $modif->commentaire_am =  $suivi_commentaire_am[$index];
+                        $modif->update();
+                    }
+                }
+
+                
                 $id_suppr = $request->input('id_suppr');
                 $suppr = $request->input('suppr');
 
-                if ($id_suppr) {
-
-                    foreach ($id_suppr as $index => $valeur) {
-                        if (isset($suppr[$index]) && $suppr[$index] === 'oui') {
-                            $delete_action = Suivi_action::where('action_id', $valeur)->delete();
+                if ($suppr && is_array($suppr)) {
+                    foreach ($suppr as $index => $valeur) {
+                        if ($valeur === 'oui' && isset($id_suppr[$index])) {
+                            $delete = Suivi_action::where('id', $id_suppr[$index])->delete();
                         }
                     }
                 }
@@ -480,48 +469,28 @@ class ListereclamationController extends Controller
                             $actio = new Action();
                             $actio->nom = $action[$index];
                             $actio->actions = $actions[$index];
-                            $actio->poste_id = $poste_id[$index];
                             $actio->cause_id = $caus->id;
                             $actio->save();
 
                             $suivi = new Suivi_action();
                             $suivi->action_id = $actio->id;
-                            $suivi->reclamation_id = $recla->id;
-                            $suivi->cause_id = $caus->id;
                             $suivi->amelioration_id = $am->id;
-                            $suivi->processus_id = $processus_id[$index];
-                            $suivi->delai = $date_limite;
                             $suivi->commentaire_am = $commentaires[$index];
                             $suivi->nature = $nature[$index];
                             $suivi->statut = 'non-realiser';
+                            $suivi->poste_id = $poste_id[$index];
                             $suivi->save();
 
                         } else if ($nature[$index] === 'trouve') {
 
                             $suivi = new Suivi_action();
                             $suivi->action_id = $action_id[$index];
-                            $suivi->reclamation_id = $reclamation_id[$index];
-                            $suivi->cause_id = $cause_id[$index];
                             $suivi->amelioration_id = $am->id;
-                            $suivi->processus_id = $processus_id[$index];
-                            $suivi->delai = $date_limite;
                             $suivi->commentaire_am = $commentaires[$index];
                             $suivi->nature = $nature[$index];
                             $suivi->statut = 'non-realiser';
+                            $suivi->poste_id = $poste_id[$index];
                             $suivi->save();
-
-                            if ($suivi) {
-
-                                $reclat = new Reclamationtrouver();
-                                $reclat->reclamation_id = $reclamation_id[$index];
-                                $reclat->amelioration_id = $am->id;
-                                $reclat->save();
-
-                                $causet = new Causetrouver();
-                                $causet->cause_id = $cause_id[$index];
-                                $causet->amelioration_id = $am->id;
-                                $causet->save();
-                            }
 
                         } else if ($nature[$index] === 'new_cause') {
 
@@ -533,29 +502,17 @@ class ListereclamationController extends Controller
                             $actio = new Action();
                             $actio->nom = $action[$index];
                             $actio->actions = $actions[$index];
-                            $actio->poste_id = $poste_id[$index];
                             $actio->cause_id = $caus->id;
                             $actio->save();
 
                             $suivi = new Suivi_action();
                             $suivi->action_id = $actio->id;
-                            $suivi->reclamation_id = $reclamation_id[$index];
-                            $suivi->cause_id = $caus->id;
                             $suivi->amelioration_id = $am->id;
-                            $suivi->processus_id = $processus_id[$index];
-                            $suivi->delai = $date_limite;
                             $suivi->statut = 'non-realiser';
                             $suivi->commentaire_am = $commentaires[$index];
                             $suivi->nature = $nature[$index];
+                            $suivi->poste_id = $poste_id[$index];
                             $suivi->save();
-
-                            if ($suivi) {
-
-                                $reclat = new Reclamationtrouver();
-                                $reclat->reclamation_id = $reclamation_id[$index];
-                                $reclat->amelioration_id = $am->id;
-                                $reclat->save();
-                            }
 
                         }
                     }

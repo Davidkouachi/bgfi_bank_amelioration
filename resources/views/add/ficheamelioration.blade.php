@@ -65,38 +65,7 @@
                     <form class="nk-block" method="post" action="{{ route('index_add') }}">
                         @csrf
                         <div class="row g-gs">
-                            <div class="col-lg-12 col-xxl-12">
-                                <div class="card card-bordered card-preview">
-                                    <div class="card-inner">
-                                        <div class="card-head">
-                                            <h5 class="card-title">
-                                                Notification
-                                            </h5>
-                                        </div>
-                                        <div class="row g-gs">
-                                            <div class="col-lg-4 text-left">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input readonly name="choix_alert_alert" value="alert" required type="checkbox" checked class="custom-control-input" id="customCheck1">
-                                                    <label class="custom-control-label" for="customCheck1">Alert à l'écran</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 text-left">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input name="choix_alert_email" value="email" type="checkbox" class="custom-control-input" id="customCheck2">
-                                                    <label class="custom-control-label" for="customCheck2">Par Email</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 text-left">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input name="choix_alert_sms" value="sms" disabled type="checkbox" class="custom-control-input" id="customCheck3">
-                                                    <label class="custom-control-label" for="customCheck3">Par Sms</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-xxl-12" id="groupesContainer">
+                            <div class="col-lg-6 col-xxl-6" >
                                 <div class="card card-bordered">
                                     <div class="card-inner">
                                             <div class="row g-4">
@@ -113,7 +82,7 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label class="form-label">
-                                                            Nombre de jours de traitement
+                                                            Nombre de jours
                                                         </label>
                                                         <div class="form-control-wrap">
                                                             <select id="nbre_jour" required name="nbre_jour" class="form-select " >
@@ -129,7 +98,7 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label class="form-label">
-                                                            Date limite de traitement
+                                                            Date limite
                                                         </label>
                                                         <div class="form-control-wrap">
                                                             <input readonly id="date_limite" name="date_limite" type="text" class="form-control text-center">
@@ -140,7 +109,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 col-xxl-12" id="groupesContainer">
+                            <div class="col-lg-6 col-xxl-6" >
                                 <div class="card card-bordered">
                                     <div class="card-inner">
                                             <div class="row g-4">
@@ -168,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 col-xxl-12" id="groupesContainer">
+                            <div class="col-md-12 col-xxl-12" >
                                 <div class="card card-bordered">
                                     <div class="card-inner">
                                             <div class="row g-4">
@@ -206,6 +175,14 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xxl-12" >
+                                <div class="card card-bordered">
+                                    <div class="card-inner">
+                                            <div class="row g-4">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <div class="form-control-wrap">
@@ -230,12 +207,45 @@
                                                                 <option value="" >
 
                                                                 </option>
-                                                                
                                                             </select>
-                                                            <input type="text" id="slect_cause_id">
+                                                            <input type="text" id="slect_cause_id" name="select_cause">
                                                         </div>
                                                     </div>
                                                 </div>
+                                                    <div class="col-lg-12" id="div_choix">
+                                                        <div class="row g-2">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group text-center">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input required type="radio" class="custom-control-input choix_select" name="choix_select" id="choixrecla" value="reclamation">
+                                                                        <label class="custom-control-label" for="choixrecla">
+                                                                            Réclamation trouvé
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group text-center">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input required type="radio" class="custom-control-input choix_select" name="choix_select" id="choixcause" value="cause">
+                                                                        <label class="custom-control-label" for="choixcause">
+                                                                            Cause trouvé
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group text-center">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input required type="radio" class="custom-control-input choix_select" name="choix_select" id="choixneant" value="neant">
+                                                                        <label class="custom-control-label" for="choixneant">
+                                                                            Néant
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             </div>
                                     </div>
                                 </div>
@@ -243,15 +253,49 @@
                             <div id="dynamic-fields">
 
                             </div>
-                            <div class="col-md-12 col-xxl-12" id="btn_enrg">
-                                <div class="card card-bordered card-preview">
-                                    <div class="card-inner row g-gs">
-                                        <div class="col-12">
-                                            <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-lg btn-success btn-dim ">
-                                                    <em class="ni ni-check me-2"></em>
-                                                    <em>Soumettre</em>
-                                                </button >
+
+                            <div class="row g-gs" id="btn_enrg" >
+                                <div class="col-lg-12 col-xxl-12">
+                                    <div class="card card-bordered card-preview">
+                                        <div class="card-inner">
+                                            <div class="card-head">
+                                                <h5 class="card-title">
+                                                    Notification
+                                                </h5>
+                                            </div>
+                                            <div class="row g-gs">
+                                                <div class="col-lg-4 text-left">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input readonly name="choix_alert_alert" value="alert" required type="checkbox" checked class="custom-control-input" id="customCheck1">
+                                                        <label class="custom-control-label" for="customCheck1">Alert à l'écran</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 text-left">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input name="choix_alert_email" value="email" type="checkbox" class="custom-control-input" id="customCheck2">
+                                                        <label class="custom-control-label" for="customCheck2">Par Email</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 text-left">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input name="choix_alert_sms" value="sms" disabled type="checkbox" class="custom-control-input" id="customCheck3">
+                                                        <label class="custom-control-label" for="customCheck3">Par Sms</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-LG-12 col-xxl-12" >
+                                    <div class="card card-bordered card-preview">
+                                        <div class="card-inner row g-gs">
+                                            <div class="col-12">
+                                                <div class="form-group text-center">
+                                                    <button type="submit" class="btn btn-lg btn-success btn-dim ">
+                                                        <em class="ni ni-check me-2"></em>
+                                                        <em>Soumettre</em>
+                                                    </button >
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -348,7 +392,6 @@
                                                                             </option>
                                                                             @endforeach
                                                                         </select>
-
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-12">
@@ -422,6 +465,8 @@
             groupe.querySelector("#suppr_nouvelle_action").addEventListener("click", function(event) {
                 event.preventDefault();
                 groupe.remove();
+
+                checkAndHideSubmitButton()
             });
 
             document.getElementById("dynamic-fields").appendChild(groupe);
@@ -492,9 +537,12 @@
                                                                             <option value="" >
                                                                                 Choisir le responsable
                                                                             </option>
-                                                                            ${postes.map(postes => `<option value="${postes.id}">${postes.nom}</option>`).join('')}
+                                                                            @foreach($postes as $poste)
+                                                                            <option value="{{$poste->id}}" >
+                                                                                {{$poste->nom}}
+                                                                            </option>
+                                                                            @endforeach
                                                                         </select>
-
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-12">
@@ -569,8 +617,7 @@
                 event.preventDefault();
                 groupe.remove();
 
-                if (!groupe.hasChildNodes()) {
-                }
+                checkAndHideSubmitButton()
             });
 
             document.getElementById("dynamic-fields").appendChild(groupe);
@@ -667,7 +714,7 @@
                 });
             });
 
-            document.querySelectorAll(".choix_recla").forEach(function(radio) {
+            document.querySelectorAll(".").forEach(function(radio) {
                 radio.addEventListener("change", function() {
                     var selectedValue = this.value;
 
@@ -720,7 +767,7 @@
                                                                                 <label class="form-label" for="Cause">
                                                                                     Processus
                                                                                 </label>
-                                                                                <select id="processus_id" required name="processus_id[]" class="form-select js-select2" placeholder="Choisir un processus" >
+                                                                                <select disabled id="processus_id" required name="processus_id[]" class="form-select js-select2" placeholder="Choisir un processus" >
                                                                                     ${processuss.map(processus => `<option value="${processus.id}" ${action.processus_id == processus.id ? 'selected' : ''}>${processus.nom}</option>`).join('')}
                                                                                 </select>
                                                                             </div>
@@ -730,8 +777,15 @@
                                                                                 <label class="form-label" for="Coût">
                                                                                     Responsable
                                                                                 </label>
-                                                                                <select required id="responsable_idc" required name="poste_id[]" class="form-select" >
-                                                                                    ${postes.map(poste => `<option value="${poste.id}" ${action.responsable_id == poste.id ? 'selected' : ''}>${poste.nom}</option>`).join('')}
+                                                                                <select required id="responsable_idc" required name="poste_id[]" class="form-select js-select2">
+                                                                                    <option value="" >
+                                                                                        Choisir le responsable
+                                                                                    </option>
+                                                                                    @foreach($postes as $poste)
+                                                                                    <option value="{{$poste->id}}" >
+                                                                                        {{$poste->nom}}
+                                                                                    </option>
+                                                                                    @endforeach
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -806,6 +860,8 @@
                                             groupe.querySelector("#suppr_action").addEventListener("click", function(event) {
                                                 event.preventDefault();
                                                 groupe.remove();
+
+                                                checkAndHideSubmitButton()
                                             });
 
                                             document.getElementById("dynamic-fields").appendChild(groupe);
@@ -846,6 +902,21 @@
             // Appel initial pour mettre à jour la date limite lors du chargement de la page
             updateDateLimite();
         });
+    </script>
+
+    <script>
+        function checkAndHideSubmitButton() {
+        var dynamicFields = document.getElementById("dynamic-fields");
+        var btnEnrg = document.getElementById("btn_enrg");
+
+        if (dynamicFields.innerHTML.trim() === "") {
+            // Si vide, cacher le bouton "Soumettre"
+            btnEnrg.style.display = "none";
+        } else {
+            // Sinon, afficher le bouton "Soumettre"
+            btnEnrg.style.display = "block";
+        }
+    }
     </script>
 
 

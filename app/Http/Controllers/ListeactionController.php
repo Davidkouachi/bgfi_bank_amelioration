@@ -31,8 +31,7 @@ class ListeactionController extends Controller
         $actions = Action::join('causes', 'actions.cause_id', 'causes.id')
                         ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
                         ->join('processuses', 'reclamations.processus_id', 'processuses.id')
-                        ->join('postes', 'actions.poste_id', 'postes.id')
-                        ->select('actions.*', 'causes.nom as cause', 'reclamations.nom as reclamation', 'processuses.nom as processus', 'postes.nom as poste')
+                        ->select('actions.*', 'causes.nom as cause', 'reclamations.nom as reclamation', 'processuses.nom as processus')
                         ->get();
 
         return view('liste.action', ['actions' => $actions ]);
