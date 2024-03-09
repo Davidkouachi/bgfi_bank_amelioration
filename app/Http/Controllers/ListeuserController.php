@@ -28,13 +28,10 @@ class ListeuserController extends Controller
 {
     public function index ()
     {
-        if (Auth::check() === false ) {
-            return redirect()->route('login');
-        }
 
         $users = User::join('postes', 'users.poste_id', 'postes.id')
                     ->join('autorisations', 'autorisations.user_id', 'users.id')
-                    ->select('users.*','autorisations.new_user as new_user', 'autorisations.list_user as list_user' ,'autorisations.new_poste as new_poste', 'autorisations.list_poste as list_poste' , 'postes.nom as poste','autorisations.historiq as historiq','autorisations.stat as stat','autorisations.new_proces as new_proces','autorisations.list_proces as list_proces','autorisations.new_recla as new_recla','autorisations.list_recla as list_recla', 'autorisations.list_cause as list_cause','autorisations.suivi_act as suivi_act','autorisations.act_eff as act_eff','autorisations.list_act as list_act')
+                    ->select('users.*','autorisations.new_user as new_user', 'autorisations.list_user as list_user' ,'autorisations.new_poste as new_poste', 'autorisations.list_poste as list_poste' , 'postes.nom as poste','autorisations.historiq as historiq','autorisations.stat as stat','autorisations.new_proces as new_proces','autorisations.list_proces as list_proces','autorisations.new_recla as new_recla','autorisations.verif_recla as verif_recla','autorisations.list_recla as list_recla', 'autorisations.recla_non_a as recla_non_a', 'autorisations.list_cause as list_cause', 'autorisations.list_r_r as list_r_r','autorisations.controle_action as controle_action','autorisations.list_action as list_action')
                     ->get();
 
         return view('liste.user',['users' => $users]);
@@ -43,20 +40,27 @@ class ListeuserController extends Controller
     public function index_modif_auto(Request $request)
     {
         $auto = Autorisation::where('user_id', $request->user_id)->first();
-        $auto->new_user = $request->nouveau_user;
-        $auto->list_user = $request->liste_user;
-        $auto->new_poste = $request->nouveau_poste;
-        $auto->list_poste = $request->liste_poste;
-        $auto->historiq = $request->historique;
-        $auto->stat = $request->statistique;
-        $auto->new_proces = $request->nouveau_proces;
-        $auto->list_proces = $request->liste_proces;
-        $auto->new_recla = $request->nouvelle_recla;
-        $auto->list_recla = $request->liste_recla;
-        $auto->list_cause = $request->liste_cause;
-        $auto->suivi_act = $request->suivi;
-        $auto->act_eff = $request->action_e;
-        $auto->list_act = $request->liste_action;
+        
+        $auto->new_user = $request->new_user;
+        $auto->list_user = $request->list_user;
+        $auto->new_poste = $request->new_poste;
+        $auto->list_poste = $request->list_poste;
+        $auto->historiq = $request->historiq;
+        $auto->stat = $request->stat;
+
+        $auto->new_proces = $request->new_proces;
+        $auto->list_proces = $request->list_proces;
+
+        $auto->new_recla = $request->new_recla;
+        $auto->verif_recla = $request->verif_recla;
+        $auto->recla_non_a = $request->recla_non_a;
+        $auto->list_recla = $request->list_recla;
+
+        $auto->list_cause = $request->list_cause;
+        $auto->list_r_r = $request->list_r_r;
+
+        $auto->controle_action = $request->controle_action;
+        $auto->list_action = $request->list_action;
         $auto->update();
 
         if ($auto) {

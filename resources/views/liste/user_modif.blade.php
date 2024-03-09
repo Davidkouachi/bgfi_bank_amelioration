@@ -40,7 +40,7 @@
                                 </div>
                             </div>
                     <div class="nk-block">
-                        <form class="nk-block" method="post" action="{{ route('index_modif_auto') }}">
+                        <form class="nk-block" id="form_update" method="post" action="{{ route('index_modif_auto') }}">
                             @csrf
                             <div class="row g-gs">
                                 <div class="col-lg-12">
@@ -69,7 +69,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio1" name="nouveau_user"
+                                                                                <input type="radio" id="customRadio1" name="new_user"
                                                                                 @php  
                                                                                     if ($user->new_user === 'oui') {
                                                                                         echo 'checked';
@@ -83,7 +83,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio2" name="nouveau_user" 
+                                                                                <input type="radio" id="customRadio2" name="new_user" 
                                                                                 @php  
                                                                                     if ($user->new_user === 'non') {
                                                                                         echo 'checked';
@@ -104,7 +104,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio1ll" name="liste_user"
+                                                                                <input type="radio" id="customRadio1ll" name="list_user"
                                                                                 @php  
                                                                                     if ($user->list_user === 'oui') {
                                                                                         echo 'checked';
@@ -118,7 +118,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio2ll" name="liste_user" 
+                                                                                <input type="radio" id="customRadio2ll" name="list_user" 
                                                                                 @php  
                                                                                     if ($user->list_user === 'non') {
                                                                                         echo 'checked';
@@ -139,7 +139,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio3" name="nouveau_poste"
+                                                                                <input type="radio" id="customRadio3" name="new_poste"
                                                                                 @php  
                                                                                     if ($user->new_poste === 'oui') {
                                                                                         echo 'checked';
@@ -153,7 +153,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio4" name="nouveau_poste"
+                                                                                <input type="radio" id="customRadio4" name="new_poste"
                                                                                 @php  
                                                                                     if ($user->new_poste === 'non') {
                                                                                         echo 'checked';
@@ -174,7 +174,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio3ll" name="liste_poste"
+                                                                                <input type="radio" id="customRadio3ll" name="list_poste"
                                                                                 @php  
                                                                                     if ($user->list_poste === 'oui') {
                                                                                         echo 'checked';
@@ -188,7 +188,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio4ll" name="liste_poste"
+                                                                                <input type="radio" id="customRadio4ll" name="list_poste"
                                                                                 @php  
                                                                                     if ($user->list_poste === 'non') {
                                                                                         echo 'checked';
@@ -209,7 +209,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio5" name="historique"
+                                                                                <input type="radio" id="customRadio5" name="historiq"
                                                                                 @php  
                                                                                     if ($user->historiq === 'oui') {
                                                                                         echo 'checked';
@@ -223,7 +223,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio6" name="historique"
+                                                                                <input type="radio" id="customRadio6" name="historiq"
                                                                                 @php  
                                                                                     if ($user->historiq === 'non') {
                                                                                         echo 'checked';
@@ -244,7 +244,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio7" name="statistique"
+                                                                                <input type="radio" id="customRadio7" name="stat"
                                                                                 @php  
                                                                                     if ($user->stat === 'oui') {
                                                                                         echo 'checked';
@@ -258,7 +258,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio8" name="statistique"
+                                                                                <input type="radio" id="customRadio8" name="stat"
                                                                                 @php  
                                                                                     if ($user->stat === 'non') {
                                                                                         echo 'checked';
@@ -286,7 +286,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio9" name="nouveau_proces"
+                                                                                <input type="radio" id="customRadio9" name="new_proces"
                                                                                 @php  
                                                                                     if ($user->new_proces === 'oui') {
                                                                                         echo 'checked';
@@ -300,7 +300,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio10" name="nouveau_proces"
+                                                                                <input type="radio" id="customRadio10" name="new_proces"
                                                                                 @php  
                                                                                     if ($user->new_proces === 'non') {
                                                                                         echo 'checked';
@@ -321,7 +321,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio11" name="liste_proces"
+                                                                                <input type="radio" id="customRadio11" name="list_proces"
                                                                                 @php  
                                                                                     if ($user->list_proces === 'oui') {
                                                                                         echo 'checked';
@@ -335,7 +335,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio12" name="liste_proces"
+                                                                                <input type="radio" id="customRadio12" name="list_proces"
                                                                                 @php  
                                                                                     if ($user->list_proces === 'non') {
                                                                                         echo 'checked';
@@ -363,7 +363,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio13" name="nouvelle_recla"
+                                                                                <input type="radio" id="customRadio13" name="new_recla"
                                                                                 @php  
                                                                                     if ($user->new_recla === 'oui') {
                                                                                         echo 'checked';
@@ -377,7 +377,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio14" name="nouvelle_recla"
+                                                                                <input type="radio" id="customRadio14" name="new_recla"
                                                                                 @php  
                                                                                     if ($user->new_recla === 'non') {
                                                                                         echo 'checked';
@@ -393,12 +393,82 @@
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <div class="form-group align-items-center justify-content-center">
-                                                                <span class="preview-title overline-title">Liste des Réclamations</span>
+                                                                <span class="preview-title overline-title">Validation des Réclamations</span>
                                                                 <div class="row gy-4">
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio15" name="liste_recla"
+                                                                                <input type="radio" id="customRadio15v" name="verif_recla"
+                                                                                @php  
+                                                                                    if ($user->verif_recla === 'oui') {
+                                                                                        echo 'checked';
+                                                                                    }
+                                                                                @endphp
+                                                                                class="custom-control-input" value="oui">
+                                                                                <label class="custom-control-label" for="customRadio15v">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio16v" name="verif_recla"
+                                                                                @php  
+                                                                                    if ($user->verif_recla === 'non') {
+                                                                                        echo 'checked';
+                                                                                    }
+                                                                                @endphp
+                                                                                 class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio16v">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Réclamations non accéptées</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio15vn" name="recla_non_a"
+                                                                                @php  
+                                                                                    if ($user->recla_non_a === 'oui') {
+                                                                                        echo 'checked';
+                                                                                    }
+                                                                                @endphp
+                                                                                class="custom-control-input" value="oui">
+                                                                                <label class="custom-control-label" for="customRadio15vn">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio16vn" name="recla_non_a"
+                                                                                @php  
+                                                                                    if ($user->recla_non_a === 'non') {
+                                                                                        echo 'checked';
+                                                                                    }
+                                                                                @endphp
+                                                                                 class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio16vn">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Suivi des Réclamations</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio15" name="list_recla"
                                                                                 @php  
                                                                                     if ($user->list_recla === 'oui') {
                                                                                         echo 'checked';
@@ -412,7 +482,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio16" name="liste_recla"
+                                                                                <input type="radio" id="customRadio16" name="list_recla"
                                                                                 @php  
                                                                                     if ($user->list_recla === 'non') {
                                                                                         echo 'checked';
@@ -426,6 +496,13 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="Cause">
+                                                                    LISTE
+                                                                </label>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-lg-3">
                                                             <div class="form-group align-items-center justify-content-center">
                                                                 <span class="preview-title overline-title">Liste des Causes</span>
@@ -433,7 +510,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio0" name="liste_cause"
+                                                                                <input type="radio" id="customRadio0" name="list_cause"
                                                                                 @php  
                                                                                     if ($user->list_cause === 'oui') {
                                                                                         echo 'checked';
@@ -447,7 +524,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio00" name="liste_cause"
+                                                                                <input type="radio" id="customRadio00" name="list_cause"
                                                                                 @php  
                                                                                     if ($user->list_cause === 'non') {
                                                                                         echo 'checked';
@@ -455,6 +532,41 @@
                                                                                 @endphp
                                                                                  class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio00">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Liste du résumé des réclamations</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio0r" name="list_r_r"
+                                                                                @php  
+                                                                                    if ($user->list_r_r === 'oui') {
+                                                                                        echo 'checked';
+                                                                                    }
+                                                                                @endphp
+                                                                                class="custom-control-input" value="oui">
+                                                                                <label class="custom-control-label" for="customRadio0r">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio00r" name="list_r_r"
+                                                                                @php  
+                                                                                    if ($user->list_r_r === 'non') {
+                                                                                        echo 'checked';
+                                                                                    }
+                                                                                @endphp
+                                                                                 class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio00r">Non</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -470,14 +582,14 @@
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <div class="form-group align-items-center justify-content-center">
-                                                                <span class="preview-title overline-title">Suivis des actions</span>
+                                                                <span class="preview-title overline-title">Contrôle des actions</span>
                                                                 <div class="row gy-4">
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio17" name="suivi"
+                                                                                <input type="radio" id="customRadio17" name="controle_action"
                                                                                 @php  
-                                                                                    if ($user->suivi_act === 'oui') {
+                                                                                    if ($user->controle_action === 'oui') {
                                                                                         echo 'checked';
                                                                                     }
                                                                                 @endphp
@@ -489,9 +601,9 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio18" name="suivi"
+                                                                                <input type="radio" id="customRadio18" name="controle_action"
                                                                                 @php  
-                                                                                    if ($user->suivi_act === 'non') {
+                                                                                    if ($user->controle_action === 'non') {
                                                                                         echo 'checked';
                                                                                     }
                                                                                 @endphp
@@ -505,49 +617,14 @@
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <div class="form-group align-items-center justify-content-center">
-                                                                <span class="preview-title overline-title">Actions éffectuées</span>
-                                                                <div class="row gy-4">
-                                                                    <div class="col-md-3 col-sm-6">
-                                                                        <div class="preview-block">
-                                                                            <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio19" name="action_e"
-                                                                                @php  
-                                                                                    if ($user->act_eff === 'oui') {
-                                                                                        echo 'checked';
-                                                                                    }
-                                                                                @endphp
-                                                                                 class="custom-control-input" value="oui">
-                                                                                <label class="custom-control-label" for="customRadio19">Oui</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-3 col-sm-6">
-                                                                        <div class="preview-block">
-                                                                            <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio20" name="action_e"
-                                                                                @php  
-                                                                                    if ($user->act_eff === 'non') {
-                                                                                        echo 'checked';
-                                                                                    }
-                                                                                @endphp
-                                                                                 class="custom-control-input" value="non">
-                                                                                <label class="custom-control-label" for="customRadio20">Non</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group align-items-center justify-content-center">
                                                                 <span class="preview-title overline-title">Liste des Actions</span>
                                                                 <div class="row gy-4">
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio21" name="liste_action"
+                                                                                <input type="radio" id="customRadio21" name="list_action"
                                                                                 @php  
-                                                                                    if ($user->list_act === 'oui') {
+                                                                                    if ($user->list_action === 'oui') {
                                                                                         echo 'checked';
                                                                                     }
                                                                                 @endphp
@@ -559,9 +636,9 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio22" name="liste_action"
+                                                                                <input type="radio" id="customRadio22" name="list_action"
                                                                                 @php  
-                                                                                    if ($user->list_act === 'non') {
+                                                                                    if ($user->list_action === 'non') {
                                                                                         echo 'checked';
                                                                                     }
                                                                                 @endphp
@@ -604,7 +681,5 @@
             </div>
         </div>
     </div>
-
-
 
 @endsection

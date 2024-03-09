@@ -52,16 +52,8 @@
                                                         <td>{{ $key+1 }}</td>
                                                         <td>{{ $am->lieu }}</td>
                                                         <td>{{ $am->detecteur }}</td>
-                                                        <td>
-                                                            {{ 
-                                                                \Carbon\Carbon::parse($am->date_fiche)->format('d/m/Y')
-                                                            }}
-                                                        </td>
-
-                                                        <td>
-                                                            {{ \Carbon\Carbon::parse($am->date_fiche)->addDays($am->nbre_traitement)->format('d/m/Y') }}
-                                                        </td>
-
+                                                        <td>{{ \Carbon\Carbon::parse($am->date_fiche)->translatedFormat('j F Y ') }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($am->date_limite)->translatedFormat('j F Y ') }}</td>
                                                         <td>
                                                             <ul class="nk-tb-actions gx-1">
                                                                 <li>

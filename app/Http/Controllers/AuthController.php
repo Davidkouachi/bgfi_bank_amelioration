@@ -89,20 +89,27 @@ class AuthController extends Controller
             if ($user) {
 
                 $auto = new Autorisation();
-                $auto->new_user = $request->nouveau_user;
-                $auto->list_user = $request->liste_user;
-                $auto->new_poste = $request->nouveau_poste;
-                $auto->list_poste = $request->liste_poste;
-                $auto->historiq = $request->historique;
-                $auto->stat = $request->statistique;
-                $auto->new_proces = $request->nouveau_proces;
-                $auto->list_proces = $request->liste_proces;
-                $auto->new_recla = $request->nouvelle_recla;
-                $auto->list_recla = $request->liste_recla;
-                $auto->list_cause = $request->liste_cause;
-                $auto->suivi_act = $request->suivi;
-                $auto->act_eff = $request->action_e;
-                $auto->list_act = $request->liste_action;
+                $auto->new_user = $request->new_user;
+                $auto->list_user = $request->list_user;
+                $auto->new_poste = $request->new_poste;
+                $auto->list_poste = $request->list_poste;
+                $auto->historiq = $request->historiq;
+                $auto->stat = $request->stat;
+
+                $auto->new_proces = $request->new_proces;
+                $auto->list_proces = $request->list_proces;
+
+                $auto->new_recla = $request->new_recla;
+                $auto->verif_recla = $request->verif_recla;
+                $auto->recla_non_a = $request->recla_non_a;
+                $auto->list_recla = $request->list_recla;
+
+                $auto->list_cause = $request->list_cause;
+                $auto->list_r_r = $request->list_r_r;
+
+                $auto->controle_action = $request->controle_action;
+                $auto->list_action = $request->list_action;
+
                 $auto->user_id = $user->id;
                 $auto->save();
 
@@ -162,18 +169,19 @@ class AuthController extends Controller
             $poste_id = Auth::user()->poste_id;
             $user_id = Auth::user()->id;
 
-            $auto = Autorisation::where('user_id', $user_id)->first();
-            if ($auto) {
-                session(['user_auto' => $auto]);
-            }
-
             $poste = Poste::find($poste_id);
+
             if ($poste) {
                 session(['user_poste' => $poste]);
 
                 if (session('user_poste')->nom === 'ESCALADEUR') {
                     return redirect()->intended(route('index_accueil_escaladeur'))->with('success', 'Connexion réussi.');
                 }
+            }
+
+            $auto = Autorisation::where('user_id', $user_id)->first();
+            if ($auto) {
+                session(['user_auto' => $auto]);
             }
 
             return redirect()->intended(route('index_accueil'))->with('success', 'Connexion réussi.');

@@ -46,6 +46,7 @@
                                                     <th>Email</th>
                                                     <th>Contact</th>
                                                     <th>Poste</th>
+                                                    <th>Date de création</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -58,6 +59,7 @@
                                                         <td>{{ $user->email }}</td>
                                                         <td>{{ $user->tel }}</td>
                                                         <td>{{ $user->poste }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($user->created_at)->translatedFormat('j F Y '.' à '.' h:i:s') }}</td>
                                                         <td>
                                                         	<div class="d-flex">
 															    <form method="post" action="{{ route('index_user_modif') }}">
@@ -73,16 +75,6 @@
 															        </button>
 															    </form>
 															</div>
-                                                            <!--<a data-bs-toggle="modal"
-                                                                data-bs-target="#modalConfirmelock"
-                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-danger">
-                                                                <em class="icon ni ni-lock"></em>
-                                                            </a>
-                                                            <a data-bs-toggle="modal"
-                                                                data-bs-target="#modalConfirmeunlock"
-                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-success">
-                                                                <em class="icon ni ni-unlock"></em>
-                                                            </a>-->
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -125,7 +117,7 @@
 		                                                        </div>
 		                                                    </div>
 		                                                </div>
-		                                                <div class="col-lg-12">
+		                                                <div class="col-lg-6">
 		                                                    <div class="form-group">
 		                                                        <label class="form-label" for="Cause">
 		                                                            Nom et Prénoms
@@ -135,7 +127,7 @@
 		                                                        </div>
 		                                                    </div>
 		                                                </div>
-		                                                <div class="col-lg-12">
+		                                                <div class="col-lg-6">
 		                                                    <div class="form-group">
 		                                                        <label class="form-label" for="corectif">
 		                                                            Email
@@ -359,6 +351,40 @@
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
+		                                                        	@if ($user->verif_recla === 'oui')
+		                                                        	<a class="btn btn-sm btn-success">
+		                                                                <em class="icon ni ni-check"></em>
+		                                                            </a>
+		                                                            @endif
+		                                                            @if ($user->verif_recla === 'non')
+		                                                            <a class="btn btn-sm btn-danger">
+		                                                                <em class="icon ni ni-cross"></em>
+		                                                            </a>
+		                                                            @endif
+		                                                            Validation des Réclamations
+		                                                        </span>
+		                                                    </div>
+		                                                </div>
+		                                                <div class="col-lg-5">
+		                                                    <div class="form-group align-items-center justify-content-center">
+		                                                        <span class="preview-title overline-title">
+		                                                        	@if ($user->recla_non_a === 'oui')
+		                                                        	<a class="btn btn-sm btn-success">
+		                                                                <em class="icon ni ni-check"></em>
+		                                                            </a>
+		                                                            @endif
+		                                                            @if ($user->recla_non_a === 'non')
+		                                                            <a class="btn btn-sm btn-danger">
+		                                                                <em class="icon ni ni-cross"></em>
+		                                                            </a>
+		                                                            @endif
+		                                                            Réclamation non acceptées
+		                                                        </span>
+		                                                    </div>
+		                                                </div>
+		                                                <div class="col-lg-5">
+		                                                    <div class="form-group align-items-center justify-content-center">
+		                                                        <span class="preview-title overline-title">
 		                                                        	@if ($user->list_recla === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
@@ -369,8 +395,15 @@
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
-		                                                            Liste des Réclamations
+		                                                            Suivis des Réclamations
 		                                                        </span>
+		                                                    </div>
+		                                                </div>
+		                                                <div class="col-lg-12">
+		                                                    <div class="form-group">
+		                                                        <label class="form-label" for="Cause">
+		                                                            LISTE
+		                                                        </label>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
@@ -390,6 +423,23 @@
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
+		                                                <div class="col-lg-5">
+		                                                    <div class="form-group align-items-center justify-content-center">
+		                                                        <span class="preview-title overline-title">
+		                                                        	@if ($user->list_r_r === 'oui')
+		                                                        	<a class="btn btn-sm btn-success">
+		                                                                <em class="icon ni ni-check"></em>
+		                                                            </a>
+		                                                            @endif
+		                                                            @if ($user->list_r_r === 'non')
+		                                                            <a class="btn btn-sm btn-danger">
+		                                                                <em class="icon ni ni-cross"></em>
+		                                                            </a>
+		                                                            @endif
+		                                                            Liste du résumé des réclamations
+		                                                        </span>
+		                                                    </div>
+		                                                </div>
 		                                                <div class="col-lg-12">
 		                                                    <div class="form-group">
 		                                                        <label class="form-label" for="Cause">
@@ -400,46 +450,29 @@
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	@if ($user->suivi_act === 'oui')
+		                                                        	@if ($user->controle_action === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
 		                                                            </a>
 		                                                            @endif
-		                                                            @if ($user->suivi_act === 'non')
+		                                                            @if ($user->controle_action === 'non')
 		                                                            <a class="btn btn-sm btn-danger">
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
 		                                                            @endif
-		                                                            Suivis des actions
+		                                                            Contrôle des actions
 		                                                        </span>
 		                                                    </div>
 		                                                </div>
 		                                                <div class="col-lg-5">
 		                                                    <div class="form-group align-items-center justify-content-center">
 		                                                        <span class="preview-title overline-title">
-		                                                        	@if ($user->act_eff === 'oui')
+		                                                        	@if ($user->list_action === 'oui')
 		                                                        	<a class="btn btn-sm btn-success">
 		                                                                <em class="icon ni ni-check"></em>
 		                                                            </a>
 		                                                            @endif
-		                                                            @if ($user->act_eff === 'non')
-		                                                            <a class="btn btn-sm btn-danger">
-		                                                                <em class="icon ni ni-cross"></em>
-		                                                            </a>
-		                                                            @endif
-		                                                            Actions éffectuées
-		                                                        </span>
-		                                                    </div>
-		                                                </div>
-		                                                <div class="col-lg-5">
-		                                                    <div class="form-group align-items-center justify-content-center">
-		                                                        <span class="preview-title overline-title">
-		                                                        	@if ($user->list_act === 'oui')
-		                                                        	<a class="btn btn-sm btn-success">
-		                                                                <em class="icon ni ni-check"></em>
-		                                                            </a>
-		                                                            @endif
-		                                                            @if ($user->list_act === 'non')
+		                                                            @if ($user->list_action === 'non')
 		                                                            <a class="btn btn-sm btn-danger">
 		                                                                <em class="icon ni ni-cross"></em>
 		                                                            </a>
@@ -461,65 +494,5 @@
 		    </div>
 		</div>
 	@endforeach
-
-        <div class="modal fade" tabindex="-1" id="modalConfirmelock" aria-modal="true" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <a href="#" class="close" data-bs-dismiss="modal">
-                        <em class="icon ni ni-cross"></em>
-                    </a>
-                    <div class="modal-body modal-body-lg text-center">
-                        <div class="nk-modal">
-                            <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-lock bg-danger"></em>
-                            <h4 class="nk-modal-title">Confirmation</h4>
-                            <div class="nk-modal-text">
-                                <div class="caption-text">
-                                    <span>Voulez-vous vraiment bloquer ce compte ?</span>
-                                </div>
-                            </div>
-                            <div class="nk-modal-action">
-                                <a href="/suppr_processus/" class="btn btn-lg btn-mw btn-success me-2">
-                                    oui
-                                </a>
-                                <a href="#" class="btn btn-lg btn-mw btn-danger"data-bs-dismiss="modal">
-                                    non
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" tabindex="-1" id="modalConfirmeunlock" aria-modal="true" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <a href="#" class="close" data-bs-dismiss="modal">
-                        <em class="icon ni ni-cross"></em>
-                    </a>
-                    <div class="modal-body modal-body-lg text-center">
-                        <div class="nk-modal">
-                            <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-unlock bg-success"></em>
-                            <h4 class="nk-modal-title">Confirmation</h4>
-                            <div class="nk-modal-text">
-                                <div class="caption-text">
-                                    <span>Voulez-vous vraiment débloquer ce compte ?</span>
-                                </div>
-                            </div>
-                            <div class="nk-modal-action">
-                                <a href="/suppr_processus/" class="btn btn-lg btn-mw btn-success me-2">
-                                    oui
-                                </a>
-                                <a href="#" class="btn btn-lg btn-mw btn-danger"data-bs-dismiss="modal">
-                                    non
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
 
 @endsection

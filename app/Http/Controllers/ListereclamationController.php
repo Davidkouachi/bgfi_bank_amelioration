@@ -264,7 +264,10 @@ class ListereclamationController extends Controller
     public function index_non_accepte()
     {
 
-        $ams = Amelioration::where('statut', '=', 'non-valider')->get();
+        $ams = Amelioration::join('rejets', 'rejets.amelioration_id', 'ameliorations.id')
+                            ->where('ameliorations.statut', '=', 'non-valider')
+                            ->select('ameliorations.*', 'rejets.motif as motif')
+                            ->get();
 
         foreach ($ams as $am) {
             $am->nbre_action = Suivi_action::where('amelioration_id', '=', $am->id)->count();

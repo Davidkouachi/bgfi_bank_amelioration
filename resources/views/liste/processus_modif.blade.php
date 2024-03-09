@@ -44,7 +44,7 @@
                                     <div class="col-md-10 col-xxl-10 "  >
                                         <div class="card card-bordered ">
                                             <div class="card-inner">
-                                                <form id="processus-form" method="post" action="{{ route('processus_modif') }}" enctype="multipart/form-data">
+                                                <form id="form_update" method="post" action="{{ route('processus_modif') }}" enctype="multipart/form-data">
                                                     @csrf
                                                     <input name="id" value="{{ $processu->id }}" type="text" class="form-control" style="display: none;">
                                                     <div class="row g-4 mb-4" id="objectifs-container" >
@@ -108,19 +108,27 @@
                                                         @endforeach
                                                     </div>
                                                     <div class="row g-gs">
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-4">
                                                             <div class="form-group text-center">
-                                                                <a class="btn btn-lg btn-warning" id="ajouter-objectif">
+                                                                <a class="btn btn-lg btn-dim btn-primary" id="ajouter-objectif">
                                                                     <em class="ni ni-plus me-2"></em>
                                                                     <em>Objectif</em>
                                                                 </a>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-4">
                                                             <div class="form-group text-center">
-                                                                <button type="submit" class="btn btn-lg btn-primary">
+                                                                <a data-bs-toggle="modal" data-bs-target="#modalDetail" class="btn btn-lg btn-warning btn-dim">
+                                                                    <em class="ni ni-eye me-2"></em>
+                                                                    <em>Voir le fichier</em>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group text-center">
+                                                                <button type="submit" class="btn btn-lg btn-dim btn-success">
                                                                     <em class="ni ni-check me-2"></em>
-                                                                    <em>Mise àjour</em>
+                                                                    <em>Mise à jour</em>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -135,6 +143,36 @@
             </div>
         </div>
     </div>
+
+        <div class="modal fade" tabindex="-1" id="modalLoad" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body modal-body-lg text-center">
+                        <div class="nk-modal">
+                            <h5 class="nk-modal-title">Mise à jour en cours</h5>
+                            <div class="nk-modal-text">
+                                <div class="text-center">
+                                    <div class="spinner-border text-warning" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("registration").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+                $('.modal').modal('hide');
+                $(`#modalLoad`).modal('hide');
+                $(`#modalLoad`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
 
     <script>
         document.getElementById('ajouter-objectif').addEventListener('click', function(event) {
@@ -188,6 +226,55 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <div class="modal fade zoom" tabindex="-1" id="modalDetail">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="pdfPreviewmodal" style="height:700px;" data-simplebar>
+                <p class="text-center mt-2">Aucun fichier</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const pdfPreview = document.getElementById('pdfPreviewmodal');
+
+        var pdfFiles = @json($pdfFiles);
+
+        fileInput.addEventListener('change', function() {
+            // Initialiser la variable trouver
+            let trouver = 0;
+            var selectedFileName = this.value.split('\\').pop(); // Récupérer le nom du fichier sélectionné
+            // Parcourir la liste des fichiers
+            pdfFiles.forEach(function(pdfFile) {
+                if (selectedFileName === pdfFile.pdf_nom) {
+                    toastr.error("Ce fichier PDF existe déjà.");
+                    fileInput.value = ''; // Vider l'input
+                    trouver = 1;
+                    
+                    pdfPreview.innerHTML = '';
+                    fileSizeElement.textContent = '';
+                }
+            });
+            // Vérifier la valeur de trouver avant de procéder
+            if (trouver === 0) {
+                // Obtenez le fichier PDF sélectionné
+                const fichier = fileInput.files[0];
+                // Vérifiez si un fichier a été sélectionné
+                if (fichier) {
+                    // Créez un élément d'incorporation pour le fichier PDF
+                    const embedElement = document.createElement('embed');
+                    embedElement.src = URL.createObjectURL(fichier);
+                    embedElement.type = 'application/pdf';
+                    embedElement.style.width = '100%';
+                    embedElement.style.height = '100%';
+                    // Affichez l'élément d'incorporation dans la div de prévisualisation
+                    pdfPreview.innerHTML = '';
+                    pdfPreview.appendChild(embedElement);
+                }
+            }
         });
     </script>
 

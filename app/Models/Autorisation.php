@@ -11,20 +11,28 @@ class Autorisation extends Model
 
     protected $fillable = [
         'id',
+
         'new_user',
         'list_user',
         'new_poste',
         'list_poste',
         'historiq',
         'stat',
+
         'new_proces',
         'list_proces',
+
         'new_recla',
+        'verif_recla',
+        'recla_non_a',
         'list_recla',
+
         'list_cause',
-        'suivi_act',
-        'act_eff',
-        'list_act',
+        'list_r_r',
+
+        'controle_action',
+        'list_action',
+
         'user_id',
     ];
 

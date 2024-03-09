@@ -90,7 +90,9 @@ class ListeprocessusController extends Controller
             }
         }
 
-        return view('liste.processus_modif', ['processu' => $processu, 'objectifData' => $objectifData]);
+        $pdfFiles = Pdf_file::all();
+
+        return view('liste.processus_modif', ['processu' => $processu, 'objectifData' => $objectifData, 'pdfFiles' => $pdfFiles]);
     }
 
     public function processus_modif(Request $request)
@@ -113,7 +115,7 @@ class ListeprocessusController extends Controller
             $pdfPathname = $request->file('pdfFile')->storeAs('public/pdf', $originalFileName);
 
             // Enregistrez le fichier PDF dans la base de données
-            $pdfFile = Pdf_file_processus::where('processus_id', $request->id)->first();
+            $pdfFile = Pdf_file::where('processus_id', $request->id)->first();
 
             if($pdfFile){
 
@@ -123,7 +125,7 @@ class ListeprocessusController extends Controller
                 $pdfFile->update();
             }else {
 
-                $pdfFile = new Pdf_file_processus();
+                $pdfFile = new Pdf_file();
                 $pdfFile->pdf_nom = $originalFileName;
                 $pdfFile->pdf_chemin = $pdfPathname;
                 $pdfFile->processus_id = $processus->id;

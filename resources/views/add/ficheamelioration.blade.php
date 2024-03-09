@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                    <form class="nk-block" method="post" action="{{ route('index_add') }}">
+                    <form class="nk-block" id="form_insert" method="post" action="{{ route('index_add') }}">
                         @csrf
                         <div class="row g-gs">
                             <div class="col-lg-6 col-xxl-6" >

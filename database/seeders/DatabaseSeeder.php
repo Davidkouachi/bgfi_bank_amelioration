@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PosteSeeder::class);
 
         // Insérer des utilisateurs avec un ID de poste spécifique
-        $poste1 = Poste::find('1');
+        $poste1 = Poste::where('nom', '=', 'ADMINISTRATEUR')->first();
 
         $user1 = User::create([
             'name' => 'David Kouachi',
@@ -38,14 +38,21 @@ class DatabaseSeeder extends Seeder
             'list_poste' => 'oui',
             'historiq' => 'oui',
             'stat' => 'oui',
+
             'new_proces' => 'oui',
             'list_proces' => 'oui',
+
             'new_recla' => 'oui',
+            'verif_recla' => 'oui',
+            'recla_non_a' => 'oui',
             'list_recla' => 'oui',
+
             'list_cause' => 'oui',
-            'suivi_act' => 'oui',
-            'act_eff' => 'oui',
-            'list_act' => 'oui',
+            'list_r_r' => 'oui',
+
+            'controle_action' => 'oui',
+            'list_action' => 'oui',
+
             'user_id' => $user1->id,
         ]);
 
@@ -54,7 +61,7 @@ class DatabaseSeeder extends Seeder
 
 
         // Insérer des utilisateurs avec un ID de poste spécifique
-        $poste2 = Poste::find('2');
+        $poste2 = Poste::where('nom', '=', 'ESCALADEUR')->first();
 
         $user2 = User::create([
             'name' => 'Chris Emmanuel',
@@ -65,24 +72,6 @@ class DatabaseSeeder extends Seeder
             'poste_id' => $poste2->id,
             'suivi_active' => 'non',
             'fa' => 'non',
-        ]);
-
-        $auto2 = Autorisation::create([
-            'new_user' => 'oui',
-            'list_user' => 'oui',
-            'new_poste' => 'oui',
-            'list_poste' => 'oui',
-            'historiq' => 'oui',
-            'stat' => 'oui',
-            'new_proces' => 'oui',
-            'list_proces' => 'oui',
-            'new_recla' => 'oui',
-            'list_recla' => 'oui',
-            'list_cause' => 'oui',
-            'suivi_act' => 'oui',
-            'act_eff' => 'oui',
-            'list_act' => 'oui',
-            'user_id' => $user2->id,
         ]);
 
     }

@@ -183,6 +183,7 @@
                                             </a>
                                         </li>
                                         @endif
+                                        @if (session('user_auto')->verif_recla === 'oui')
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_validation_recla') }}">
                                                 <em class="ni ni-file-docs me-1"></em>
@@ -191,6 +192,8 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        @endif
+                                        @if (session('user_auto')->recla_non_a === 'oui')
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_non_accepte') }}">
                                                 <em class="ni ni-row-view me-1"></em>
@@ -199,6 +202,7 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        @endif
                                         @if (session('user_auto')->list_recla === 'oui')
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_listereclamation') }}">
@@ -231,6 +235,7 @@
                                             </a>
                                         </li>
                                         @endif
+                                        @if (session('user_auto')->list_r_r === 'oui')
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_listerecla') }}">
                                                 <em class="ni ni-list-index me-1"></em>
@@ -239,10 +244,11 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </li>
                                 @endif
-                                @if (session('user_auto')->suivi_act === 'oui' || session('user_auto')->act_eff === 'oui' || session('user_auto')->list_act === 'oui')
+                                @if (session('user_auto')->controle_action === 'oui' || session('user_auto')->list_action === 'oui')
                                 <li class="nk-menu-item has-sub">
                                     <a class="nk-menu-toggle btn " >
                                         <em class="ni ni-box-view-fill me-2"></em>
@@ -251,7 +257,7 @@
                                         </span>
                                     </a>
                                     <ul class="nk-menu-sub">
-                                        @if (session('user_auto')->suivi_act === 'oui')
+                                        @if (session('user_auto')->controle_action === 'oui')
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_suiviaction') }}">
                                                 <em class="icon ni ni-view-list-sq me-1"></em>
@@ -261,17 +267,7 @@
                                             </a>
                                         </li>
                                         @endif
-                                        <!--@if (session('user_auto')->act_eff === 'oui')
-                                        <li class="nk-menu-item">
-                                            <a class="nk-menu-link" href="{{ route('index_listeactioneffectuer') }}">
-                                                <em class="icon ni ni-view-list-sq me-1"></em>
-                                                <span class="nk-menu-text">
-                                                    Actions éffectuées
-                                                </span>
-                                            </a>
-                                        </li>
-                                        @endif-->
-                                        @if (session('user_auto')->list_act === 'oui')
+                                        @if (session('user_auto')->list_action === 'oui')
                                         <li class="nk-menu-item">
                                             <a class="nk-menu-link" href="{{ route('index_listeaction') }}">
                                                 <em class="ni ni-list-index me-1"></em>
@@ -524,7 +520,7 @@
                     <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
                 </div>
                 <div class="modal-body">
-                    <form id="processus-form" method="post" action="{{ route('index_add_poste_traitement') }}">
+                    <form id="form_insert" method="post" action="{{ route('index_add_poste_traitement') }}">
                         @csrf
                         <div class="row g-4 mb-4" id="poste-container">
                             <div class="col-lg-12">
@@ -594,125 +590,141 @@
         });
     </script>
 
-    <!--<script>
-        let idleTimer;
-        const idleTime = 1200000;
+        <div class="modal fade" tabindex="-1" id="modalLoad" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body modal-body-lg text-center">
+                        <div class="nk-modal">
+                            <h5 class="nk-modal-title">Vérification des données en cours</h5>
+                            <div class="nk-modal-text">
+                                <div class="text-center">
+                                    <div class="spinner-border text-warning" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        function resetIdleTimer() {
-            clearTimeout(idleTimer);
-            idleTimer = setTimeout(showLogoutModal, idleTime);
-        }
+        <div class="modal fade" tabindex="-1" id="modalLoadm" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body modal-body-lg text-center">
+                        <div class="nk-modal">
+                            <h5 class="nk-modal-title">Mise à jour en cours</h5>
+                            <div class="nk-modal-text">
+                                <div class="text-center">
+                                    <div class="spinner-border text-warning" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        function showLogoutModal() {
-            $('#modalAlert2').modal('show');
-        }
+        <div class="modal fade" tabindex="-1" id="modalLoadv" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body modal-body-lg text-center">
+                        <div class="nk-modal">
+                            <h5 class="nk-modal-title">Validation en cours</h5>
+                            <div class="nk-modal-text">
+                                <div class="text-center">
+                                    <div class="spinner-border text-warning" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        document.addEventListener('mousemove', resetIdleTimer);
-        document.addEventListener('keypress', resetIdleTimer);
-    </script>
-    <script>
-        document.getElementById('logoutBtn').addEventListener('click', function(event) {
-            event.preventDefault(); // Pour éviter le comportement par défaut du lien
-            window.location.reload();
-        });
-    </script>-->
+        <div class="modal fade" tabindex="-1" id="modalLoadr" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body modal-body-lg text-center">
+                        <div class="nk-modal">
+                            <h5 class="nk-modal-title">Rejet en cours</h5>
+                            <div class="nk-modal-text">
+                                <div class="text-center">
+                                    <div class="spinner-border text-warning" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="modal fade" tabindex="-1" id="modalLoads" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body modal-body-lg text-center">
+                        <div class="nk-modal">
+                            <h5 class="nk-modal-title">Suppression en cours</h5>
+                            <div class="nk-modal-text">
+                                <div class="text-center">
+                                    <div class="spinner-border text-warning" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <script>
+            document.getElementById("form_insert").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
 
-    <!--<script>
-        // Check if the browser supports the Notification API
-        if ("Notification" in window) {
-            // Request permission to show notifications
-            Notification.requestPermission().then(function (permission) {
-                if (permission === "granted") {
-                    // Check if the notification has already been shown
-                    if (!localStorage.getItem('notificationShown')) {
-                        // Permission has been granted, create a notification
-                        var notification = new Notification("Notification!", {
-                            icon: "BGFI_logo.png", // Replace with the path to your icon
-                            body: "Nouvelle action corrective.",
-                        });
+                $('.modal').modal('hide');
+                $(`#modalLoad`).modal('hide');
+                $(`#modalLoad`).modal('show');
 
-                        // Set a flag in local storage to indicate that the notification has been shown
-                        //localStorage.setItem('notificationShown', 'true');
-                    }
-                } else {
-                    console.warn("Notification permission denied");
-                }
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
             });
-        } else {
-            console.warn("Notifications not supported in this browser");
-        }
-    </script>-->
+            document.getElementById("form_update").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
 
-    <!--<script>
-        // Fonction pour interroger le contrôleur Laravel
-        function checkForCorrectiveAction() {
-            $.ajax({
-                url: '/check_actions',
-                method: 'GET',
-                success: function (data) {
-                    data.preventDefault();
-                    if (data.msg === 'oui') {
-                        // Afficher la notification uniquement s'il y a une action corrective et pas déjà affichée
-                        //if (!sessionStorage.getItem('correctiveActionShown')) {
-                            Swal.fire({
-                                title: "Information!",
-                                text: "Nouvelle(s) action(s) corrective a valider",
-                                icon: "info",
-                                showCancelButton: false,
-                                confirmButtonColor: "#3085d6",
-                                confirmButtonText: "OK",
-                                allowOutsideClick: false // Empêche la fermeture en cliquant à l'extérieur
-                            }).then((result) => {
-                                // Si l'utilisateur clique sur le bouton "OK"
-                                if (result.isConfirmed) {
-                                    // Requête AJAX pour effectuer la modification dans le contrôleur Laravel
-                                    $.ajax({
-                                        url: '/update_action_type',
-                                        method: 'GET',
-                                        success: function () {
-                                            // Recharger la page après la mise à jour
-                                            location.reload();
-                                        }
-                                    });
-                                }
-                            });
+                $('.modal').modal('hide');
+                $(`#modalLoadm`).modal('hide');
+                $(`#modalLoadm`).modal('show');
 
-
-                            // Enregistrer dans sessionStorage pour ne pas répéter le message
-                            //sessionStorage.setItem('correctiveActionShown', 'true');
-                        //}
-                    } //else {
-                        // S'il n'y a pas d'action corrective, effacer le sessionStorage
-                        //sessionStorage.removeItem('correctiveActionShown');
-                    //}
-                }
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
             });
-        }
+            document.getElementById("form_val").addEventListener("click", function(event) {
 
-        // Appeler la fonction toutes les 5 secondes
-        setInterval(checkForCorrectiveAction, 5000);
-    </script>-->
+                $('.modal').modal('hide');
+                $(`#modalLoadv`).modal('hide');
+                $(`#modalLoadv`).modal('show');
 
-    <!--<script>
-        window.Echo.channel('notif')
-            .listen('.App\\Events\\ActionUpdated', (e) => {
-                Swal.fire({
-                    title: "Information!",
-                    text: "Nouvelle(s) action(s) corrective a valider",
-                    icon: "info",
-                    showCancelButton: false,
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "OK",
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
-                });
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
             });
-    </script>-->
+            document.getElementById("form_rejet").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+                
+                $('.modal').modal('hide');
+                $(`#modalLoadr`).modal('hide');
+                $(`#modalLoadr`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+            document.getElementById("form_suppr").addEventListener("click", function(event) {
+
+                $('.modal').modal('hide');
+                $(`#modalLoads`).modal('hide');
+                $(`#modalLoads`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
 
     @if (session('success'))
         <script>
@@ -752,6 +764,5 @@
     @endif
 
 </body>
-<!-- Mirrored from dashlite.net/demo8/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 14 Mar 2023 15:17:24 GMT -->
 
 </html>

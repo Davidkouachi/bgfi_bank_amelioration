@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                     <div class="nk-block">
-                        <form class="row g-gs" method="post" action="{{ route('add_user') }}">
+                        <form class="row g-gs" id="form_insert" method="post" action="{{ route('add_user') }}">
                             @csrf
                             <div class="col-lg-8" style="margin: 20px auto;">
                                 <div class="row g-gs" >
@@ -49,7 +49,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="Cause">
                                                                     Nom et Prénoms
@@ -59,7 +59,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="corectif">
                                                                     Email
@@ -69,7 +69,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-4">
                                                             <div class="form-group">
                                                                 <div class="form-label-group">
                                                                     <label class="form-label" for="password">
@@ -82,11 +82,11 @@
                                                                         <em class="passcode-icon icon-hide icon ni ni-eye-off">
                                                                         </em>
                                                                     </a>
-                                                                    <input name="mdp" autocomplete="new-password" type="password" class="form-control form-control-lg" required="" id="password" value="12345">
+                                                                    <input name="mdp" autocomplete="new-password" type="password" class="form-control" required="" id="password" value="12345">
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-4">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="preventif">
                                                                     Contact
@@ -108,7 +108,7 @@
                                                                 </script>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-4">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="email-address-1">
                                                                     Poste
@@ -156,7 +156,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio1" name="nouveau_user" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio1" name="new_user" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio1">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -164,7 +164,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio2" name="nouveau_user" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio2" name="new_user" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio2">Non</label>
                                                                             </div>
                                                                         </div>
@@ -179,7 +179,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio1l" name="liste_user" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio1l" name="list_user" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio1l">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -187,7 +187,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio2l" name="liste_user" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio2l" name="list_user" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio2l">Non</label>
                                                                             </div>
                                                                         </div>
@@ -202,7 +202,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio3" name="nouveau_poste" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio3" name="new_poste" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio3">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -210,7 +210,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio4" name="nouveau_poste" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio4" name="new_poste" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio4">Non</label>
                                                                             </div>
                                                                         </div>
@@ -225,7 +225,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio3l" name="liste_poste" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio3l" name="list_poste" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio3l">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -233,7 +233,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio4l" name="liste_poste" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio4l" name="list_poste" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio4l">Non</label>
                                                                             </div>
                                                                         </div>
@@ -248,7 +248,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio5" name="historique" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio5" name="historiq" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio5">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -256,7 +256,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio6" name="historique" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio6" name="historiq" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio6">Non</label>
                                                                             </div>
                                                                         </div>
@@ -271,7 +271,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio7" name="statistique" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio7" name="stat" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio7">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -279,7 +279,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio8" name="statistique" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio8" name="stat" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio8">Non</label>
                                                                             </div>
                                                                         </div>
@@ -301,7 +301,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio9" name="nouveau_proces" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio9" name="new_proces" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio9">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -309,7 +309,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio10" name="nouveau_proces" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio10" name="new_proces" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio10">Non</label>
                                                                             </div>
                                                                         </div>
@@ -324,7 +324,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio11" name="liste_proces" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio11" name="list_proces" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio11">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -332,7 +332,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio12" name="liste_proces" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio12" name="list_proces" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio12">Non</label>
                                                                             </div>
                                                                         </div>
@@ -354,7 +354,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio13" name="nouvelle_recla" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio13" name="new_recla" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio13">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -362,7 +362,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio14" name="nouvelle_recla" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio14" name="new_recla" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio14">Non</label>
                                                                             </div>
                                                                         </div>
@@ -372,12 +372,58 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-4">
                                                             <div class="form-group align-items-center justify-content-center">
-                                                                <span class="preview-title overline-title">Liste des Réclamations</span>
+                                                                <span class="preview-title overline-title">Vérification des  réclamations</span>
                                                                 <div class="row gy-4">
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio15" name="liste_recla" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio130" name="verif_recla" class="custom-control-input" value="oui" >
+                                                                                <label class="custom-control-label" for="customRadio130">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio140" name="verif_recla" checked class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio140">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-lg-4">
+                                                            <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Réclamations non acceptées</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio1301" name="recla_non_a" class="custom-control-input" value="oui" >
+                                                                                <label class="custom-control-label" for="customRadio1301">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio1401" name="recla_non_a" checked class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio1401">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-lg-4">
+                                                            <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Suivi des Réclamations</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio15" name="list_recla" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio15">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -385,12 +431,19 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio16" name="liste_recla" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio16" name="list_recla" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio16">Non</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="Cause">
+                                                                    LISTES
+                                                                </label>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-4">
@@ -400,7 +453,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio0" name="liste_cause" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio0" name="list_cause" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio0">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -408,8 +461,31 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio00" name="liste_cause" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio00" name="list_cause" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio00">Non</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-lg-4">
+                                                            <div class="form-group align-items-center justify-content-center">
+                                                                <span class="preview-title overline-title">Liste du résumé des réclamations</span>
+                                                                <div class="row gy-4">
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio0R" name="list_r_r" class="custom-control-input" value="oui" >
+                                                                                <label class="custom-control-label" for="customRadio0R">Oui</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-6">
+                                                                        <div class="preview-block">
+                                                                            <div class="custom-control custom-radio">
+                                                                                <input type="radio" id="customRadio00R" name="list_r_r" checked class="custom-control-input" value="non">
+                                                                                <label class="custom-control-label" for="customRadio00R">Non</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -425,12 +501,12 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-4">
                                                             <div class="form-group align-items-center justify-content-center">
-                                                                <span class="preview-title overline-title">Suivis des actions</span>
+                                                                <span class="preview-title overline-title">Contrôle des actions</span>
                                                                 <div class="row gy-4">
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio17" name="suivi" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio17" name="controle_action" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio17">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -438,31 +514,8 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio18" name="suivi" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio18" name="controle_action" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio18">Non</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 col-lg-4">
-                                                            <div class="form-group align-items-center justify-content-center">
-                                                                <span class="preview-title overline-title">Actions éffectuées</span>
-                                                                <div class="row gy-4">
-                                                                    <div class="col-md-3 col-sm-6">
-                                                                        <div class="preview-block">
-                                                                            <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio19" name="action_e" class="custom-control-input" value="oui" >
-                                                                                <label class="custom-control-label" for="customRadio19">Oui</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-3 col-sm-6">
-                                                                        <div class="preview-block">
-                                                                            <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio20" name="action_e" checked class="custom-control-input" value="non">
-                                                                                <label class="custom-control-label" for="customRadio20">Non</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -476,7 +529,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio21" name="liste_action" class="custom-control-input" value="oui" >
+                                                                                <input type="radio" id="customRadio21" name="list_action" class="custom-control-input" value="oui" >
                                                                                 <label class="custom-control-label" for="customRadio21">Oui</label>
                                                                             </div>
                                                                         </div>
@@ -484,7 +537,7 @@
                                                                     <div class="col-md-3 col-sm-6">
                                                                         <div class="preview-block">
                                                                             <div class="custom-control custom-radio">
-                                                                                <input type="radio" id="customRadio22" name="liste_action" checked class="custom-control-input" value="non">
+                                                                                <input type="radio" id="customRadio22" name="list_action" checked class="custom-control-input" value="non">
                                                                                 <label class="custom-control-label" for="customRadio22">Non</label>
                                                                             </div>
                                                                         </div>
@@ -524,93 +577,6 @@
     </div>
 
     <script>
-        document.getElementById("ajouterGroupe").addEventListener("click", function(event) {
-            event.preventDefault();
-            const groupe = document.createElement("div");
-            groupe.className = "card card-bordered";
-            groupe.innerHTML = `
-                                    <div class="card-inner">
-                                            <div class="row g-4">
-                                                <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="Cause">
-                                                                    Matricule
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input id="matricule" autocomplete="off" required name="matricule[]" type="text" class="form-control" id="Cause" readonly>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="Cause">
-                                                                    Nom et Prénoms
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input id="nom" autocomplete="off" required name="np[]" type="text" class="form-control" id="Cause">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="corectif">
-                                                                    Email
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input autocomplete="off" required name="email[]" type="email" class="form-control" id="corectif">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="preventif">
-                                                                    Contact
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input autocomplete="off" required name="tel[]" type="tel" class="form-control" id="preventif">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6å">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="email-address-1">
-                                                                    Poste
-                                                                </label>
-                                                                <select required name="poste[]" class="form-select ">
-                                                                    <option value="">
-                                                                        Choisir
-                                                                    </option>
-                                                                    <option value="responsable">
-                                                                        Responsable
-                                                                    </option>
-                                                                    <option value="valideur">
-                                                                        Validateur
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                <div class="col-12">
-                                                    <div class="form-group text-center">
-                                                        <a class="btn btn-lg btn-danger btn-dim supprimerGroupe">
-                                                            <em class="ni ni-trash me-2"></em>
-                                                            <em>Supprimer</em>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    </div>
-            `;
-
-
-            groupe.querySelector(".supprimerGroupe").addEventListener("click", function() {
-                groupe.remove();
-            });
-
-            document.getElementById("groupesContainer").appendChild(groupe);
-        });
-    </script>
-
-    <script>
         function generateMatricule(length) {
           const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
           let matricule = "";
@@ -632,7 +598,6 @@
           });
         });
     </script>
-
 
 
 @endsection
