@@ -25,46 +25,63 @@ class SuiviactionController extends Controller
 {
     public function index_suiviaction()
     {
-        
-        $ams = Amelioration::where('statut', '=', 'valider')->get();
+
+        $ams = Action::join('causes', 'actions.cause_id', 'causes.id')
+                    ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
+                    ->join('processuses', 'reclamations.processus_id', 'processuses.id')
+                    ->select('actions.id as id', 'actions.nom as action', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
+                    ->get();
 
         $actionsData = [];
 
         foreach ($ams as $am) {
+            $rech = Suivi_action::join('postes', 'suivi_actions.poste_id', 'postes.id')
+                            ->join('ameliorations', 'suivi_actions.amelioration_id', '=', 'ameliorations.id')
+                            ->join('actions', 'suivi_actions.action_id', '=', 'actions.id')
+                            ->where('ameliorations.statut', '=', 'valider')
+                            ->where('ameliorations.escaladeur', '=', 'non')
+                            ->where('suivi_actions.statut', '=', 'non-realiser')
+                            ->where('suivi_actions.action_id', $am->id)
+                            ->select('suivi_actions.*','postes.nom as poste', 'ameliorations.detecteur as detecteur', 'ameliorations.date_fiche as date_fiche', 'ameliorations.lieu as lieu', 'ameliorations.reclamations as reclamations', 'ameliorations.consequences as consequences', 'ameliorations.causes as causes', 'ameliorations.date_fiche as date_fiche', 'ameliorations.date_limite as date_limite', 'ameliorations.nbre_traitement as nbre_traitement', 'ameliorations.choix_select as choix_select')
+                            ->get();
 
-            $suivi = Suivi_action::join('postes', 'suivi_actions.poste_id', 'postes.id')
-                                    ->where('amelioration_id', '=', $am->id)
-                                    ->select('suivi_actions.*', 'postes.nom as poste')
-                                    ->where('suivi_actions.statut', '=', 'non-realiser')
-                                    ->get();
+            $am->nbre_am = count($rech);
+
             $actionsData[$am->id] = [];
-            foreach ($suivi as $suivis) {
 
-                    $action= null;
+            $maxDateLimite = null;
 
-                    $action = Action::join('causes', 'actions.cause_id', 'causes.id')
-                                    ->join('reclamations', 'causes.reclamation_id', 'reclamations.id')
-                                    ->join('processuses', 'reclamations.processus_id', 'processuses.id')
-                                    ->where('actions.id', '=', $suivis->action_id)
-                                    ->select('actions.nom as action', 'processuses.nom as processus', 'reclamations.nom as reclamation', 'causes.nom as cause')
-                                    ->first();
+            foreach($rech as $rec)
+            {
+                $actionsData[$am->id][] = [
+                    'lieu' => $rec->lieu,
+                    'date_fiche' => $rec->date_fiche,
+                    'date_limite' => $rec->date_limite,
+                    'nbre_traitement' => $rec->nbre_traitement,
+                    'detecteur' => $rec->detecteur,
+                    'reclamations' => $rec->reclamations,
+                    'consequences' => $rec->consequences,
+                    'causes' => $rec->causes,
+                    'choix_select' => $rec->choix_select,
+                ];
 
-                if ($action) {
-                    $actionsData[$am->id][] = [
-                        'id' => $suivis->id,
-                        'action' => $action->action,
-                        'responsable' => $suivis->poste,
-                        'delai' => $am->date_limite,
-                        'processus' => $action->processus,
-                        'reclamation' => $action->reclamation,
-                        'cause' => $action->cause,
-                    ];
-                }
-
+                // Parcourir les données de chaque AM
+                foreach ($actionsData[$am->id] as $detail) {
+                    // Convertir la date limite en objet DateTime pour la comparaison
+                    $dateLimite = Carbon::createFromFormat('Y-m-d', $detail['date_limite']);
+                    
+                    // Comparer la date limite actuelle avec la date limite maximale
+                    if ($maxDateLimite === null || $dateLimite < $maxDateLimite) {
+                        $maxDateLimite = $dateLimite;
+                    }
+                }               
             }
+
+            $am->delai = $maxDateLimite !== null ? $maxDateLimite->format('d-m-Y') : null;
+
         }
 
-        return view('traitement.suiviaction', ['ams' => $ams, 'actionsData' => $actionsData ]);
+        return view('traitement.suiviaction',  ['ams' => $ams, 'actionsData' => $actionsData]);
     }
 
     public function valider_recla($id)
@@ -185,10 +202,10 @@ class SuiviactionController extends Controller
 
     public function add_suivi_action(Request $request, $id)
     {
-        $suivi = Suivi_action::find($id);
+        $suivis = Suivi_action::where('action_id', $id)->get();
         
-        if ($suivi)
-        {
+        foreach ($suivis as $suivi) {
+            
             $suivi->efficacite = $request->input('efficacite');
             $suivi->commentaires = $request->input('commentaire');
             $suivi->date_action = $request->input('date_action');
@@ -210,19 +227,17 @@ class SuiviactionController extends Controller
                     $am->update();
                 }
 
-                $his = new Historique_action();
-                $his->nom_formulaire = 'Suivi des actions';
-                $his->nom_action = 'Suivi effectué';
-                $his->user_id = Auth::user()->id;
-                $his->save();
-
-                return back()->with('success', 'Suivi éffectué.');
             }
 
         }
 
-        return back()->with('error', 'Suivi non éffectuée.');
-    }
+        $his = new Historique_action();
+        $his->nom_formulaire = 'Contrôle des actions';
+        $his->nom_action = 'Suivi effectué';
+        $his->user_id = Auth::user()->id;
+        $his->save();
 
+        return back()->with('success', 'Suivi éffectué.');
+    } 
 
 }

@@ -599,5 +599,18 @@
         });
     </script>
 
+    <script>
+            document.getElementById("form_insert").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+                $('.modal').modal('hide');
+                $(`#modalLoadm`).modal('hide');
+                $(`#modalLoadm`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
+
 
 @endsection

@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                    <form class="nk-block" method="post" action="{{route('index_non_accepte_traitement')}}">
+                    <form class="nk-block" id="form_update" method="post" action="{{route('index_non_accepte_traitement')}}">
                         @csrf
                         <input style="display: none" name="amelioration_id" type="text" value="{{ $am->id }}">
                         <div class="row g-gs">
@@ -361,6 +361,18 @@
         </div>
     </div>
 
+        <script>
+            document.getElementById("form_update").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+                $('.modal').modal('hide');
+                $(`#modalLoad`).modal('hide');
+                $(`#modalLoad`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
 
     <script>
         $(document).ready(function() {

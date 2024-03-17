@@ -88,7 +88,7 @@
                         <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{{ route('index_modif_poste_traitement') }}">
+                        <form id="form_update" method="post" action="{{ route('index_modif_poste_traitement') }}">
                             @csrf
                             <div class="row g-4 mb-4" id="poste-container">
                                 <div class="col-lg-12">
@@ -119,6 +119,19 @@
             </div>
         </div>
     @endforeach
+
+        <script>
+            document.getElementById("form_update").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+                $('.modal').modal('hide');
+                $(`#modalLoadm`).modal('hide');
+                $(`#modalLoadm`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
 
 
 @endsection

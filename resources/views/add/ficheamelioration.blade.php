@@ -308,6 +308,19 @@
         </div>
     </div>
 
+        <script>
+            document.getElementById("form_insert").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+                $('.modal').modal('hide');
+                $(`#modalLoad`).modal('hide');
+                $(`#modalLoad`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
+
 
     <script>
         $(document).ready(function() {
@@ -792,7 +805,7 @@
                                                                         <div class="col-lg-12">
                                                                             <div class="form-group">
                                                                                 <label class="form-label" for="controle">
-                                                                                    rRésumé des réclamations
+                                                                                    Résumé des réclamations
                                                                                 </label>
                                                                                 <div class="form-control-wrap">
                                                                                     <input style="display:none;" name="reclamation_id[]" value="${action.reclamation_id}" type="text" class="form-control" >
@@ -869,7 +882,6 @@
                                     }
 
     </script>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

@@ -558,6 +558,19 @@
         </div>
     </div>
 
+        <script>
+            document.getElementById("form_insert").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+                $('.modal').modal('hide');
+                $(`#modalLoad`).modal('hide');
+                $(`#modalLoad`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
+
     <script>
         document.getElementById('ajouter-poste').addEventListener('click', function(event) {
             event.preventDefault();
@@ -674,57 +687,6 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            document.getElementById("form_insert").addEventListener("submit", function(event) {
-                event.preventDefault(); // Empêche la soumission par défaut du formulaire
-
-                $('.modal').modal('hide');
-                $(`#modalLoad`).modal('hide');
-                $(`#modalLoad`).modal('show');
-
-                // Si toutes les validations passent, soumettre le formulaire
-                this.submit();
-            });
-            document.getElementById("form_update").addEventListener("submit", function(event) {
-                event.preventDefault(); // Empêche la soumission par défaut du formulaire
-
-                $('.modal').modal('hide');
-                $(`#modalLoadm`).modal('hide');
-                $(`#modalLoadm`).modal('show');
-
-                // Si toutes les validations passent, soumettre le formulaire
-                this.submit();
-            });
-            document.getElementById("form_val").addEventListener("click", function(event) {
-
-                $('.modal').modal('hide');
-                $(`#modalLoadv`).modal('hide');
-                $(`#modalLoadv`).modal('show');
-
-                // Si toutes les validations passent, soumettre le formulaire
-                this.submit();
-            });
-            document.getElementById("form_rejet").addEventListener("submit", function(event) {
-                event.preventDefault(); // Empêche la soumission par défaut du formulaire
-                
-                $('.modal').modal('hide');
-                $(`#modalLoadr`).modal('hide');
-                $(`#modalLoadr`).modal('show');
-
-                // Si toutes les validations passent, soumettre le formulaire
-                this.submit();
-            });
-            document.getElementById("form_suppr").addEventListener("click", function(event) {
-
-                $('.modal').modal('hide');
-                $(`#modalLoads`).modal('hide');
-                $(`#modalLoads`).modal('show');
-
-                // Si toutes les validations passent, soumettre le formulaire
-                this.submit();
-            });
-        </script>
 
     @if (session('success'))
         <script>

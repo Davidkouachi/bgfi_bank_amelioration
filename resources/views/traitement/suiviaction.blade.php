@@ -1,4 +1,4 @@
-@extends('app')
+    @extends('app')
 
 @section('titre', 'Liste de contrôle des actions')
 
@@ -39,45 +39,38 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th></th>
-                                                    <th>Lieu</th>
-                                                    <th>Détecteur</th>
-                                                    <th>Date d'enregistrement</th>
-                                                    <th>Date Limite de traitement</th>
+                                                    <th>Action</th>
+                                                    <th>Réclamation</th>
+                                                    <th>Cause</th>
+                                                    <th>Processus</th>
+                                                    <th>Nombre de réclamations</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach($ams as $key => $am)
+                                                    @if($am->nbre_am > 0)
                                                     <tr class="text-center">
                                                         <td>{{ $key+1 }}</td>
-                                                        <td>{{ $am->lieu }}</td>
-                                                        <td>{{ $am->detecteur }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($am->date_fiche)->translatedFormat('j F Y ') }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($am->date_limite)->translatedFormat('j F Y ') }}</td>
+                                                        <td>{{ $am->action }}</td>
+                                                        <td>{{ $am->reclamation }}</td>
+                                                        <td>{{ $am->cause }}</td>
+                                                        <td>{{ $am->processus }}</td>
+                                                        <td>{{ $am->nbre_am }}</td>
                                                         <td>
-                                                            <ul class="nk-tb-actions gx-1">
-                                                                <li>
-                                                                    <div class="drodown">
-                                                                        <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                            <em class="icon ni ni-more-h"></em>
-                                                                        </a>
-                                                                        <div class="dropdown-menu dropdown-menu-end"data-popper-placement="bottom-end">
-                                                                            @foreach($actionsData[$am->id] as $key => $actions)
-                                                                            <ul class="link-list-opt no-bdr">
-                                                                                <li>
-                                                                                    <a data-bs-toggle="modal" data-bs-target="#modalDetail{{ $actions['id'] }}">
-                                                                                        <em class="icon ni ni-eye"></em>
-                                                                                        <span>Action {{ $key+1 }} </span>
-                                                                                    </a>
-                                                                                </li>
-                                                                            </ul>
-                                                                            @endforeach
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
+                                                            <a data-bs-toggle="modal"
+                                                                data-bs-target="#modalAm{{ $am->id }}"
+                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-info border border-1 border-white rounded">
+                                                                <em class="icon ni ni-notice"></em>
+                                                            </a>
+                                                            <a data-bs-toggle="modal"
+                                                                data-bs-target="#modalDetail{{ $am->id }}"
+                                                                href="#" class="btn btn-icon btn-white btn-dim btn-sm btn-warning border border-1 border-white rounded">
+                                                                <em class="icon ni ni-eye"></em>
+                                                            </a>
                                                         </td>
                                                     </tr>
+                                                    @endif
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -91,141 +84,227 @@
         </div>
     </div>
 
-    @foreach($ams as $am)
-        @foreach($actionsData[$am->id] as $key => $actions)
-            <div class="modal fade zoom" tabindex="-1" id="modalDetail{{ $actions['id'] }}">
-                <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Suivi</h5>
-                            <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <em class="icon ni ni-cross"></em>
-                            </a>
-                        </div>
-                        <div class="modal-body">
-                            <div class="nk-block">
-                                <form class="row g-gs" method="post" action="/Suivi_action/{{ $actions['id'] }}">
-                                    @csrf
-                                    <div class="col-lg-12 col-xxl-12" >
-                                        <div class="card">
-                                            <div class="card-inner">
-                                                    <div class="row g-4">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="Cause">
-                                                                    Processus
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value=" {{ $actions['processus'] }} " type="text" class="form-control" disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Reclamation
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value=" {{ $actions['reclamation'] }} " type="text" class="form-control" disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Cause
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value=" {{ $actions['cause'] }} " type="text" class="form-control" disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="controle">
-                                                                    Action
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value=" {{ $actions['action'] }}  " type="text" class="form-control" disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="corectif">
-                                                                    Délai
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ \Carbon\Carbon::parse($actions['delai'])->format('d/m/Y') }}" type="text" class="form-control" disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="Coût">
-                                                                    Responsable
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input value="{{ $actions['responsable'] }}" type="text" class="form-control" disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="email-address-1">
-                                                                    Efficacitée
-                                                                </label>
-                                                                <select required name="efficacite" class="form-select ">
-                                                                    <option value="">
-                                                                        Choisir
-                                                                    </option>
-                                                                    <option value="oui">
-                                                                        Oui
-                                                                    </option>
-                                                                    <option value="non">
-                                                                        Non
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="Coût">
-                                                                    Date d'action éffectuée
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <input name="date_action" type="date" class="form-control"  max="{{ \Carbon\Carbon::now()->toDateString() }}">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-8">
-                                                            <div class="form-group text-center">
-                                                                <label class="form-label" for="description">
-                                                                    Commentaire
-                                                                </label>
-                                                                <div class="form-control-wrap">
-                                                                    <textarea name="commentaire" class="form-control no-resize" id="default-textarea"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group text-center">
-                                                                <button type="submit" class="btn btn-lg btn-success btn-dim">
-                                                                    <em class="ni ni-check me-2 "></em>
-                                                                    <em >Enregistrer</em>
-                                                                </button>
-                                                            </div>
+    @foreach ($ams as $am)
+        <div class="modal fade zoom" tabindex="-1" id="modalAm{{ $am->id }}">
+            <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Fiche(s) de réclamation(s)</h5>
+                        <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em
+                                class="icon ni ni-cross"></em></a>
+                    </div>
+                    <div class="modal-body">
+                        <form class="nk-block">
+                            <div class="row g-gs">
+                                @foreach($actionsData[$am->id] as $key => $amDatas)
+                                <div class="col-md-12 col-xxl-12">
+                                    <div class="card card-bordered">
+                                        <div class="card-inner">
+                                            <div class="row g-4">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="Cause">
+                                                            Date de reception
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ \Carbon\Carbon::parse($amDatas['date_fiche'])->translatedFormat('j F Y ') }}" readonly type="text" class="form-control" id="Cause">
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="Cause">
+                                                            Date Limite de traitement
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ \Carbon\Carbon::parse($amDatas['date_limite'])->translatedFormat('j F Y ') }}" readonly type="text" class="form-control" id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="Cause">
+                                                            Nombres de jours
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ $amDatas['nbre_traitement'] }}" readonly type="text" class="form-control" id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="Cause">
+                                                            Lieu
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ $amDatas['lieu'] }}" readonly type="text" class="form-control" id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="Cause">
+                                                            Détecteur
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <input value="{{ $amDatas['detecteur'] }}" readonly type="text" class="form-control" id="Cause">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            Réclamations
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <textarea readonly required name="causes" class="form-control no-resize" id="default-textarea">{{ $amDatas['reclamations'] }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            Conséquences
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <textarea readonly required name="causes" class="form-control no-resize" id="default-textarea">{{ $amDatas['consequences'] }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            Causes
+                                                        </label>
+                                                        <div class="form-control-wrap">
+                                                            <textarea readonly required name="causes" class="form-control no-resize" id="default-textarea">{{ $amDatas['causes'] }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
+                                @endforeach
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach ($ams as $am)
+        <div class="modal fade zoom" tabindex="-1" id="modalDetail{{ $am->id }}">
+            <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Suivi</h5>
+                        <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><em
+                                class="icon ni ni-cross"></em></a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="nk-block">
+                            <form class="row g-gs" id="form_insert" method="post" action="/Suivi_action/{{ $am->id }}">
+                                @csrf
+                                <div class="col-lg-12 col-xxl-12" >
+                                    <div class="card">
+                                        <div class="card-inner">
+                                                <div class="row g-4">
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="controle">
+                                                                Action Corrective
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input disabled value="{{ $am->action }}" type="text" class="form-control" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="email-address-1">
+                                                                Efficacitée
+                                                            </label>
+                                                            <select required name="efficacite" class="form-select ">
+                                                                <option value="">
+                                                                    Choisir
+                                                                </option>
+                                                                <option value="oui">
+                                                                    Oui
+                                                                </option>
+                                                                <option value="non">
+                                                                    Non
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="Coût">
+                                                                Date de réalisation
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <input name="date_action" id="date_action" type="date" class="form-control" max="{{ \Carbon\Carbon::now()->toDateString() }}" onchange="checkDate0()" >
+                                                                <script>
+                                                                    function checkDate0() {
+                                                                        var dateInput = document.getElementById('date_action');
+                                                                        // Récupérer la date entrée
+                                                                        var inputDate = new Date(document.getElementById('date_action').value);
+
+                                                                        // Récupérer la date de validation (convertie en objet Date)
+                                                                        var validationDate = new Date("{{ $am->date_validation }}");
+
+                                                                        // Comparer les dates
+                                                                        if (inputDate < validationDate.setDate(validationDate.getDate() - 0)) {
+                                                                            dateInput.value = "";
+                                                                            toastr.info("La date d'action ne doit pas être supérieur a la date de validation de la fiche d'incident.");
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="form-group text-center">
+                                                            <label class="form-label" for="description">
+                                                                Commentaire
+                                                            </label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea name="commentaire" class="form-control no-resize" id="default-textarea"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group text-center">
+                                                            <button type="submit" class="btn btn-lg btn-success btn-dim">
+                                                                <em class="ni ni-check me-2 "></em>
+                                                                <em >Enregistrer</em>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
+        </div>
     @endforeach
+
+        <script>
+            document.getElementById("form_insert").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+                $('.modal').modal('hide');
+                $(`#modalLoad`).modal('hide');
+                $(`#modalLoad`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
 
     <script>
         Pusher.logToConsole = true;

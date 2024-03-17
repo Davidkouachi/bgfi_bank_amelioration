@@ -339,6 +339,26 @@
         </div>
     @endforeach
 
+        <script>
+            document.getElementById("form_val").addEventListener("click", function(event) {
+
+                $('.modal').modal('hide');
+                $(`#modalLoadv`).modal('hide');
+                $(`#modalLoadv`).modal('show');
+
+            });
+            document.getElementById("form_rejet").addEventListener("submit", function(event) {
+                event.preventDefault(); // Empêche la soumission par défaut du formulaire
+                
+                $('.modal').modal('hide');
+                $(`#modalLoadr`).modal('hide');
+                $(`#modalLoadr`).modal('show');
+
+                // Si toutes les validations passent, soumettre le formulaire
+                this.submit();
+            });
+        </script>
+
     <script>
         Pusher.logToConsole = true;
 
